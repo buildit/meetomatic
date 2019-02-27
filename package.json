@@ -1,0 +1,27 @@
+{
+  "name": "meetomatic",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node server.js",
+    "build": "next dev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/buildit/meetomatic.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/buildit/meetomatic/issues"
+  },
+  "homepage": "https://github.com/buildit/meetomatic#readme",
+  "dependencies": {
+    "express": "^4.16.4",
+    "next": "^8.0.3",
+    "react": "^16.8.3",
+    "react-dom": "^16.8.3",
+    "socket.io": "^2.2.0"
+  }
+}
