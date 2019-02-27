@@ -1,5 +1,5 @@
 
-import Layout from '../components/MyLayout.js'
+import Layout from '../components/MyLayout/MyLayout.js'
 
 export default () => (
     <Layout>
