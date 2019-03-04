@@ -1,5 +1,5 @@
 import {User} from './user';
 
-export class Message {
+export class Card {
     constructor(private from: User, private content: string) {}
 }

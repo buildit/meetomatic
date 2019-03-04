@@ -1,6 +1,6 @@
-import { Message, User } from '.';
+import { Card, User } from '.';
 
-export class ChatMessage extends Message{
+export class Room extends Card{
     constructor(from: User, content: string) {
         super(from, content);
     }
