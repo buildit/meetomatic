@@ -1,29 +1,23 @@
 {
-  "name": "meetomatic",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
   "scripts": {
-    "dev": "node server.js",
-    "build": "next dev"
+    "dev": "nodemon",
+    "build": "next build && tsc --project tsconfig.server.json",
+    "start": "cross-env NODE_ENV=production node dist/index.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/buildit/meetomatic.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/buildit/meetomatic/issues"
-  },
-  "homepage": "https://github.com/buildit/meetomatic#readme",
   "dependencies": {
-    "@zeit/next-sass": "^1.0.1",
-    "express": "^4.16.4",
-    "next": "^8.0.3",
-    "node-sass": "^4.11.0",
-    "react": "^16.8.3",
-    "react-dom": "^16.8.3",
-    "socket.io": "^2.2.0"
+    "@zeit/next-typescript": "^1.1.0",
+    "next": "^7.0.0",
+    "react": "^16.7.0",
+    "react-dom": "^16.7.0",
+    "socket.io": "^2.2.0",
+    "express": "^4.16.4"
+  },
+  "devDependencies": {
+    "@types/next": "^7.0.0",
+    "@types/react": "^16.6.0",
+    "cross-env": "^5.2.0",
+    "nodemon": "^1.18.8",
+    "ts-node": "^7.0.1",
+    "typescript": "^3.2.0"
   }
 }

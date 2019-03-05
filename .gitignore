@@ -1,12 +1,8 @@
-# dependencies
-node_modules
+# Dependency directories
+node_modules/
 
-# logs
-npm-debug.log
-
-# Nuxt build
+# next.js build output
 .next
-.env
 
-# Nuxt generate
+# typescript build output
 dist
