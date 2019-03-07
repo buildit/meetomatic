@@ -1,8 +1,7 @@
-import React from 'react';
+import * as React from "react"; 
 import Card from '../components/Card/Card';
-import io from 'socket.io-client';
+import * as io from 'socket.io-client';
 import * as SocketIO from 'socket.io';
-import { ProgressPlugin } from 'webpack';
 
 export interface Props {
     name: string;
@@ -27,7 +26,7 @@ export default class extends React.Component<Props, State> {
   }
 
   componentDidMount() {
-    this.socket.on('now', data => {
+    this.socket.on('connected', data => {
         this.setState({
             hello: data.message
         })
@@ -37,12 +36,7 @@ export default class extends React.Component<Props, State> {
   render() {    
     return (
       <div>
-         <Card 
-            message="Logrocket" 
-            date="today" 
-            votes="20"
-        />
-         <h1>{this.state.hello}</h1>
+         Hello World!
       </div>
     )
   }

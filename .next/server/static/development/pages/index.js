@@ -217,7 +217,7 @@ function (_React$Component) {
     value: function componentDidMount() {
       var _this2 = this;
 
-      this.socket.on('now', function (data) {
+      this.socket.on('connected', function (data) {
         _this2.setState({
           hello: data.message
         });

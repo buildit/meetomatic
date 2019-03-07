@@ -2,22 +2,35 @@
   "scripts": {
     "dev": "nodemon",
     "build": "next build && tsc --project tsconfig.server.json",
-    "start": "cross-env NODE_ENV=production node dist/index.js"
+    "start": "cross-env NODE_ENV=production node dist/index.js",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
   },
   "dependencies": {
     "@zeit/next-typescript": "^1.1.0",
+    "core-js": "^2.6.5",
+    "express": "^4.16.4",
     "next": "^7.0.0",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
+    "reflect-metadata": "^0.1.13",
     "socket.io": "^2.2.0",
-    "express": "^4.16.4"
+    "tsyringe": "^3.0.1"
   },
   "devDependencies": {
+    "@types/enzyme": "^3.9.0",
+    "@types/enzyme-adapter-react-16": "^1.0.5",
+    "@types/jest": "^24.0.9",
     "@types/next": "^7.0.0",
     "@types/react": "^16.6.0",
     "cross-env": "^5.2.0",
+    "enzyme": "^3.9.0",
+    "enzyme-adapter-react-16": "^1.10.0",
+    "jest": "^24.1.0",
     "nodemon": "^1.18.8",
+    "ts-jest": "^24.0.0",
     "ts-node": "^7.0.1",
-    "typescript": "^3.2.0"
+    "typescript": "^3.3.3333"
   }
 }
