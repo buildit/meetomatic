@@ -1,4 +1,14 @@
+import "reflect-metadata";
 import { MeetoMaticServer } from './server';
+import {container} from "tsyringe";
+import SocketHandler from "./handlers/socket/socket.handler";
 
-let app = new MeetoMaticServer().getApp();
+container.register(
+    "SocketService", {
+    useClass: SocketHandler
+});
+
+
+const app = container.resolve(MeetoMaticServer);
+
 export { app };

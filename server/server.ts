@@ -1,22 +1,28 @@
 import { createServer, Server } from 'http';
 import * as express from '../node_modules/express';
 import * as socketIo from '../node_modules/socket.io';
-import { Message } from './model/message';
 import * as next from '../node_modules/next';
+import { SocketService } from './handlers/socket/socket.handler.interface';
+import {injectable, inject} from "tsyringe";
 
+
+@injectable()
 export class MeetoMaticServer {
     public static readonly PORT:number = 3000;
     private app: express.Application;
     private server: Server;
     private io: socketIo.Server;
     private port: string | number;
+    private socketHandler: SocketService;
 
-    constructor() {
+    constructor(@inject("SocketService")  service: SocketService) {
         this.createApp();
         this.config();
         this.createServer();
         this.sockets();
         this.listen();
+
+        this.socketHandler = service;
     }
 
     private createApp(): void {
@@ -52,19 +58,7 @@ export class MeetoMaticServer {
             });
 
             this.io.on('connect', (socket: any) => {
-                socket.emit('now', {
-                    message: 'zeit'
-                });
-
-                console.log('Connected client on port %s.', this.port);
-                socket.on('message', (m: Message) => {
-                    console.log('[server](message): %s', JSON.stringify(m));
-                    this.io.emit('message', m);
-                });
-
-                socket.on('disconnect', () => {
-                    console.log('Client disconnected');
-                });
+                this.socketHandler.init(socket);
             });
 
         });
