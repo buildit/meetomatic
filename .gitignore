@@ -2,7 +2,10 @@
 node_modules/
 
 # next.js build output
-.next
+.next/
 
 # typescript build output
 dist
+
+# macOS files
+.DS_Store
