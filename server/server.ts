@@ -3,7 +3,9 @@ import * as express from '../node_modules/express';
 import * as socketIo from '../node_modules/socket.io';
 import * as next from '../node_modules/next';
 import { SocketService } from './handlers/socket/socket.handler.interface';
+import { GraphService } from './graph-server/graph.service.interface';
 import {injectable, inject} from "tsyringe";
+
 
 
 @injectable()
@@ -14,8 +16,11 @@ export class MeetoMaticServer {
     private io: socketIo.Server;
     private port: string | number;
     private socketHandler: SocketService;
+    private graphServer: GraphService;
 
-    constructor(@inject("SocketService")  service: SocketService) {
+    constructor(@inject("SocketService")  service: SocketService, 
+                @inject("GraphService")  graphService: GraphService)
+    {
         this.createApp();
         this.config();
         this.createServer();
@@ -23,6 +28,7 @@ export class MeetoMaticServer {
         this.listen();
 
         this.socketHandler = service;
+        this.graphServer = graphService;
     }
 
     private createApp(): void {
@@ -53,6 +59,8 @@ export class MeetoMaticServer {
                 return handle(req, res)
             })
 
+            this.graphServer.init();
+            
             this.server.listen(this.port, () => {
                 console.log('Running server on port %s', this.port);
             });
