@@ -1,7 +1,8 @@
 import * as React from "react"; 
-import Card from '../components/Card/Card';
+import CreateBoard from '../components/CreateBoard/CreateBoard';
 import * as io from 'socket.io-client';
 import * as SocketIO from 'socket.io';
+import "../styles.scss";
 
 export interface Props {
     name: string;
@@ -36,7 +37,7 @@ export default class extends React.Component<Props, State> {
   render() {    
     return (
       <div>
-         Hello World!
+         <CreateBoard name="" password="" />
       </div>
     )
   }

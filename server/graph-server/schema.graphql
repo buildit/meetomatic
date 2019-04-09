@@ -36,3 +36,8 @@ type Post {
   content: String!
   author: User!
 }
+
+type CreateBoard {
+  name: String!
+  passwords: String
+}

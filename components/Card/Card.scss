@@ -1,19 +1,21 @@
-import Link from 'next/link'
-import styles from  "./Card.interface.ts"
+.grav-c-card {
+  padding: 1rem;
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  background-color: #f9f9f9;
+  border: 1px solid #d6d6d6;
 
-const linkStyle = {
-  marginRight: 15
+  &__title {
+    margin-top: 0;
+    margin-bottom: 1rem;
+  }
+
+  &__body {
+    margin-top: 0;
+    margin-bottom: 1rem;
+  }
 }
 
-const Header = () => (
-    <div className={styles.example}>
-        <Link href="/">
-          <a style={linkStyle}>Home</a>
-        </Link>
-        <Link href="/about">
-          <a style={linkStyle}>About</a>
-        </Link>
-    </div>
-)
-
-export default Header
+.mom-c-votes {
+  text-align: right;
+}

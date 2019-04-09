@@ -1,0 +1,30 @@
+/**
+  Import all SASS partials that make up Gravity's UI library
+
+  Partials are organised as per Harry Roberts' ITCSS architecture.
+  See: https://www.xfive.co/blog/itcss-scalable-maintainable-css-architecture/
+*/
+
+// === Settings layer ===
+@import 'gravity-ui-sass/00-settings/settings.all';
+
+// === Tools layer ===
+@import 'gravity-ui-sass/01-tools/tools.all';
+
+// === Generic layer ===
+@import 'normalize';
+@import 'gravity-ui-sass/02-generic/generic.all';
+
+// === Elements layer ===
+@import 'gravity-ui-sass/03-elements/elements.all';
+
+// === Objects layer ===
+@import 'gravity-ui-sass/04-objects/objects.all';
+
+// === Components layer ===
+@import 'gravity-ui-sass/05-components/components.all';
+@import './pages/board';
+@import './components/Card/Card';
+
+// === Utilities layer ===
+@import 'gravity-ui-sass/06-utilities/utilities.all';

@@ -1,2 +1,8 @@
 const withTypescript = require('@zeit/next-typescript')
-module.exports = withTypescript()
+const withSass = require('@zeit/next-sass')
+const eyeglass = require("eyeglass");
+
+
+module.exports = withTypescript(withSass({
+  sassLoaderOptions: eyeglass()
+}))

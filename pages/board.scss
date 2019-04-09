@@ -1,0 +1,23 @@
+.mom-board {
+  > * {
+    margin: 0;
+  }
+
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  min-height: 100vh;
+
+  &__column{
+    padding: 1rem 0.5rem;
+    border-right: 1px rgb(162, 162, 162) dashed;
+
+    &:last-child {
+      border-right: none;
+    }
+  }
+  
+  &__column-title {
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+}
