@@ -65,7 +65,6 @@ export default class extends React.Component<Props, State> {
   }
 
   handleCardChange(event) {
-    console.log("event", event.target.value);
     this.setState({ NewCardTitle: event.target.value });
   }
 
