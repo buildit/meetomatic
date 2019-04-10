@@ -2,9 +2,11 @@ import * as React from "react";
 import Card from "../components/Card/Card";
 import NewCard from "../components/NewCard/NewCard";
 import BoardColumn from "../components/BoardColumn/BoardColumn";
+import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import * as io from "socket.io-client";
 import * as SocketIO from "socket.io";
 import "../styles.scss";
+import { copyFileSync } from "fs";
 
 const boardColumns = [
   {
@@ -80,6 +82,27 @@ export default class extends React.Component<Props, State> {
     });
   }
 
+
+  moveCard = (columnIndex, rowIndex, destColumnIndex,destRowIndex) => {
+    const board = this.state.board;
+    const movedCard = board[columnIndex].cards.splice(rowIndex, 1) [0];
+
+    board[destColumnIndex].cards.splice(destRowIndex, 0, movedCard);
+
+    this.setState({
+      board
+    });
+  }
+
+  onDragEnd = (event) => {
+    const columnIndex = event.source.droppableId.split("-")[1];
+    const rowIndex = event.source.index;
+    const destColumnIndex = event.destination.droppableId.split("-")[1];
+    const destRowIndex = event.destination.index;
+
+    this.moveCard(columnIndex, rowIndex, destColumnIndex,destRowIndex);
+  }
+
   componentDidMount() {
     this.socket.on("connected", data => {
       this.setState({
@@ -92,9 +115,20 @@ export default class extends React.Component<Props, State> {
     return (
       <div className="mom-container">
         <div className="mom-board">
-          {this.state.board.map((column, index) => {
-            return <BoardColumn index={index} key={column.title} title={column.title} cards={column.cards} addNewCard={this.addNewCard} handleCardChange={this.handleCardChange} NewCardTitle={this.state.NewCardTitle} />
-          })}
+            <DragDropContext onDragEnd={this.onDragEnd}>
+              {this.state.board.map((column, index) => {
+                return (
+                  <Droppable droppableId={`column-${index}`}>
+                    {(provided) => (
+                      <div className="mom-board__column" ref={provided.innerRef}  {...provided.droppableProps}>
+                        <BoardColumn index={index} key={`${column.title}${{index}}`} title={column.title} cards={column.cards} addNewCard={this.addNewCard} handleCardChange={this.handleCardChange} NewCardTitle={this.state.NewCardTitle} />
+                        {provided.placeholder}
+                      </div>
+                      )}
+                  </Droppable>
+                );
+              })}
+            </DragDropContext>
         </div>
       </div>
     );

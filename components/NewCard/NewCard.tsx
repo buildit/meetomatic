@@ -5,7 +5,11 @@ export interface Props {
   NewCardTitle: string;
 }
 
-export default class NewCard extends React.Component<NewCardInterface, Props, {}> {
+export default class NewCard extends React.Component<
+  NewCardInterface,
+  Props,
+  {}
+> {
   constructor(props: NewCardInterface) {
     super(props);
 
@@ -14,13 +18,13 @@ export default class NewCard extends React.Component<NewCardInterface, Props, {}
   }
 
   handleChange(event) {
-    this.props.handleCardChange(event)
+    this.props.handleCardChange(event);
   }
 
   handleSubmit(event) {
     event.preventDefault();
-    
-    this.props.addNewCard()
+
+    this.props.addNewCard();
   }
 
   render() {
@@ -29,7 +33,14 @@ export default class NewCard extends React.Component<NewCardInterface, Props, {}
         <h3 className="grav-c-card__title">New card</h3>
         <div className="grav-c-form-group">
           <label htmlFor="boardName">Title</label>
-          <input id="boardName" type="text" name="name" value={this.props.NewCardTitle} required onChange={this.handleChange} />
+          <input
+            id="boardName"
+            type="text"
+            name="name"
+            value={this.props.NewCardTitle}
+            required
+            onChange={this.handleChange}
+          />
         </div>
         <button type="submit">Add card</button>
       </form>
