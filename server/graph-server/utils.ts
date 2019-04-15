@@ -1,5 +1,5 @@
 import * as jwt from "jsonwebtoken";
-import { Prisma } from "./generated/prisma-client";
+import { Prisma, User } from "./generated/prisma-client";
 
 export interface Context {
   prisma: Prisma;
@@ -7,19 +7,25 @@ export interface Context {
   config: {
     appSecret: String;
   };
+  user: User;
 }
 
-export function getUserId(ctx: Context) {
+export async function getUser(ctx: Context): Promise<User> {
   const Authorization = ctx.request.get("Authorization");
   if (Authorization) {
-    const token = Authorization.replace("Bearer ", "");
-    const { userId } = jwt.verify(token, process.env.APP_SECRET) as {
-      userId: string;
-    };
-    return userId;
+    try {
+      const token = Authorization.replace("Bearer ", "");
+      const { userId } = jwt.verify(token, ctx.config.appSecret) as {
+        userId: string;
+      };
+      const user = await ctx.prisma.user({ id: userId });
+      return user;
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
   }
-
-  throw new AuthError();
+  return null;
 }
 
 export class AuthError extends Error {
