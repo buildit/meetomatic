@@ -17,6 +17,7 @@
     "core-js": "^2.6.5",
     "express": "^4.16.4",
     "graphql-import": "^0.7.1",
+    "graphql-shield": "^5.3.3",
     "graphql-yoga": "^1.17.4",
     "next": "^7.0.0",
     "node-sass": "^4.11.0",
@@ -30,7 +31,7 @@
     "tsyringe": "^3.0.1"
   },
   "devDependencies": {
-    "@buildit/gravity-ui-sass": "github:buildit/gravity-ui-sass#next",
+    "@buildit/gravity-ui-web": "^1.0.1",
     "@types/enzyme": "^3.9.0",
     "@types/enzyme-adapter-react-16": "^1.0.5",
     "@types/jest": "^24.0.9",

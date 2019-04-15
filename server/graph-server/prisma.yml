@@ -1,11 +1,9 @@
-# The HTTP endpoint for your Prisma API
-#endpoint: ''
-endpoint: https://eu1.prisma.sh/aris-markogiannakis-3b2818/demo/dev
+endpoint: http://localhost:4466
+datamodel: datamodel.prisma
 
-# Points to the file that contains your datamodel
-datamodel: schema.graphql
-
-# Specifies language & location for the generated Prisma client
 generate:
   - generator: javascript-client
-    output: ./generated/prisma-client
+    output: ./generated/prisma-client/
+hooks:
+  post-deploy:
+    - prisma generate
