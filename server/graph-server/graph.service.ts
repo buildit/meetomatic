@@ -5,8 +5,6 @@ import resolvers from "./resolvers";
 import { getUser, Context } from "./utils";
 import { ContextParameters } from "graphql-yoga/dist/types";
 
-// import { rule, shield, not } from "graphql-shield";
-
 const config = {
   appSecret: process.env.APP_SECRET || "mysecret"
 };

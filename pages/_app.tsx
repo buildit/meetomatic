@@ -1,21 +1,33 @@
-import App, {Container} from 'next/app'
-import React from 'react'
+import App, { Container, DefaultAppIProps } from "next/app";
+import React from "react";
+import { ApolloProvider } from "react-apollo";
+import withApollo from "../lib/withApollo";
 
-export default class MyApp extends App {
-  static async getInitialProps ({ Component, router, ctx }) {
-    let pageProps = {}
+interface MyAppProps extends DefaultAppIProps {
+  apollo: any;
+}
+
+class MyApp extends App<MyAppProps> {
+  static async getInitialProps({ Component, ctx }) {
+    let pageProps = {};
 
     if (Component.getInitialProps) {
-      pageProps = await Component.getInitialProps(ctx)
+      pageProps = await Component.getInitialProps(ctx);
     }
 
-    return {pageProps}
+    return { pageProps };
   }
 
-  render () {
-    const {Component, pageProps} = this.props
-    return <Container>
-      <Component {...pageProps} />
-    </Container>
+  render() {
+    const { Component, pageProps, apollo } = this.props;
+    return (
+      <Container>
+        <ApolloProvider client={apollo}>
+          <Component {...pageProps} />
+        </ApolloProvider>
+      </Container>
+    );
   }
 }
+
+export default withApollo(MyApp);
