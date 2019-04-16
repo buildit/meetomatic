@@ -10,12 +10,6 @@ export interface Props {
   client: ApolloClient<InMemoryCache>;
 }
 
-interface State {
-  email: string;
-  name: string;
-  password: string;
-}
-
 const CREATE_USER = gql`
   mutation signup($email: String!, $name: String!, $password: String!) {
     signup(email: $email, name: $name, password: $password) {
@@ -29,17 +23,7 @@ const CREATE_USER = gql`
   }
 `;
 
-export default class extends React.Component<Props, State> {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      email: "",
-      name: "",
-      password: ""
-    };
-  }
-
+export default class extends React.Component<Props> {
   _handleRegisterComplete(data) {
     document.cookie = cookie.serialize("token", data.signup.token, {
       maxAge: 30 * 24 * 60 * 60
@@ -49,14 +33,15 @@ export default class extends React.Component<Props, State> {
 
   render() {
     return (
-      // TODO: onCompleted onError
       <Mutation
         mutation={CREATE_USER}
         onCompleted={this._handleRegisterComplete}
       >
-        {function(createUser) {
+        {function(createUser, { loading, error }) {
           return (
             <RegisterForm
+              error={error && error.graphQLErrors[0].message}
+              isProcessing={loading}
               createUser={(name, email, password) =>
                 createUser({ variables: { name, email, password } })
               }
