@@ -1,5 +1,6 @@
-export default interface Card{
-  message: string;
+export default interface Card {
+  title: string;
   date: string;
-  votes: string;
+  votes: number;
+  index: number;
 }

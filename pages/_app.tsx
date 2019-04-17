@@ -1,21 +1,60 @@
-import App, {Container} from 'next/app'
-import React from 'react'
+import App, { Container, DefaultAppIProps } from "next/app";
+import React from "react";
+import { ApolloProvider } from "react-apollo";
+import withApollo from "../lib/withApollo";
+import { gql } from "apollo-boost";
+import redirect from "../lib/redirect";
 
-export default class MyApp extends App {
-  static async getInitialProps ({ Component, router, ctx }) {
-    let pageProps = {}
+const GET_USER = gql`
+  {
+    getCurrentUser {
+      id
+      email
+      name
+    }
+  }
+`;
 
-    if (Component.getInitialProps) {
-      pageProps = await Component.getInitialProps(ctx)
+interface MyAppProps extends DefaultAppIProps {
+  apollo: any;
+}
+
+const unauthpages = ["/register", "/login"];
+
+class MyApp extends App<MyAppProps> {
+  static async getInitialProps({ Component, ctx }) {
+    let pageProps = {};
+
+    const getCurrentUser = await ctx.apolloClient.query({ query: GET_USER });
+    const user = getCurrentUser.data.getCurrentUser;
+
+    if (!user) {
+      if (!unauthpages.includes(ctx.pathname)) {
+        redirect(ctx, "/register");
+      }
+    } else {
+      if (unauthpages.includes(ctx.pathname)) {
+        redirect(ctx, "/");
+      }
     }
 
-    return {pageProps}
+    if (Component.getInitialProps) {
+      pageProps = await Component.getInitialProps(ctx);
+    }
+
+    return { pageProps };
   }
 
-  render () {
-    const {Component, pageProps} = this.props
-    return <Container>
-      <Component {...pageProps} />
-    </Container>
+  render() {
+    const { Component, pageProps, apollo } = this.props;
+    return (
+      <Container>
+        <ApolloProvider client={apollo}>
+          <Component {...pageProps} />
+        </ApolloProvider>
+      </Container>
+    );
   }
 }
+
+export default withApollo(MyApp);
