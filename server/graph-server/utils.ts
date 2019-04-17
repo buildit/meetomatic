@@ -15,11 +15,13 @@ export async function getUser(ctx: Context): Promise<User> {
   if (Authorization) {
     try {
       const token = Authorization.replace("Bearer ", "");
-      const { userId } = jwt.verify(token, ctx.config.appSecret) as {
-        userId: string;
-      };
-      const user = await ctx.prisma.user({ id: userId });
-      return user;
+      if (token) {
+        const { userId } = jwt.verify(token, ctx.config.appSecret) as {
+          userId: string;
+        };
+        const user = await ctx.prisma.user({ id: userId });
+        return user;
+      }
     } catch (error) {
       console.log(error);
       return null;

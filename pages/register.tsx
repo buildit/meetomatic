@@ -1,7 +1,7 @@
 import * as React from "react";
 import "../styles.scss";
 import { ApolloClient, InMemoryCache, gql } from "apollo-boost";
-import { Mutation } from "react-apollo";
+import { Mutation, withApollo } from "react-apollo";
 import cookie from "cookie";
 import redirect from "../lib/redirect";
 import RegisterForm from "../components/Auth/RegisterForm";
@@ -23,7 +23,7 @@ const CREATE_USER = gql`
   }
 `;
 
-export default class extends React.Component<Props> {
+class Register extends React.Component<Props> {
   _handleRegisterComplete(data) {
     document.cookie = cookie.serialize("token", data.signup.token, {
       maxAge: 30 * 24 * 60 * 60
@@ -52,3 +52,5 @@ export default class extends React.Component<Props> {
     );
   }
 }
+
+export default withApollo(Register);
