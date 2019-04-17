@@ -24,12 +24,13 @@ const CREATE_USER = gql`
 `;
 
 class Register extends React.Component<Props> {
-  _handleRegisterComplete(data) {
+  _handleRegisterComplete = async data => {
     document.cookie = cookie.serialize("token", data.signup.token, {
       maxAge: 30 * 24 * 60 * 60
     });
+    await this.props.client.cache.reset();
     redirect({}, "/");
-  }
+  };
 
   render() {
     return (

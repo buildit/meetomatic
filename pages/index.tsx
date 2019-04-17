@@ -37,7 +37,6 @@ export default class extends React.Component<Props, State> {
   render() {
     return (
       <div>
-        test
         <CreateBoard name="" password="" />
       </div>
     );
