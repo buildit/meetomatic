@@ -20,18 +20,18 @@ export default class extends React.Component<Props, State> {
   constructor(props) {
     super(props);
 
-    this.socket = io();
+    // this.socket = io();
     this.state = {
       hello: ""
     };
   }
 
   componentDidMount() {
-    this.socket.on("connected", data => {
-      this.setState({
-        hello: data.message
-      });
-    });
+    // this.socket.on("connected", data => {
+    //   this.setState({
+    //     hello: data.message
+    //   });
+    // });
   }
 
   render() {

@@ -1,13 +1,4 @@
 import withApollo from "next-with-apollo";
-import ApolloClient, { InMemoryCache } from "apollo-boost";
-import cookie from "cookie";
-
-function parseCookies(req, options = {}) {
-  return cookie.parse(
-    req ? req.headers.cookie || "" : document.cookie,
-    options
-  );
-}
 
 export default withApollo(({ ctx, initialState }) => {
   return new ApolloClient({
