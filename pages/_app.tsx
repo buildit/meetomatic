@@ -1,11 +1,10 @@
 import App, { Container, DefaultAppIProps } from "next/app";
 import React from "react";
 import { ApolloProvider } from "react-apollo";
-import withApollo from "../lib/withApollo";
 import { gql } from "apollo-boost";
 import redirect from "../lib/redirect";
-import ApolloClient, { InMemoryCache } from "apollo-boost";
 import cookie from "cookie";
+import initApolloClient, { AppApolloClient } from "../lib/initApollo";
 
 function parseCookies(req, options = {}) {
   return cookie.parse(
@@ -14,8 +13,6 @@ function parseCookies(req, options = {}) {
   );
 }
 
-// Global apollo client used by the browser
-let apolloClient;
 const GET_USER = gql`
   {
     getCurrentUser {
@@ -26,23 +23,6 @@ const GET_USER = gql`
   }
 `;
 
-function createApolloClient({ getToken }) {
-  return new ApolloClient({
-    uri: "http://localhost:4000",
-    cache: new InMemoryCache(),
-    request: async operation => {
-      const token = getToken();
-      const headers = {};
-      if (token) {
-        console.log("token: ", token);
-        headers["authorization"] = token;
-      }
-      operation.setContext({
-        headers
-      });
-    }
-  });
-}
 interface MyAppProps extends DefaultAppIProps {
   apollo: any;
 }
@@ -55,16 +35,14 @@ class MyApp extends App<MyAppProps> {
   static async getInitialProps({ Component, ctx }) {
     let pageProps = {};
 
-    let appClient;
+    let appClient: AppApolloClient;
+
     if (process.browser) {
-      if (!apolloClient) {
-        apolloClient = createApolloClient({
-          getToken: () => parseCookies(null, {}).token
-        });
-      }
-      appClient = apolloClient;
+      appClient = initApolloClient({
+        getToken: () => parseCookies(null, {}).token
+      });
     } else {
-      appClient = createApolloClient({
+      appClient = initApolloClient({
         getToken: () => parseCookies(ctx.req).token
       });
     }
@@ -93,7 +71,7 @@ class MyApp extends App<MyAppProps> {
 
   constructor(props) {
     super(props);
-    this.apolloClient = createApolloClient({
+    this.apolloClient = initApolloClient({
       getToken: () => parseCookies(null, {})
     });
   }
