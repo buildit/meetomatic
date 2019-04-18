@@ -1,5 +1,5 @@
-import * as express from "../node_modules/express";
-import * as next from "../node_modules/next";
+import * as express from "express";
+import * as next from "next";
 import { GraphService } from "./graph-server/graph.service.interface";
 import { injectable, inject } from "tsyringe";
 
@@ -27,7 +27,7 @@ export class MeetoMaticServer {
   }
 
   private listen(): void {
-    const dev = (process.env.NODE_ENV = "production");
+    const dev = process.env.NODE_ENV !== "production";
     const nextApp = next({ dev });
     const handle = nextApp.getRequestHandler();
 

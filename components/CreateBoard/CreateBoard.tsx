@@ -1,8 +1,8 @@
-import React from "react";
+import React, { Component } from "react";
 
 import CreateBoardInterface from "./CreateBoard.interface";
 
-export default class CreateBoard extends React.Component<CreateBoardInterface, {}> {
+export default class CreateBoard extends Component<CreateBoardInterface, {}> {
   constructor(props: CreateBoardInterface) {
     super(props);
   }

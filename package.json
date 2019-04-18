@@ -22,7 +22,6 @@
     "graphql-shield": "^5.3.3",
     "graphql-yoga": "^1.17.4",
     "next": "^7.0.0",
-    "next-with-apollo": "^3.4.0",
     "node-sass": "^4.11.0",
     "prisma-binding": "^2.3.9",
     "prisma-client-lib": "^1.29.1",
@@ -36,6 +35,7 @@
   },
   "devDependencies": {
     "@buildit/gravity-ui-web": "^1.0.1",
+    "@types/cookie": "^0.3.2",
     "@types/enzyme": "^3.9.0",
     "@types/enzyme-adapter-react-16": "^1.0.5",
     "@types/jest": "^24.0.9",
@@ -46,9 +46,9 @@
     "enzyme-adapter-react-16": "^1.10.0",
     "eyeglass": "2.2.1",
     "jest": "^24.1.0",
-    "nodemon": "^1.18.8",
+    "nodemon": "^1.18.11",
     "ts-jest": "^24.0.0",
-    "ts-node": "^7.0.1",
+    "ts-node": "^8.1.0",
     "typescript": "^3.3.3333"
   }
 }

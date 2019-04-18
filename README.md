@@ -65,4 +65,4 @@ The database files are mapped to a docker volume on your local disk so they pers
 
 To delete the volume and reset all database data run
 
-    $ npm run dev
+    $ docker volume rm meetomatic_postgres
