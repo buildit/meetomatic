@@ -1,13 +1,12 @@
-import React from "react";
+import React, { Component } from "react";
 
-interface RegisterFormProps {
-  createUser(name: string, email: string, password: string): any;
+interface LoginFormProps {
+  login(email: string, password: string): any;
   isProcessing: boolean;
   error: string;
 }
 
-export default class RegisterForm extends React.Component<RegisterFormProps> {
-  private nameInput = React.createRef<HTMLInputElement>();
+export default class RegisterForm extends Component<LoginFormProps> {
   private emailInput = React.createRef<HTMLInputElement>();
   private passwordInput = React.createRef<HTMLInputElement>();
 
@@ -18,8 +17,7 @@ export default class RegisterForm extends React.Component<RegisterFormProps> {
 
   _handleSubmit(e: { preventDefault: () => void }) {
     e.preventDefault();
-    this.props.createUser(
-      this.nameInput.current.value,
+    this.props.login(
       this.emailInput.current.value,
       this.passwordInput.current.value
     );
@@ -29,23 +27,15 @@ export default class RegisterForm extends React.Component<RegisterFormProps> {
     const { isProcessing, error } = this.props;
     return (
       <div>
-        <h1>Register</h1>
+        <h1>Login</h1>
         {error && <div>{error}</div>}
         <form onSubmit={this._handleSubmit}>
           <div>
             <input
               disabled={isProcessing}
-              ref={this.nameInput}
-              type="text"
-              placeholder="Enter your name..."
-            />
-          </div>
-          <div>
-            <input
-              disabled={isProcessing}
               ref={this.emailInput}
               type="text"
-              placeholder="Enter your email..."
+              placeholder="Email address"
             />
           </div>
           <div>
@@ -53,11 +43,11 @@ export default class RegisterForm extends React.Component<RegisterFormProps> {
               disabled={isProcessing}
               ref={this.passwordInput}
               type="password"
-              placeholder="Enter a password"
+              placeholder="Password"
             />
           </div>
           <button disabled={isProcessing} type="submit">
-            Create
+            Login
           </button>
         </form>
       </div>

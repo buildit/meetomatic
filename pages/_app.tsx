@@ -1,3 +1,4 @@
+import "../styles.scss";
 import App, { Container, DefaultAppIProps } from "next/app";
 import React from "react";
 import { ApolloProvider } from "react-apollo";
@@ -72,7 +73,7 @@ class MyApp extends App<MyAppProps> {
   constructor(props) {
     super(props);
     this.apolloClient = initApolloClient({
-      getToken: () => parseCookies(null, {})
+      getToken: () => parseCookies(null, {}).token
     });
   }
 
