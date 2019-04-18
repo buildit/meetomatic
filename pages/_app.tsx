@@ -5,7 +5,7 @@ import { ApolloProvider } from "react-apollo";
 import { gql } from "apollo-boost";
 import redirect from "../lib/redirect";
 import cookie from "cookie";
-import initApolloClient, { AppApolloClient } from "../lib/initApollo";
+import initApolloClient from "../lib/initApollo";
 
 function parseCookies(req, options = {}) {
   return cookie.parse(
@@ -55,11 +55,11 @@ class MyApp extends App<MyAppProps> {
 
     if (!user) {
       if (!unauthpages.includes(ctx.pathname)) {
-        redirect(ctx, "/register");
+        redirect(ctx, "/login");
       }
     } else {
       if (unauthpages.includes(ctx.pathname)) {
-        redirect(ctx, "/");
+        redirect(ctx);
       }
     }
 

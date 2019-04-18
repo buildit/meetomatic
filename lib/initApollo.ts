@@ -1,7 +1,5 @@
 import ApolloClient, { InMemoryCache } from "apollo-boost";
 
-export type AppApolloClient = ApolloClient<InMemoryCache>;
-
 function createApolloClient({ getToken }): AppApolloClient {
   return new ApolloClient({
     uri: "http://localhost:4000",

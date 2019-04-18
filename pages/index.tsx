@@ -2,7 +2,7 @@ import * as React from "react";
 import CreateBoard from "../components/CreateBoard/CreateBoard";
 import * as io from "socket.io-client";
 import * as SocketIO from "socket.io";
-import "../styles.scss";
+// import "../styles.scss";
 
 export interface Props {
   name: string;

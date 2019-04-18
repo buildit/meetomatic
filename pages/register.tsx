@@ -1,14 +1,11 @@
 import React from "react";
-import { ApolloClient, InMemoryCache, gql } from "apollo-boost";
+import { gql } from "apollo-boost";
 import { Mutation, withApollo } from "react-apollo";
 import cookie from "cookie";
 import redirect from "../lib/redirect";
 import RegisterForm from "../components/Auth/RegisterForm";
 import Link from "next/link";
-
-export interface Props {
-  client: ApolloClient<InMemoryCache>;
-}
+import { TOKEN_MAXAGE, TOKEN_COOKIE } from "../lib/constants";
 
 const CREATE_USER = gql`
   mutation signup($email: String!, $name: String!, $password: String!) {
@@ -23,13 +20,13 @@ const CREATE_USER = gql`
   }
 `;
 
-class Register extends React.Component<Props> {
-  _handleRegisterComplete = async data => {
-    document.cookie = cookie.serialize("token", data.signup.token, {
-      maxAge: 30 * 24 * 60 * 60
+class Register extends React.Component<ApolloPageProps> {
+  _handleRegisterComplete = async ({ signup: { token } }) => {
+    document.cookie = cookie.serialize(TOKEN_COOKIE, token, {
+      maxAge: TOKEN_MAXAGE
     });
     await this.props.client.cache.reset();
-    redirect({}, "/");
+    redirect();
   };
 
   render() {
