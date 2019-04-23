@@ -6,15 +6,34 @@ interface RegisterFormProps {
   error: string;
 }
 
-export default class RegisterForm extends React.Component<RegisterFormProps> {
+interface RegisterFormState {
+  canRegister: boolean;
+}
+
+export default class RegisterForm extends React.Component<
+  RegisterFormProps,
+  RegisterFormState
+> {
   private nameInput = React.createRef<HTMLInputElement>();
   private emailInput = React.createRef<HTMLInputElement>();
   private passwordInput = React.createRef<HTMLInputElement>();
+
+  state = {
+    canRegister: false
+  };
 
   constructor(props) {
     super(props);
     this._handleSubmit = this._handleSubmit.bind(this);
   }
+
+  _handleInputChange = () => {
+    const canRegister =
+      this.nameInput.current.value &&
+      this.emailInput.current.value &&
+      this.passwordInput.current.value;
+    this.setState({ canRegister: !!canRegister });
+  };
 
   _handleSubmit(e: { preventDefault: () => void }) {
     e.preventDefault();
@@ -27,6 +46,7 @@ export default class RegisterForm extends React.Component<RegisterFormProps> {
 
   render() {
     const { isProcessing, error } = this.props;
+    const { canRegister } = this.state;
     return (
       <div>
         <h1>Register</h1>
@@ -34,6 +54,7 @@ export default class RegisterForm extends React.Component<RegisterFormProps> {
         <form onSubmit={this._handleSubmit}>
           <div>
             <input
+              onChange={this._handleInputChange}
               disabled={isProcessing}
               ref={this.nameInput}
               type="text"
@@ -42,6 +63,7 @@ export default class RegisterForm extends React.Component<RegisterFormProps> {
           </div>
           <div>
             <input
+              onChange={this._handleInputChange}
               disabled={isProcessing}
               ref={this.emailInput}
               type="text"
@@ -50,13 +72,14 @@ export default class RegisterForm extends React.Component<RegisterFormProps> {
           </div>
           <div>
             <input
+              onChange={this._handleInputChange}
               disabled={isProcessing}
               ref={this.passwordInput}
               type="password"
               placeholder="Enter a password"
             />
           </div>
-          <button disabled={isProcessing} type="submit">
+          <button disabled={!canRegister || isProcessing} type="submit">
             Create
           </button>
         </form>

@@ -34,7 +34,7 @@
     "tsyringe": "^3.0.1"
   },
   "devDependencies": {
-    "@buildit/gravity-ui-web": "^1.0.1",
+    "@buildit/gravity-ui-web": "^2.0.0",
     "@types/cookie": "^0.3.2",
     "@types/enzyme": "^3.9.0",
     "@types/enzyme-adapter-react-16": "^1.0.5",
