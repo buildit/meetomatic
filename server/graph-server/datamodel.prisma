@@ -1,6 +1,15 @@
 type User {
-  id: ID! @unique
+  id: ID! @unique @id
   name: String!
   email: String!
   password: String!
+}
+
+type Card {
+  id: ID! @unique @id
+  description: String!
+  owner: User
+  column: String!
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
 }

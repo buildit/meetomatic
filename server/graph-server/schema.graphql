@@ -5,6 +5,7 @@ type Query {
 type Mutation {
   signup(email: String!, password: String!, name: String!): AuthPayload!
   login(email: String!, password: String!): AuthPayload!
+  createCard(input: CreateCardInput): Card!
 }
 
 type AuthPayload {
@@ -12,10 +13,22 @@ type AuthPayload {
   user: User!
 }
 
+input CreateCardInput {
+  description: String!
+  column: String!
+}
+
 type User {
   id: ID!
   email: String!
   name: String!
+}
+
+type Card {
+  id: ID!
+  description: String!
+  owner: User
+  column: String! # Temp field until we get boards and states in
 }
 
 type CreateBoard {
