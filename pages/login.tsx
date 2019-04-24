@@ -9,7 +9,7 @@ import { TOKEN_MAXAGE, TOKEN_COOKIE } from "../lib/constants";
 
 const LOGIN_USER = gql`
   mutation loginUser($email: String!, $password: String!) {
-    login(email: $email, password: $password) {
+    login(input: { email: $email, password: $password }) {
       token
       user {
         name

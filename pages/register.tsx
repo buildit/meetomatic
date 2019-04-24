@@ -9,7 +9,7 @@ import { TOKEN_MAXAGE, TOKEN_COOKIE } from "../lib/constants";
 
 const CREATE_USER = gql`
   mutation signup($email: String!, $name: String!, $password: String!) {
-    signup(email: $email, name: $name, password: $password) {
+    signup(input: { email: $email, name: $name, password: $password }) {
       token
       user {
         id

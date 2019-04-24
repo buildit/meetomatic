@@ -1,19 +1,24 @@
 import { GraphService } from "./graph.service.interface";
 import { GraphQLServer } from "graphql-yoga";
 import { prisma } from "./generated/prisma-client";
-import resolvers from "./resolvers";
 import { getUser, Context } from "./utils";
 import { ContextParameters } from "graphql-yoga/dist/types";
-
+import { buildSchema } from "type-graphql";
+import CardResolvers from "./resolvers/cardResolver";
+import UserResolvers from "./resolvers/userResolver";
 const config = {
   appSecret: process.env.APP_SECRET || "mysecret"
 };
 
 export default class graphService implements GraphService {
-  init(): void {
+  async init() {
+    const schema = await buildSchema({
+      resolvers: [CardResolvers, UserResolvers],
+      emitSchemaFile: false,
+      validate: true
+    });
     const server = new GraphQLServer({
-      typeDefs: "./server/graph-server/schema.graphql",
-      resolvers,
+      schema,
       context: async function(context: ContextParameters) {
         const result: Context = {
           ...context,
