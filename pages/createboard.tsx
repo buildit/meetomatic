@@ -21,7 +21,7 @@ const CREATE_BOARD = gql`
 
 class Board extends React.Component<Props> {
     _handleBoardCreation = async data => {
-    console.log(data);
+      redirect(data, "/board");
     };
   
     render() {

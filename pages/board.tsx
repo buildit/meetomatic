@@ -52,6 +52,10 @@ export default class extends React.Component<Props, State> {
   protected getSocket = () => this.socket;
   private socket: SocketIO.Socket;
 
+  static async getInitialProps (context, apolloClient) {
+      console.log(context);
+  }
+
   constructor(props) {
     super(props);
 
@@ -112,6 +116,7 @@ export default class extends React.Component<Props, State> {
   }
 
   render() {
+    console.log(this.props);
     return (
       <div className="mom-container">
         <div className="mom-board">
