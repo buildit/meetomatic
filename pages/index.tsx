@@ -1,5 +1,5 @@
 import * as React from "react";
-import CreateBoard from "../components/CreateBoard/CreateBoard";
+import Board from "./createboard";
 import * as io from "socket.io-client";
 import * as SocketIO from "socket.io";
 import "../styles.scss";
@@ -37,7 +37,7 @@ export default class extends React.Component<Props, State> {
   render() {
     return (
       <div>
-        <CreateBoard name="" password="" />
+        <Board />
       </div>
     );
   }

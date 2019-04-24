@@ -1,26 +1,56 @@
 import React from "react";
 
-import CreateBoardInterface from "./CreateBoard.interface";
+interface CreateFormProps {
+  createBoard(name: string, password: string): any;
+  isProcessing: boolean;
+  error: string;
+}
 
-export default class CreateBoard extends React.Component<CreateBoardInterface, {}> {
-  constructor(props: CreateBoardInterface) {
+export default class CreateBoard extends React.Component<CreateFormProps> {
+  private nameInput = React.createRef<HTMLInputElement>();
+  private passwordInput = React.createRef<HTMLInputElement>();
+
+  constructor(props) {
     super(props);
+    this._handleSubmit = this._handleSubmit.bind(this);
+  }
+
+  _handleSubmit(e: { preventDefault: () => void }) {
+    e.preventDefault();
+    console.log(this.props);
+    this.props.createBoard(
+      this.nameInput.current.value,
+      this.passwordInput.current.value,
+    );
   }
 
   render() {
+    const { isProcessing, error } = this.props;
     return (
-      <form className="grav-o-container">
-        <h2>Create board</h2>
-        <div className="grav-c-form-group">
-          <label htmlFor="boardName">Board name</label>
-          <input id="boardName" type="text" />
-        </div>
-        <div className="grav-c-form-group">
-          <label htmlFor="boardPassword">Board password (optional)</label>
-          <input id="boardPassword" type="password" />
-        </div>
-        <button type="submit">Create board</button>
-      </form>
-    );
-  }
+      <div className="grav-o-container">
+        <h1>Create Board</h1>
+        {error && <div>{error}</div>}
+        <form onSubmit={this._handleSubmit}>
+          <div>
+            <input
+              disabled={isProcessing}
+              ref={this.nameInput}
+              type="text"
+              placeholder="Board Name"
+            />
+          </div>
+          <div>
+            <input
+              disabled={isProcessing}
+              ref={this.passwordInput}
+              type="password"
+              placeholder="Enter a password"
+            />
+          </div>
+          <button disabled={isProcessing} type="submit">
+            Create Board
+          </button>
+        </form>
+      </div>
+    )};
 }

@@ -5,6 +5,7 @@ type Query {
 type Mutation {
   signup(email: String!, password: String!, name: String!): AuthPayload!
   login(email: String!, password: String!): AuthPayload!
+  createBoard(name: String!, password: String!): Board!
 }
 
 type AuthPayload {
@@ -18,7 +19,8 @@ type User {
   name: String!
 }
 
-type CreateBoard {
+type Board {
+  id: ID!
   name: String!
-  passwords: String
+  password: String!
 }

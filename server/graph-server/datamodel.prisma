@@ -4,3 +4,9 @@ type User {
   email: String!
   password: String!
 }
+
+type Board {
+  id: ID! @unique
+  name: String!
+  password: String!
+}
