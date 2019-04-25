@@ -1,11 +1,12 @@
 import "../styles.scss";
 import App, { Container, DefaultAppIProps } from "next/app";
 import React from "react";
-import { ApolloProvider } from "react-apollo";
+import { ApolloProvider, getDataFromTree } from "react-apollo";
 import { gql } from "apollo-boost";
 import redirect from "../lib/redirect";
 import cookie from "cookie";
 import initApolloClient from "../lib/initApollo";
+import Head from "next/head";
 
 function parseCookies(req, options = {}) {
   return cookie.parse(
@@ -26,6 +27,7 @@ const GET_USER = gql`
 
 interface MyAppProps extends DefaultAppIProps {
   apollo: any;
+  apolloState: any;
 }
 
 const unauthpages = ["/register", "/login"];
@@ -33,7 +35,7 @@ const unauthpages = ["/register", "/login"];
 class MyApp extends App<MyAppProps> {
   private apolloClient: any = null;
 
-  static async getInitialProps({ Component, ctx }) {
+  static async getInitialProps({ router, Component, ctx }) {
     let pageProps = {};
 
     let appClient: AppApolloClient;
@@ -63,28 +65,56 @@ class MyApp extends App<MyAppProps> {
       }
     }
 
+    if (!process.browser) {
+      // Run all graphql queries in the component tree
+      // and extract the resulting data
+      try {
+        // Run all GraphQL queries
+        await getDataFromTree(
+          <ApolloProvider client={appClient}>
+            <App pageProps={pageProps} Component={Component} router={router} />
+          </ApolloProvider>
+        );
+      } catch (error) {
+        // Prevent Apollo Client GraphQL errors from crashing SSR.
+        // Handle them in components via the data.error prop:
+        // https://www.apollographql.com/docs/react/api/react-apollo.html#graphql-query-data-error
+        console.error("Error while running `getDataFromTree`", error);
+      }
+
+      // getDataFromTree does not call componentWillUnmount
+      // head side effect therefore need to be cleared manually
+      Head.rewind();
+    }
+
+    // Extract query data from the Apollo's store
+    const apolloState = appClient.cache.extract();
+
     if (Component.getInitialProps) {
       pageProps = await Component.getInitialProps(ctx);
     }
 
-    return { pageProps };
+    return { pageProps, apolloState };
   }
 
   constructor(props) {
     super(props);
-    this.apolloClient = initApolloClient({
-      getToken: () => parseCookies(null, {}).token
-    });
+    this.apolloClient = initApolloClient(
+      {
+        getToken: () => parseCookies(null, {}).token
+      },
+      props.apolloState
+    );
   }
 
   render() {
     const { Component, pageProps } = this.props;
     return (
-      <Container>
-        <ApolloProvider client={this.apolloClient}>
+      <ApolloProvider client={this.apolloClient}>
+        <Container>
           <Component {...pageProps} />
-        </ApolloProvider>
-      </Container>
+        </Container>
+      </ApolloProvider>
     );
   }
 }

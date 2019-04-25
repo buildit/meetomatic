@@ -1,9 +1,9 @@
 import ApolloClient, { InMemoryCache } from "apollo-boost";
 
-function createApolloClient({ getToken }): AppApolloClient {
+function createApolloClient({ getToken }, initialState): AppApolloClient {
   return new ApolloClient({
     uri: "http://localhost:4000",
-    cache: new InMemoryCache(),
+    cache: new InMemoryCache().restore(initialState),
     request: async operation => {
       const token = getToken();
       const headers = {};
@@ -24,15 +24,16 @@ type InitApolloOptions = {
 let apolloClient: AppApolloClient = null;
 
 export default function initApollo(
-  options: InitApolloOptions
+  options: InitApolloOptions,
+  initialState = {}
 ): AppApolloClient {
   if (!process.browser) {
-    return createApolloClient(options);
+    return createApolloClient(options, initialState);
   }
 
   // If in the browser, reuse the existing client
   if (!apolloClient) {
-    apolloClient = createApolloClient(options);
+    apolloClient = createApolloClient(options, initialState);
   }
   return apolloClient;
 }

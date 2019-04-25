@@ -13,8 +13,7 @@ export default class BoardResolvers {
   }
 
   @FieldResolver()
-  async columns(@Root() board: Board): Promise<Column[]> {
-    console.log(board);
+  async columns(@Root() _board: Board): Promise<Column[]> {
     return [
       { id: "123", name: "Not Started" },
       { id: "456", name: "In Progress" },
