@@ -52,9 +52,11 @@ export default class extends React.Component<Props, State> {
   protected getSocket = () => this.socket;
   private socket: SocketIO.Socket;
 
-  static async getInitialProps (context, apolloClient) {
-      console.log(context);
+  static getInitialProps(ctx) {
+    console.log(ctx);
+    return ctx.query;
   }
+
 
   constructor(props) {
     super(props);

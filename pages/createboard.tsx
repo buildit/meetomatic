@@ -21,9 +21,10 @@ const CREATE_BOARD = gql`
 
 class Board extends React.Component<Props> {
     _handleBoardCreation = async data => {
-      redirect(data, "/board");
+     const boardId = data.createBoard.id;
+     redirect(data, `/board/${boardId}`);
     };
-  
+
     render() {
       return (
         <Mutation
