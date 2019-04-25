@@ -1,6 +1,14 @@
 import { Context } from "../utils";
-import { Resolver, Mutation, Arg, Query, Ctx } from "type-graphql";
+import {
+  Resolver,
+  Mutation,
+  Arg,
+  Ctx,
+  FieldResolver,
+  Root
+} from "type-graphql";
 import Card, { CreateCardInput } from "../schemas/card";
+import User from "../schemas/user";
 
 @Resolver(() => Card)
 export default class {
@@ -16,7 +24,6 @@ export default class {
     });
 
     const newCard = await card;
-    // Prisma is a bit quirky in how it works with relations.  We need to fetch it separately
     const owner = await ctx.prisma.card({ id: newCard.id }).owner();
 
     return {
@@ -31,8 +38,8 @@ export default class {
     };
   }
 
-  @Query(() => Card)
-  getCard() {
-    return null;
+  @FieldResolver(() => User)
+  async owner(@Root() card: Card, @Ctx() ctx: Context) {
+    return await ctx.prisma.card({ id: card.id }).owner();
   }
 }

@@ -12,7 +12,10 @@ export default class {
   }
 
   @Mutation(() => AuthPayload)
-  async signup(@Arg("input") input: SignUpInput, @Ctx() ctx: Context) {
+  async signup(
+    @Arg("input") input: SignUpInput,
+    @Ctx() ctx: Context
+  ): Promise<AuthPayload> {
     const password = await bcrypt.hash(input.password, 10);
     const existingUsers = await ctx.prisma.users({
       where: { email: input.email }

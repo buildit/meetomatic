@@ -6,6 +6,9 @@ import { ContextParameters } from "graphql-yoga/dist/types";
 import { buildSchema } from "type-graphql";
 import CardResolvers from "./resolvers/cardResolver";
 import UserResolvers from "./resolvers/userResolver";
+import BoardResolvers from "./resolvers/boardResolvers";
+import ColumnResolvers from "./resolvers/columnResolvers";
+
 const config = {
   appSecret: process.env.APP_SECRET || "mysecret"
 };
@@ -13,7 +16,12 @@ const config = {
 export default class graphService implements GraphService {
   async init() {
     const schema = await buildSchema({
-      resolvers: [CardResolvers, UserResolvers],
+      resolvers: [
+        CardResolvers,
+        UserResolvers,
+        BoardResolvers,
+        ColumnResolvers
+      ],
       emitSchemaFile: false,
       validate: true
     });
