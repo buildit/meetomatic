@@ -53,7 +53,6 @@ export default class extends React.Component<Props, State> {
   private socket: SocketIO.Socket;
 
   static getInitialProps(ctx) {
-    console.log(ctx);
     return ctx.query;
   }
 
@@ -118,7 +117,6 @@ export default class extends React.Component<Props, State> {
   }
 
   render() {
-    console.log(this.props);
     return (
       <div className="mom-container">
         <div className="mom-board">
