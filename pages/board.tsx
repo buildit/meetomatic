@@ -40,6 +40,7 @@ const boardColumns = [
 export interface Props {
   name: string;
   enthusiasmLevel?: number;
+  id?: string;
 }
 
 interface State {
@@ -66,13 +67,17 @@ export default class extends React.Component<Props, State> {
     this.addNewCard = this.addNewCard.bind(this);
   }
 
+  static getInitialProps(ctx) {
+    return ctx.query;
+  }
+
   handleCardChange(event) {
     this.setState({ NewCardTitle: event.target.value });
   }
 
   addNewCard() {
     const board = this.state.board;
-    const newCard = {"title": this.state.NewCardTitle, "votes": 0};
+    const newCard = { title: this.state.NewCardTitle, votes: 0 };
 
     board[0].cards.push(newCard);
 
@@ -82,53 +87,65 @@ export default class extends React.Component<Props, State> {
     });
   }
 
-
-  moveCard = (columnIndex, rowIndex, destColumnIndex,destRowIndex) => {
+  moveCard = (columnIndex, rowIndex, destColumnIndex, destRowIndex) => {
     const board = this.state.board;
-    const movedCard = board[columnIndex].cards.splice(rowIndex, 1) [0];
+    const movedCard = board[columnIndex].cards.splice(rowIndex, 1)[0];
 
     board[destColumnIndex].cards.splice(destRowIndex, 0, movedCard);
 
     this.setState({
       board
     });
-  }
+  };
 
-  onDragEnd = (event) => {
+  onDragEnd = event => {
     const columnIndex = event.source.droppableId.split("-")[1];
     const rowIndex = event.source.index;
     const destColumnIndex = event.destination.droppableId.split("-")[1];
     const destRowIndex = event.destination.index;
 
-    this.moveCard(columnIndex, rowIndex, destColumnIndex,destRowIndex);
-  }
+    this.moveCard(columnIndex, rowIndex, destColumnIndex, destRowIndex);
+  };
 
   componentDidMount() {
-    this.socket.on("connected", data => {
-      this.setState({
-        hello: data.message
-      });
-    });
+    // this.socket.on("connected", data => {
+    //   this.setState({
+    //     hello: data.message
+    //   });
+    // });
   }
 
   render() {
     return (
       <div className="mom-container">
         <div className="mom-board">
-            <DragDropContext onDragEnd={this.onDragEnd}>
-              {this.state.board.map((column, index) => {
-                return (
-                  <Droppable droppableId={`column-${index}`}>
-                    {(provided) => (
-                      <div className="mom-board__column" ref={provided.innerRef}  {...provided.droppableProps}>
-                        <BoardColumn index={index} key={`${column.title}${{index}}`} title={column.title} cards={column.cards} addNewCard={this.addNewCard} handleCardChange={this.handleCardChange} NewCardTitle={this.state.NewCardTitle} />
-                        {provided.placeholder}
-                      </div>
-                      )}
-                  </Droppable>
-                );
-              })}
-            </DragDropContext>
+          <div>This is board {this.props.id}</div>
+          <DragDropContext onDragEnd={this.onDragEnd}>
+            {this.state.board.map((column, index) => {
+              return (
+                <Droppable droppableId={`column-${index}`}>
+                  {provided => (
+                    <div
+                      className="mom-board__column"
+                      ref={provided.innerRef}
+                      {...provided.droppableProps}
+                    >
+                      <BoardColumn
+                        index={index}
+                        key={`${column.title}${{ index }}`}
+                        title={column.title}
+                        cards={column.cards}
+                        addNewCard={this.addNewCard}
+                        handleCardChange={this.handleCardChange}
+                        NewCardTitle={this.state.NewCardTitle}
+                      />
+                      {provided.placeholder}
+                    </div>
+                  )}
+                </Droppable>
+              );
+            })}
+          </DragDropContext>
         </div>
       </div>
     );

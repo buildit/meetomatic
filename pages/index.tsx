@@ -2,6 +2,7 @@ import * as React from "react";
 import CreateBoard from "../components/CreateBoard/CreateBoard";
 import * as io from "socket.io-client";
 import * as SocketIO from "socket.io";
+import Link from "next/link";
 // import "../styles.scss";
 
 export interface Props {
@@ -37,6 +38,9 @@ export default class extends React.Component<Props, State> {
   render() {
     return (
       <div>
+        <Link as={`/board/123`} href={`/borad?id=123`}>
+          <a>Board 123</a>
+        </Link>
         <CreateBoard name="" password="" />
       </div>
     );
