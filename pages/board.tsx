@@ -4,14 +4,16 @@ import { DragDropContext, Droppable } from "react-beautiful-dnd";
 // import * as io from "socket.io-client";
 import * as SocketIO from "socket.io";
 import "../styles.scss";
-import { Query } from "react-apollo";
+import { Query, Mutation } from "react-apollo";
 import gql from "graphql-tag";
-import { Board } from "./types/board";
+import { Board, BoardVariables } from "./types/Board";
+import { CreateCard, CreateCardVariables } from "./types/CreateCard";
+import { ColumnState } from "types";
 
-class BoardQuery extends Query<Board> {}
+class BoardQuery extends Query<Board, BoardVariables> {}
 const GET_BOARD = gql`
-  query Board {
-    board(id: "123") {
+  query Board($id: String!) {
+    board(id: $id) {
       id
       name
       columns {
@@ -31,47 +33,32 @@ const GET_BOARD = gql`
     }
   }
 `;
-const boardColumns = [
-  {
-    title: "To do",
-    cards: [
-      {
-        title: "This is a test card",
-        votes: 3
-      },
-      {
-        title: "This is another test card",
-        votes: 1
+
+class CreateCardMutation extends Mutation<CreateCard, CreateCardVariables> {}
+const CREATE_CARD = gql`
+  mutation CreateCard($description: String!, $column: String!) {
+    createCard(input: { description: $description, column: $column }) {
+      id
+      description
+      column
+      owner {
+        name
+        id
+        email
       }
-    ]
-  },
-  {
-    title: "In Progress",
-    cards: [
-      {
-        title: "This card is in progress",
-        votes: 4
-      }
-    ]
-  },
-  {
-    title: "Done",
-    cards: []
+    }
   }
-];
+`;
 
 export interface Props {
-  name: string;
-  enthusiasmLevel?: number;
+  id: string;
 }
 
 interface State {
-  hello: string;
-  board: Array<any>;
-  NewCardTitle: string;
+  newCardTitle: string;
 }
 
-export default class extends React.Component<Props, State> {
+export default class BoardPage extends React.Component<Props, State> {
   protected getSocket = () => this.socket;
   private socket: SocketIO.Socket;
 
@@ -79,110 +66,96 @@ export default class extends React.Component<Props, State> {
     return ctx.query;
   }
 
-
-  constructor(props) {
-    super(props);
-
-    // this.socket = io();
-    this.state = {
-      hello: "",
-      board: boardColumns,
-      NewCardTitle: ""
-    };
-
-    this.handleCardChange = this.handleCardChange.bind(this);
-    this.addNewCard = this.addNewCard.bind(this);
-  }
-
-  handleCardChange(event) {
-    this.setState({ NewCardTitle: event.target.value });
-  }
-
-  addNewCard() {
-    const board = this.state.board;
-    const newCard = { title: this.state.NewCardTitle, votes: 0 };
-
-    board[0].cards.push(newCard);
-
-    this.setState({
-      board,
-      NewCardTitle: ""
-    });
-  }
-
-  moveCard = (columnIndex, rowIndex, destColumnIndex, destRowIndex) => {
-    const board = this.state.board;
-    const movedCard = board[columnIndex].cards.splice(rowIndex, 1)[0];
-
-    board[destColumnIndex].cards.splice(destRowIndex, 0, movedCard);
-
-    this.setState({
-      board
-    });
+  state = {
+    newCardTitle: ""
   };
 
-  onDragEnd = event => {
-    const columnIndex = event.source.droppableId.split("-")[1];
-    const rowIndex = event.source.index;
-    const destColumnIndex = event.destination.droppableId.split("-")[1];
-    const destRowIndex = event.destination.index;
+  _handleCardChange = (value: string) => this.setState({ newCardTitle: value });
 
-    this.moveCard(columnIndex, rowIndex, destColumnIndex, destRowIndex);
+  _handleCreateCardComplete = () => {
+    this.setState({ newCardTitle: "" });
   };
 
-  // componentDidMount() {
-  //   this.socket.on("connected", data => {
-  //     this.setState({
-  //       hello: data.message
-  //     });
-  //   });
-  // }
+  moveCard = (/*columnIndex, rowIndex, destColumnIndex, destRowIndex*/) => {};
+
+  onDragEnd = () => {
+    // const columnIndex = event.source.droppableId.split("-")[1];
+    // const rowIndex = event.source.index;
+    // const destColumnIndex = event.destination.droppableId.split("-")[1];
+    // const destRowIndex = event.destination.index;
+    // this.moveCard(columnIndex, rowIndex, destColumnIndex, destRowIndex);
+  };
+
+  renderColumn(column: ColumnState, index: number) {
+    return (
+      <CreateCardMutation
+        key={column.id}
+        mutation={CREATE_CARD}
+        onCompleted={this._handleCreateCardComplete}
+        update={(cache, { data }) => {
+          const { board } = cache.readQuery<Board>({ query: GET_BOARD });
+          column = board.columns.find(c => c.name === data.createCard.column);
+          column.cards.push(data.createCard);
+          cache.writeQuery({ query: GET_BOARD, data: { board } });
+        }}
+      >
+        {createCard => {
+          return (
+            <Droppable droppableId={`column-${index}`}>
+              {provided => (
+                <div
+                  className="mom-board__column"
+                  ref={provided.innerRef}
+                  {...provided.droppableProps}
+                >
+                  <BoardColumn
+                    key={`${column.name}${{ index }}`}
+                    id={column.id}
+                    name={column.name}
+                    cards={column.cards}
+                    onAddNewCard={columnId =>
+                      createCard({
+                        variables: {
+                          column: columnId,
+                          description: this.state.newCardTitle
+                        }
+                      })
+                    }
+                    onNewCardTitleChange={this._handleCardChange}
+                    newCardTitle={this.state.newCardTitle}
+                    showAdd={index === 0}
+                  />
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          );
+        }}
+      </CreateCardMutation>
+    );
+  }
 
   render() {
+    const self = this;
     return (
       <div className="mom-container">
-        <div className="mom-board">
-          <BoardQuery query={GET_BOARD}>
-            {({ data, loading }) => {
-              data.board.name;
-              if (loading) {
-                return <div>Loading...</div>;
-              }
-              return (
-                <div>
-                  {/* {boardData.columns.map}
-                  {boardData && boardData.name} */}
+        <BoardQuery query={GET_BOARD} variables={{ id: this.props.id }}>
+          {({ data, loading }) => {
+            if (loading) {
+              return <div>Loading...</div>;
+            }
+            return (
+              <div>
+                <div>{data.board.name}</div>
+                <div className="mom-board">
+                  <DragDropContext onDragEnd={self.onDragEnd}>
+                    {data.board.columns.map((c, i) => this.renderColumn(c, i))}
+                  </DragDropContext>
                 </div>
-              );
-            }}
-          </BoardQuery>
-          <DragDropContext onDragEnd={this.onDragEnd}>
-            {this.state.board.map((column, index) => {
-              return (
-                <Droppable droppableId={`column-${index}`}>
-                  {provided => (
-                    <div
-                      className="mom-board__column"
-                      ref={provided.innerRef}
-                      {...provided.droppableProps}
-                    >
-                      <BoardColumn
-                        index={index}
-                        key={`${column.title}${{ index }}`}
-                        title={column.title}
-                        cards={column.cards}
-                        addNewCard={this.addNewCard}
-                        handleCardChange={this.handleCardChange}
-                        NewCardTitle={this.state.NewCardTitle}
-                      />
-                      {provided.placeholder}
-                    </div>
-                  )}
-                </Droppable>
-              );
-            })}
-          </DragDropContext>
-        </div>
+              </div>
+            );
+          }}
+        </BoardQuery>
       </div>
     );
   }

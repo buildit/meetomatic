@@ -38,3 +38,7 @@ export interface Board_board {
 export interface Board {
   board: Board_board | null;
 }
+
+export interface BoardVariables {
+  id: string;
+}

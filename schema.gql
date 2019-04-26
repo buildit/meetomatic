@@ -12,7 +12,6 @@ type Board {
   id: String!
   name: String!
   columns: [Column!]
-  password: String!
 }
 
 type Card {

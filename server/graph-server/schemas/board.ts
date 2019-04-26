@@ -11,9 +11,6 @@ export default class Board {
 
   @Field(() => [Column], { nullable: true })
   columns?: Column[];
-
-  @Field()
-  password: string;
 }
 
 @InputType()

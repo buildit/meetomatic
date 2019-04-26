@@ -17,8 +17,7 @@ export default class BoardResolvers {
   async board(@Arg("id") id: string): Promise<Board> {
     return {
       id: id,
-      name: "My First Board",
-      password: "jamie"
+      name: `My First Board - ${id}`
     };
   }
 
@@ -30,12 +29,14 @@ export default class BoardResolvers {
     const board = await ctx.prisma.createBoard({ ...input });
     return board;
   }
+
   @FieldResolver()
   async columns(@Root() _board: Board): Promise<Column[]> {
     return [
       { id: "123", name: "Not Started" },
       { id: "456", name: "In Progress" },
-      { id: "789", name: "Done" }
+      { id: "789", name: "Done" },
+      { id: "101112", name: "Done Done" }
     ];
   }
 }

@@ -1,16 +1,13 @@
 import React from "react";
-import NewCardInterface from "./NewCard.interface";
 
 export interface Props {
-  NewCardTitle: string;
+  addNewCard: any;
+  handleCardChange: any;
+  newCardTitle: string;
 }
 
-export default class NewCard extends React.Component<
-  NewCardInterface,
-  Props,
-  {}
-> {
-  constructor(props: NewCardInterface) {
+export default class NewCard extends React.Component<Props, {}> {
+  constructor(props: Props) {
     super(props);
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -18,12 +15,11 @@ export default class NewCard extends React.Component<
   }
 
   handleChange(event) {
-    this.props.handleCardChange(event);
+    this.props.handleCardChange(event.target.value);
   }
 
   handleSubmit(event) {
     event.preventDefault();
-
     this.props.addNewCard();
   }
 
@@ -37,7 +33,7 @@ export default class NewCard extends React.Component<
             id="boardName"
             type="text"
             name="name"
-            value={this.props.NewCardTitle}
+            value={this.props.newCardTitle}
             required
             onChange={this.handleChange}
           />
