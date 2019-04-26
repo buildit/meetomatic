@@ -12,6 +12,7 @@ type Board {
   id: String!
   name: String!
   columns: [Column!]
+  password: String!
 }
 
 type Card {
@@ -25,6 +26,11 @@ type Column {
   id: String!
   name: String!
   cards: [Card!]
+}
+
+input CreateBoardInput {
+  name: String!
+  password: String!
 }
 
 input CreateCardInput {
@@ -41,6 +47,7 @@ type Mutation {
   createCard(input: CreateCardInput!): Card!
   signup(input: SignUpInput!): AuthPayload!
   login(input: LoginInput!): AuthPayload!
+  createBoard(input: CreateBoardInput!): Board!
 }
 
 type Query {

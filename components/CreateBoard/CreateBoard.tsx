@@ -3,7 +3,7 @@ import React from "react";
 interface CreateFormProps {
   createBoard(name: string, password: string): any;
   isProcessing: boolean;
-  error: string;
+  error?: string;
 }
 
 export default class CreateBoard extends React.Component<CreateFormProps> {

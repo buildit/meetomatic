@@ -1,6 +1,15 @@
-import { Resolver, Query, Arg, Root, FieldResolver } from "type-graphql";
-import Board from "../schemas/board";
+import {
+  Resolver,
+  Query,
+  Arg,
+  Root,
+  FieldResolver,
+  Ctx,
+  Mutation
+} from "type-graphql";
+import Board, { CreateBoardInput } from "../schemas/board";
 import Column from "../schemas/column";
+import { Context } from "../utils";
 
 @Resolver(() => Board)
 export default class BoardResolvers {
@@ -8,10 +17,19 @@ export default class BoardResolvers {
   async board(@Arg("id") id: string): Promise<Board> {
     return {
       id: id,
-      name: "My First Board"
+      name: "My First Board",
+      password: "jamie"
     };
   }
 
+  @Mutation(() => Board)
+  async createBoard(
+    @Arg("input") input: CreateBoardInput,
+    @Ctx() ctx: Context
+  ): Promise<Board> {
+    const board = await ctx.prisma.createBoard({ ...input });
+    return board;
+  }
   @FieldResolver()
   async columns(@Root() _board: Board): Promise<Column[]> {
     return [
