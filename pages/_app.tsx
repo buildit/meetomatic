@@ -63,6 +63,9 @@ class MyApp extends App<MyAppProps> {
         redirect(ctx);
       }
     }
+    if (Component.getInitialProps) {
+      pageProps = await Component.getInitialProps(ctx);
+    }
 
     if (!process.browser) {
       // Run all graphql queries in the component tree
@@ -88,10 +91,6 @@ class MyApp extends App<MyAppProps> {
 
     // Extract query data from the Apollo's store
     const apolloState = appClient.cache.extract();
-
-    if (Component.getInitialProps) {
-      pageProps = await Component.getInitialProps(ctx);
-    }
 
     return { pageProps, apolloState };
   }
