@@ -7,7 +7,7 @@ import User, { AuthPayload, SignUpInput, LoginInput } from "../schemas/user";
 @Resolver(() => User)
 export default class {
   @Query(() => User, { nullable: true })
-  async getCurrentUser(@Ctx() ctx: Context): Promise<User> {
+  async currentUser(@Ctx() ctx: Context): Promise<User> {
     return await getUser(ctx);
   }
 

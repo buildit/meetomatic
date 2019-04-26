@@ -3,7 +3,7 @@ import { Prisma, User } from "./generated/prisma-client";
 
 export interface Context {
   prisma: Prisma;
-  request: any;
+  req: any;
   config: {
     appSecret: String;
   };
@@ -11,7 +11,7 @@ export interface Context {
 }
 
 export async function getUser(ctx: Context): Promise<User> {
-  const Authorization = ctx.request.get("Authorization");
+  const Authorization = ctx.req.get("Authorization");
   if (Authorization) {
     try {
       const token = Authorization.replace("Bearer ", "");

@@ -6,9 +6,10 @@ import LoginForm from "../components/Auth/LoginForm";
 import redirect from "../lib/redirect";
 import Link from "next/link";
 import { TOKEN_MAXAGE, TOKEN_COOKIE } from "../lib/constants";
+import { Login, LoginVariables } from "./types/Login";
 
 const LOGIN_USER = gql`
-  mutation loginUser($email: String!, $password: String!) {
+  mutation Login($email: String!, $password: String!) {
     login(input: { email: $email, password: $password }) {
       token
       user {
@@ -20,9 +21,11 @@ const LOGIN_USER = gql`
   }
 `;
 
-class Login extends React.Component<ApolloPageProps> {
-  _handleLoginComplete = async ({ login: { token } }) => {
-    document.cookie = cookie.serialize(TOKEN_COOKIE, token, {
+class LoginMutation extends Mutation<Login, LoginVariables> {}
+
+class LoginPage extends React.Component<ApolloPageProps> {
+  _handleLoginComplete = async (data: Login) => {
+    document.cookie = cookie.serialize(TOKEN_COOKIE, data.login.token, {
       maxAge: TOKEN_MAXAGE
     });
     await this.props.client.cache.reset();
@@ -32,7 +35,10 @@ class Login extends React.Component<ApolloPageProps> {
   render() {
     return (
       <div className="grav-o-container">
-        <Mutation mutation={LOGIN_USER} onCompleted={this._handleLoginComplete}>
+        <LoginMutation
+          mutation={LOGIN_USER}
+          onCompleted={this._handleLoginComplete}
+        >
           {function(loginUser, { loading, error }) {
             return (
               <LoginForm
@@ -44,7 +50,7 @@ class Login extends React.Component<ApolloPageProps> {
               />
             );
           }}
-        </Mutation>
+        </LoginMutation>
         <Link href="/register">
           <a>Need an account? Sign up here.</a>
         </Link>
@@ -53,4 +59,4 @@ class Login extends React.Component<ApolloPageProps> {
   }
 }
 
-export default withApollo(Login);
+export default withApollo(LoginPage);

@@ -1,8 +1,7 @@
 import { GraphService } from "./graph.service.interface";
-import { GraphQLServer } from "graphql-yoga";
+import { ApolloServer } from "apollo-server";
 import { prisma } from "./generated/prisma-client";
 import { getUser, Context } from "./utils";
-import { ContextParameters } from "graphql-yoga/dist/types";
 import { buildSchema } from "type-graphql";
 import CardResolvers from "./resolvers/cardResolver";
 import UserResolvers from "./resolvers/userResolver";
@@ -22,12 +21,12 @@ export default class graphService implements GraphService {
         BoardResolvers,
         ColumnResolvers
       ],
-      emitSchemaFile: false,
+      emitSchemaFile: true,
       validate: true
     });
-    const server = new GraphQLServer({
+    const server = new ApolloServer({
       schema,
-      context: async function(context: ContextParameters) {
+      context: async function(context) {
         const result: Context = {
           ...context,
           prisma,
@@ -40,9 +39,9 @@ export default class graphService implements GraphService {
       }
     });
 
-    server.start(() =>
-      console.log(`Server is running on http://localhost:4000`)
-    );
+    server.listen().then(({ url }) => {
+      console.log(`Server is running on ${url}`);
+    });
   }
 
   start(): void {}

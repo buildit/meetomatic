@@ -5,10 +5,10 @@ import Column from "../schemas/column";
 @Resolver(() => Board)
 export default class BoardResolvers {
   @Query(() => Board, { nullable: true })
-  async getBoard(@Arg("id") id: string): Promise<Board> {
+  async board(@Arg("id") id: string): Promise<Board> {
     return {
       id: id,
-      name: "Testing Board"
+      name: "My First Board"
     };
   }
 

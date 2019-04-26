@@ -7,6 +7,7 @@ import redirect from "../lib/redirect";
 import cookie from "cookie";
 import initApolloClient from "../lib/initApollo";
 import Head from "next/head";
+import { CurrentUser } from "./types/CurrentUser";
 
 function parseCookies(req, options = {}) {
   return cookie.parse(
@@ -16,8 +17,8 @@ function parseCookies(req, options = {}) {
 }
 
 const GET_USER = gql`
-  {
-    getCurrentUser {
+  query CurrentUser {
+    currentUser {
       id
       email
       name
@@ -33,27 +34,25 @@ interface MyAppProps extends DefaultAppIProps {
 const unauthpages = ["/register", "/login"];
 
 class MyApp extends App<MyAppProps> {
-  private apolloClient: any = null;
+  private apolloClient;
 
   static async getInitialProps({ router, Component, ctx }) {
     let pageProps = {};
 
-    let appClient: AppApolloClient;
-
-    if (process.browser) {
-      appClient = initApolloClient({
-        getToken: () => parseCookies(null, {}).token
-      });
-    } else {
-      appClient = initApolloClient({
-        getToken: () => parseCookies(ctx.req).token
-      });
-    }
+    let appClient = process.browser
+      ? initApolloClient({
+          getToken: () => parseCookies(null, {}).token
+        })
+      : initApolloClient({
+          getToken: () => parseCookies(ctx.req).token
+        });
 
     ctx.apolloClient = appClient;
 
-    const getCurrentUser = await ctx.apolloClient.query({ query: GET_USER });
-    const user = getCurrentUser.data.getCurrentUser;
+    const getCurrentUser = await appClient.query<CurrentUser>({
+      query: GET_USER
+    });
+    const user = getCurrentUser.data.currentUser;
 
     if (!user) {
       if (!unauthpages.includes(ctx.pathname)) {

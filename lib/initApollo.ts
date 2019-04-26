@@ -1,6 +1,9 @@
 import ApolloClient, { InMemoryCache } from "apollo-boost";
 
-function createApolloClient({ getToken }, initialState): AppApolloClient {
+function createApolloClient(
+  { getToken },
+  initialState
+): ApolloClient<InMemoryCache> {
   return new ApolloClient({
     uri: "http://localhost:4000",
     cache: new InMemoryCache().restore(initialState),
@@ -21,12 +24,12 @@ type InitApolloOptions = {
   getToken(): String;
 };
 
-let apolloClient: AppApolloClient = null;
+let apolloClient = null;
 
 export default function initApollo(
   options: InitApolloOptions,
   initialState = {}
-): AppApolloClient {
+): ApolloClient<InMemoryCache> {
   if (!process.browser) {
     return createApolloClient(options, initialState);
   }

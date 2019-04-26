@@ -6,9 +6,10 @@ import redirect from "../lib/redirect";
 import RegisterForm from "../components/Auth/RegisterForm";
 import Link from "next/link";
 import { TOKEN_MAXAGE, TOKEN_COOKIE } from "../lib/constants";
+import { SignUp, SignUpVariables } from "./types/SignUp";
 
 const CREATE_USER = gql`
-  mutation signup($email: String!, $name: String!, $password: String!) {
+  mutation SignUp($email: String!, $name: String!, $password: String!) {
     signup(input: { email: $email, name: $name, password: $password }) {
       token
       user {
@@ -20,9 +21,11 @@ const CREATE_USER = gql`
   }
 `;
 
-class Register extends React.Component<ApolloPageProps> {
-  _handleRegisterComplete = async ({ signup: { token } }) => {
-    document.cookie = cookie.serialize(TOKEN_COOKIE, token, {
+class SignUpMutation extends Mutation<SignUp, SignUpVariables> {}
+
+class RegisterPage extends React.Component<ApolloPageProps> {
+  _handleRegisterComplete = async (data: SignUp) => {
+    document.cookie = cookie.serialize(TOKEN_COOKIE, data.signup.token, {
       maxAge: TOKEN_MAXAGE
     });
     await this.props.client.cache.reset();
@@ -32,7 +35,7 @@ class Register extends React.Component<ApolloPageProps> {
   render() {
     return (
       <div className="grav-o-container">
-        <Mutation
+        <SignUpMutation
           mutation={CREATE_USER}
           onCompleted={this._handleRegisterComplete}
         >
@@ -47,7 +50,7 @@ class Register extends React.Component<ApolloPageProps> {
               />
             );
           }}
-        </Mutation>
+        </SignUpMutation>
         <Link href="/login">
           <a>Already have an account? Login</a>
         </Link>
@@ -56,4 +59,4 @@ class Register extends React.Component<ApolloPageProps> {
   }
 }
 
-export default withApollo(Register);
+export default withApollo(RegisterPage);
