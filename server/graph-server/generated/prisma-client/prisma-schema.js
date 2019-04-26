@@ -3,7 +3,11 @@ module.exports = {
   // Please don't change this file manually but run `prisma generate` to update it.
   // For more information, please read the docs: https://www.prisma.io/docs/prisma-client/
 
-/* GraphQL */ `type AggregateCard {
+/* GraphQL */ `type AggregateBoard {
+  count: Int!
+}
+
+type AggregateCard {
   count: Int!
 }
 
@@ -13,6 +17,127 @@ type AggregateUser {
 
 type BatchPayload {
   count: Long!
+}
+
+type Board {
+  id: ID!
+  name: String!
+  password: String!
+}
+
+type BoardConnection {
+  pageInfo: PageInfo!
+  edges: [BoardEdge]!
+  aggregate: AggregateBoard!
+}
+
+input BoardCreateInput {
+  name: String!
+  password: String!
+}
+
+type BoardEdge {
+  node: Board!
+  cursor: String!
+}
+
+enum BoardOrderByInput {
+  id_ASC
+  id_DESC
+  name_ASC
+  name_DESC
+  password_ASC
+  password_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type BoardPreviousValues {
+  id: ID!
+  name: String!
+  password: String!
+}
+
+type BoardSubscriptionPayload {
+  mutation: MutationType!
+  node: Board
+  updatedFields: [String!]
+  previousValues: BoardPreviousValues
+}
+
+input BoardSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: BoardWhereInput
+  AND: [BoardSubscriptionWhereInput!]
+  OR: [BoardSubscriptionWhereInput!]
+  NOT: [BoardSubscriptionWhereInput!]
+}
+
+input BoardUpdateInput {
+  name: String
+  password: String
+}
+
+input BoardUpdateManyMutationInput {
+  name: String
+  password: String
+}
+
+input BoardWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  password: String
+  password_not: String
+  password_in: [String!]
+  password_not_in: [String!]
+  password_lt: String
+  password_lte: String
+  password_gt: String
+  password_gte: String
+  password_contains: String
+  password_not_contains: String
+  password_starts_with: String
+  password_not_starts_with: String
+  password_ends_with: String
+  password_not_ends_with: String
+  AND: [BoardWhereInput!]
+  OR: [BoardWhereInput!]
+  NOT: [BoardWhereInput!]
+}
+
+input BoardWhereUniqueInput {
+  id: ID
 }
 
 type Card {
@@ -166,6 +291,12 @@ scalar DateTime
 scalar Long
 
 type Mutation {
+  createBoard(data: BoardCreateInput!): Board!
+  updateBoard(data: BoardUpdateInput!, where: BoardWhereUniqueInput!): Board
+  updateManyBoards(data: BoardUpdateManyMutationInput!, where: BoardWhereInput): BatchPayload!
+  upsertBoard(where: BoardWhereUniqueInput!, create: BoardCreateInput!, update: BoardUpdateInput!): Board!
+  deleteBoard(where: BoardWhereUniqueInput!): Board
+  deleteManyBoards(where: BoardWhereInput): BatchPayload!
   createCard(data: CardCreateInput!): Card!
   updateCard(data: CardUpdateInput!, where: CardWhereUniqueInput!): Card
   updateManyCards(data: CardUpdateManyMutationInput!, where: CardWhereInput): BatchPayload!
@@ -198,6 +329,9 @@ type PageInfo {
 }
 
 type Query {
+  board(where: BoardWhereUniqueInput!): Board
+  boards(where: BoardWhereInput, orderBy: BoardOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Board]!
+  boardsConnection(where: BoardWhereInput, orderBy: BoardOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): BoardConnection!
   card(where: CardWhereUniqueInput!): Card
   cards(where: CardWhereInput, orderBy: CardOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Card]!
   cardsConnection(where: CardWhereInput, orderBy: CardOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CardConnection!
@@ -208,6 +342,7 @@ type Query {
 }
 
 type Subscription {
+  board(where: BoardSubscriptionWhereInput): BoardSubscriptionPayload
   card(where: CardSubscriptionWhereInput): CardSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
 }

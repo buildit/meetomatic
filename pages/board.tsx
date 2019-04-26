@@ -75,6 +75,11 @@ export default class extends React.Component<Props, State> {
   protected getSocket = () => this.socket;
   private socket: SocketIO.Socket;
 
+  static getInitialProps(ctx) {
+    return ctx.query;
+  }
+
+
   constructor(props) {
     super(props);
 

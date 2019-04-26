@@ -1,12 +1,13 @@
 import * as React from "react";
-import CreateBoard from "../components/CreateBoard/CreateBoard";
-import * as io from "socket.io-client";
+import Board from "./board";
 import * as SocketIO from "socket.io";
+import Link from "next/link";
 // import "../styles.scss";
 
 export interface Props {
   name: string;
   enthusiasmLevel?: number;
+  id?: string;
 }
 
 interface State {
@@ -16,6 +17,10 @@ interface State {
 export default class extends React.Component<Props, State> {
   protected getSocket = () => this.socket;
   private socket: SocketIO.Socket;
+
+  static getInitialProps(ctx) {
+    return ctx.query;
+  }
 
   constructor(props) {
     super(props);
@@ -37,7 +42,10 @@ export default class extends React.Component<Props, State> {
   render() {
     return (
       <div>
-        <CreateBoard name="" password="" />
+        <Link as={`/board/123`} href={`/borad?id=123`}>
+          <a>Board 123</a>
+        </Link>
+        <Board name="" />
       </div>
     );
   }

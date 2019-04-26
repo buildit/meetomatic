@@ -13,3 +13,8 @@ type Card {
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
 }
+type Board {
+  id: ID! @unique
+  name: String!
+  password: String!
+}
