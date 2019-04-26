@@ -93,10 +93,17 @@ export default class BoardPage extends React.Component<Props, State> {
         mutation={CREATE_CARD}
         onCompleted={this._handleCreateCardComplete}
         update={(cache, { data }) => {
-          const { board } = cache.readQuery<Board>({ query: GET_BOARD });
+          const { board } = cache.readQuery<Board>({
+            query: GET_BOARD,
+            variables: { id: this.props.id }
+          });
           column = board.columns.find(c => c.name === data.createCard.column);
           column.cards.push(data.createCard);
-          cache.writeQuery({ query: GET_BOARD, data: { board } });
+          cache.writeQuery({
+            query: GET_BOARD,
+            variables: { id: this.props.id },
+            data: { board }
+          });
         }}
       >
         {createCard => {

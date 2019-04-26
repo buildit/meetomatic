@@ -2,5 +2,10 @@ endpoint: http://localhost:4466
 datamodel: datamodel.prisma
 
 generate:
-  - generator: javascript-client
+  - generator: typescript-client
     output: ./generated/prisma-client/
+seed:
+  run: npx ts-node --project ../../tsconfig.server.json ./data/seed.ts
+hooks:
+  post-deploy:
+    - prisma seed

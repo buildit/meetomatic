@@ -10,6 +10,9 @@ export interface Context {
   user: User;
 }
 
+export async function getSystemUser(ctx: Context): Promise<User> {
+  return await ctx.prisma.user({ id: "cjuygqsd40ce40812ot28cdbd" });
+}
 export async function getUser(ctx: Context): Promise<User> {
   const Authorization = ctx.req.get("Authorization");
   if (Authorization) {

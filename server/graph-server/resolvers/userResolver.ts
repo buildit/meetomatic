@@ -1,6 +1,6 @@
 import * as bcrypt from "bcryptjs";
 import * as jwt from "jsonwebtoken";
-import { Context, getUser } from "../utils";
+import { Context, getSystemUser } from "../utils";
 import { Resolver, Mutation, Ctx, Arg, Query } from "type-graphql";
 import User, { AuthPayload, SignUpInput, LoginInput } from "../schemas/user";
 
@@ -8,7 +8,8 @@ import User, { AuthPayload, SignUpInput, LoginInput } from "../schemas/user";
 export default class {
   @Query(() => User, { nullable: true })
   async currentUser(@Ctx() ctx: Context): Promise<User> {
-    return await getUser(ctx);
+    // Note: When we reintroduce users sign up and login use getUser(ctx) instead
+    return await getSystemUser(ctx);
   }
 
   @Mutation(() => AuthPayload)

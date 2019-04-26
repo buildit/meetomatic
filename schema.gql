@@ -51,6 +51,7 @@ type Mutation {
 
 type Query {
   currentUser: User
+  boards: [Board!]!
   board(id: String!): Board
 }
 

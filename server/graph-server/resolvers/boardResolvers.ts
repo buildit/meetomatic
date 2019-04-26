@@ -13,6 +13,10 @@ import { Context } from "../utils";
 
 @Resolver(() => Board)
 export default class BoardResolvers {
+  @Query(() => [Board])
+  async boards(@Ctx() ctx: Context): Promise<Board[]> {
+    return await ctx.prisma.boards();
+  }
   @Query(() => Board, { nullable: true })
   async board(@Arg("id") id: string): Promise<Board> {
     return {
