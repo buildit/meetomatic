@@ -6,9 +6,14 @@
 // GraphQL mutation operation: CreateBoard
 // ====================================================
 
-export interface CreateBoard_createBoard {
+export interface CreateBoard_createBoard_board {
   __typename: "Board";
   id: string;
+}
+
+export interface CreateBoard_createBoard {
+  __typename: "CreateBoardPayload";
+  board: CreateBoard_createBoard_board;
 }
 
 export interface CreateBoard {

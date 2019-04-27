@@ -17,7 +17,7 @@ export default class BoardColumn extends React.Component<BoardColumnProps, {}> {
     showAdd: false
   };
 
-  _handleAddNewCard = () => this.props.onAddNewCard(this.props.name);
+  _handleAddNewCard = () => this.props.onAddNewCard(this.props.id);
 
   render() {
     return (
@@ -33,7 +33,6 @@ export default class BoardColumn extends React.Component<BoardColumnProps, {}> {
                 index={index}
                 description={card.description}
                 votes={0}
-                column={card.column}
               />
             );
           })}

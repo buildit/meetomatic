@@ -7,19 +7,20 @@ import {
   FieldResolver,
   Root
 } from "type-graphql";
-import Card, { CreateCardInput } from "../schemas/card";
+import Card, { CreateCardInput, CreateCardPayload } from "../schemas/card";
 import User from "../schemas/user";
+import Column from "../schemas/column";
 
 @Resolver(() => Card)
 export default class {
-  @Mutation(() => Card)
+  @Mutation(() => CreateCardPayload)
   async createCard(
     @Arg("input") input: CreateCardInput,
     @Ctx() ctx: Context
-  ): Promise<Card> {
+  ): Promise<CreateCardPayload> {
     const card = ctx.prisma.createCard({
       description: input.description,
-      column: input.column,
+      column: { connect: { id: input.columnId } },
       owner: { connect: { id: ctx.user.id } }
     });
 
@@ -27,19 +28,26 @@ export default class {
     const owner = await ctx.prisma.card({ id: newCard.id }).owner();
 
     return {
-      id: newCard.id,
-      description: newCard.description,
-      column: newCard.column,
-      owner: {
-        name: owner.name,
-        email: owner.email,
-        id: owner.id
+      card: {
+        id: newCard.id,
+        description: newCard.description,
+        // column: newCard.column,
+        owner: {
+          name: owner.name,
+          email: owner.email,
+          id: owner.id
+        }
       }
     };
   }
 
   @FieldResolver(() => User)
-  async owner(@Root() card: Card, @Ctx() ctx: Context) {
-    return await ctx.prisma.card({ id: card.id }).owner();
+  owner(@Root() card: Card, @Ctx() ctx: Context): Promise<User> {
+    return ctx.prisma.card({ id: card.id }).owner();
+  }
+
+  @FieldResolver(() => Column)
+  column(@Root() card: Card, @Ctx() ctx: Context): Promise<Column> {
+    return ctx.prisma.card({ id: card.id }).column();
   }
 }

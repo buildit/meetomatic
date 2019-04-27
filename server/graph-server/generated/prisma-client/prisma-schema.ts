@@ -10,6 +10,10 @@ type AggregateCard {
   count: Int!
 }
 
+type AggregateColumn {
+  count: Int!
+}
+
 type AggregateUser {
   count: Int!
 }
@@ -23,6 +27,7 @@ type Board {
   name: String!
   password: String!
   owner: User!
+  columns(where: ColumnWhereInput, orderBy: ColumnOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Column!]
 }
 
 type BoardConnection {
@@ -32,6 +37,20 @@ type BoardConnection {
 }
 
 input BoardCreateInput {
+  id: ID
+  name: String!
+  password: String!
+  owner: UserCreateOneInput!
+  columns: ColumnCreateManyWithoutBoardInput
+}
+
+input BoardCreateOneWithoutColumnsInput {
+  create: BoardCreateWithoutColumnsInput
+  connect: BoardWhereUniqueInput
+}
+
+input BoardCreateWithoutColumnsInput {
+  id: ID
   name: String!
   password: String!
   owner: UserCreateOneInput!
@@ -83,11 +102,30 @@ input BoardUpdateInput {
   name: String
   password: String
   owner: UserUpdateOneRequiredInput
+  columns: ColumnUpdateManyWithoutBoardInput
 }
 
 input BoardUpdateManyMutationInput {
   name: String
   password: String
+}
+
+input BoardUpdateOneRequiredWithoutColumnsInput {
+  create: BoardCreateWithoutColumnsInput
+  update: BoardUpdateWithoutColumnsDataInput
+  upsert: BoardUpsertWithoutColumnsInput
+  connect: BoardWhereUniqueInput
+}
+
+input BoardUpdateWithoutColumnsDataInput {
+  name: String
+  password: String
+  owner: UserUpdateOneRequiredInput
+}
+
+input BoardUpsertWithoutColumnsInput {
+  update: BoardUpdateWithoutColumnsDataInput!
+  create: BoardCreateWithoutColumnsInput!
 }
 
 input BoardWhereInput {
@@ -134,6 +172,9 @@ input BoardWhereInput {
   password_ends_with: String
   password_not_ends_with: String
   owner: UserWhereInput
+  columns_every: ColumnWhereInput
+  columns_some: ColumnWhereInput
+  columns_none: ColumnWhereInput
   AND: [BoardWhereInput!]
   OR: [BoardWhereInput!]
   NOT: [BoardWhereInput!]
@@ -146,8 +187,8 @@ input BoardWhereUniqueInput {
 type Card {
   id: ID!
   description: String!
-  owner: User
-  column: String!
+  owner: User!
+  column: Column!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -161,8 +202,19 @@ type CardConnection {
 input CardCreateInput {
   id: ID
   description: String!
-  owner: UserCreateOneInput
-  column: String!
+  owner: UserCreateOneInput!
+  column: ColumnCreateOneWithoutCardsInput!
+}
+
+input CardCreateManyWithoutColumnInput {
+  create: [CardCreateWithoutColumnInput!]
+  connect: [CardWhereUniqueInput!]
+}
+
+input CardCreateWithoutColumnInput {
+  id: ID
+  description: String!
+  owner: UserCreateOneInput!
 }
 
 type CardEdge {
@@ -175,8 +227,6 @@ enum CardOrderByInput {
   id_DESC
   description_ASC
   description_DESC
-  column_ASC
-  column_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -186,9 +236,58 @@ enum CardOrderByInput {
 type CardPreviousValues {
   id: ID!
   description: String!
-  column: String!
   createdAt: DateTime!
   updatedAt: DateTime!
+}
+
+input CardScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  description: String
+  description_not: String
+  description_in: [String!]
+  description_not_in: [String!]
+  description_lt: String
+  description_lte: String
+  description_gt: String
+  description_gte: String
+  description_contains: String
+  description_not_contains: String
+  description_starts_with: String
+  description_not_starts_with: String
+  description_ends_with: String
+  description_not_ends_with: String
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [CardScalarWhereInput!]
+  OR: [CardScalarWhereInput!]
+  NOT: [CardScalarWhereInput!]
 }
 
 type CardSubscriptionPayload {
@@ -211,13 +310,49 @@ input CardSubscriptionWhereInput {
 
 input CardUpdateInput {
   description: String
-  owner: UserUpdateOneInput
-  column: String
+  owner: UserUpdateOneRequiredInput
+  column: ColumnUpdateOneRequiredWithoutCardsInput
+}
+
+input CardUpdateManyDataInput {
+  description: String
 }
 
 input CardUpdateManyMutationInput {
   description: String
-  column: String
+}
+
+input CardUpdateManyWithoutColumnInput {
+  create: [CardCreateWithoutColumnInput!]
+  delete: [CardWhereUniqueInput!]
+  connect: [CardWhereUniqueInput!]
+  set: [CardWhereUniqueInput!]
+  disconnect: [CardWhereUniqueInput!]
+  update: [CardUpdateWithWhereUniqueWithoutColumnInput!]
+  upsert: [CardUpsertWithWhereUniqueWithoutColumnInput!]
+  deleteMany: [CardScalarWhereInput!]
+  updateMany: [CardUpdateManyWithWhereNestedInput!]
+}
+
+input CardUpdateManyWithWhereNestedInput {
+  where: CardScalarWhereInput!
+  data: CardUpdateManyDataInput!
+}
+
+input CardUpdateWithoutColumnDataInput {
+  description: String
+  owner: UserUpdateOneRequiredInput
+}
+
+input CardUpdateWithWhereUniqueWithoutColumnInput {
+  where: CardWhereUniqueInput!
+  data: CardUpdateWithoutColumnDataInput!
+}
+
+input CardUpsertWithWhereUniqueWithoutColumnInput {
+  where: CardWhereUniqueInput!
+  update: CardUpdateWithoutColumnDataInput!
+  create: CardCreateWithoutColumnInput!
 }
 
 input CardWhereInput {
@@ -250,20 +385,7 @@ input CardWhereInput {
   description_ends_with: String
   description_not_ends_with: String
   owner: UserWhereInput
-  column: String
-  column_not: String
-  column_in: [String!]
-  column_not_in: [String!]
-  column_lt: String
-  column_lte: String
-  column_gt: String
-  column_gte: String
-  column_contains: String
-  column_not_contains: String
-  column_starts_with: String
-  column_not_starts_with: String
-  column_ends_with: String
-  column_not_ends_with: String
+  column: ColumnWhereInput
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -289,6 +411,235 @@ input CardWhereUniqueInput {
   id: ID
 }
 
+type Column {
+  id: ID!
+  owner: User!
+  name: String!
+  cards(where: CardWhereInput, orderBy: CardOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Card!]
+  board: Board!
+}
+
+type ColumnConnection {
+  pageInfo: PageInfo!
+  edges: [ColumnEdge]!
+  aggregate: AggregateColumn!
+}
+
+input ColumnCreateInput {
+  id: ID
+  owner: UserCreateOneInput!
+  name: String!
+  cards: CardCreateManyWithoutColumnInput
+  board: BoardCreateOneWithoutColumnsInput!
+}
+
+input ColumnCreateManyWithoutBoardInput {
+  create: [ColumnCreateWithoutBoardInput!]
+  connect: [ColumnWhereUniqueInput!]
+}
+
+input ColumnCreateOneWithoutCardsInput {
+  create: ColumnCreateWithoutCardsInput
+  connect: ColumnWhereUniqueInput
+}
+
+input ColumnCreateWithoutBoardInput {
+  id: ID
+  owner: UserCreateOneInput!
+  name: String!
+  cards: CardCreateManyWithoutColumnInput
+}
+
+input ColumnCreateWithoutCardsInput {
+  id: ID
+  owner: UserCreateOneInput!
+  name: String!
+  board: BoardCreateOneWithoutColumnsInput!
+}
+
+type ColumnEdge {
+  node: Column!
+  cursor: String!
+}
+
+enum ColumnOrderByInput {
+  id_ASC
+  id_DESC
+  name_ASC
+  name_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type ColumnPreviousValues {
+  id: ID!
+  name: String!
+}
+
+input ColumnScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  AND: [ColumnScalarWhereInput!]
+  OR: [ColumnScalarWhereInput!]
+  NOT: [ColumnScalarWhereInput!]
+}
+
+type ColumnSubscriptionPayload {
+  mutation: MutationType!
+  node: Column
+  updatedFields: [String!]
+  previousValues: ColumnPreviousValues
+}
+
+input ColumnSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: ColumnWhereInput
+  AND: [ColumnSubscriptionWhereInput!]
+  OR: [ColumnSubscriptionWhereInput!]
+  NOT: [ColumnSubscriptionWhereInput!]
+}
+
+input ColumnUpdateInput {
+  owner: UserUpdateOneRequiredInput
+  name: String
+  cards: CardUpdateManyWithoutColumnInput
+  board: BoardUpdateOneRequiredWithoutColumnsInput
+}
+
+input ColumnUpdateManyDataInput {
+  name: String
+}
+
+input ColumnUpdateManyMutationInput {
+  name: String
+}
+
+input ColumnUpdateManyWithoutBoardInput {
+  create: [ColumnCreateWithoutBoardInput!]
+  delete: [ColumnWhereUniqueInput!]
+  connect: [ColumnWhereUniqueInput!]
+  set: [ColumnWhereUniqueInput!]
+  disconnect: [ColumnWhereUniqueInput!]
+  update: [ColumnUpdateWithWhereUniqueWithoutBoardInput!]
+  upsert: [ColumnUpsertWithWhereUniqueWithoutBoardInput!]
+  deleteMany: [ColumnScalarWhereInput!]
+  updateMany: [ColumnUpdateManyWithWhereNestedInput!]
+}
+
+input ColumnUpdateManyWithWhereNestedInput {
+  where: ColumnScalarWhereInput!
+  data: ColumnUpdateManyDataInput!
+}
+
+input ColumnUpdateOneRequiredWithoutCardsInput {
+  create: ColumnCreateWithoutCardsInput
+  update: ColumnUpdateWithoutCardsDataInput
+  upsert: ColumnUpsertWithoutCardsInput
+  connect: ColumnWhereUniqueInput
+}
+
+input ColumnUpdateWithoutBoardDataInput {
+  owner: UserUpdateOneRequiredInput
+  name: String
+  cards: CardUpdateManyWithoutColumnInput
+}
+
+input ColumnUpdateWithoutCardsDataInput {
+  owner: UserUpdateOneRequiredInput
+  name: String
+  board: BoardUpdateOneRequiredWithoutColumnsInput
+}
+
+input ColumnUpdateWithWhereUniqueWithoutBoardInput {
+  where: ColumnWhereUniqueInput!
+  data: ColumnUpdateWithoutBoardDataInput!
+}
+
+input ColumnUpsertWithoutCardsInput {
+  update: ColumnUpdateWithoutCardsDataInput!
+  create: ColumnCreateWithoutCardsInput!
+}
+
+input ColumnUpsertWithWhereUniqueWithoutBoardInput {
+  where: ColumnWhereUniqueInput!
+  update: ColumnUpdateWithoutBoardDataInput!
+  create: ColumnCreateWithoutBoardInput!
+}
+
+input ColumnWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  owner: UserWhereInput
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  cards_every: CardWhereInput
+  cards_some: CardWhereInput
+  cards_none: CardWhereInput
+  board: BoardWhereInput
+  AND: [ColumnWhereInput!]
+  OR: [ColumnWhereInput!]
+  NOT: [ColumnWhereInput!]
+}
+
+input ColumnWhereUniqueInput {
+  id: ID
+}
+
 scalar DateTime
 
 scalar Long
@@ -306,6 +657,12 @@ type Mutation {
   upsertCard(where: CardWhereUniqueInput!, create: CardCreateInput!, update: CardUpdateInput!): Card!
   deleteCard(where: CardWhereUniqueInput!): Card
   deleteManyCards(where: CardWhereInput): BatchPayload!
+  createColumn(data: ColumnCreateInput!): Column!
+  updateColumn(data: ColumnUpdateInput!, where: ColumnWhereUniqueInput!): Column
+  updateManyColumns(data: ColumnUpdateManyMutationInput!, where: ColumnWhereInput): BatchPayload!
+  upsertColumn(where: ColumnWhereUniqueInput!, create: ColumnCreateInput!, update: ColumnUpdateInput!): Column!
+  deleteColumn(where: ColumnWhereUniqueInput!): Column
+  deleteManyColumns(where: ColumnWhereInput): BatchPayload!
   createUser(data: UserCreateInput!): User!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
@@ -338,6 +695,9 @@ type Query {
   card(where: CardWhereUniqueInput!): Card
   cards(where: CardWhereInput, orderBy: CardOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Card]!
   cardsConnection(where: CardWhereInput, orderBy: CardOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CardConnection!
+  column(where: ColumnWhereUniqueInput!): Column
+  columns(where: ColumnWhereInput, orderBy: ColumnOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Column]!
+  columnsConnection(where: ColumnWhereInput, orderBy: ColumnOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ColumnConnection!
   user(where: UserWhereUniqueInput!): User
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
@@ -347,6 +707,7 @@ type Query {
 type Subscription {
   board(where: BoardSubscriptionWhereInput): BoardSubscriptionPayload
   card(where: CardSubscriptionWhereInput): CardSubscriptionPayload
+  column(where: ColumnSubscriptionWhereInput): ColumnSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
 }
 
@@ -436,15 +797,6 @@ input UserUpdateManyMutationInput {
   name: String
   email: String
   password: String
-}
-
-input UserUpdateOneInput {
-  create: UserCreateInput
-  update: UserUpdateDataInput
-  upsert: UserUpsertNestedInput
-  delete: Boolean
-  disconnect: Boolean
-  connect: UserWhereUniqueInput
 }
 
 input UserUpdateOneRequiredInput {

@@ -34,7 +34,7 @@ export default class graphService implements GraphService {
           user: null
         };
         // Note: Should this be in middleware?
-        // Note: We are going with anon acces for now, so just attach everything to the system user for now
+        // Note: We are going with anon access for now, so just attach everything to the system user for now
         result.user = await getSystemUser(result);
         return result;
       }

@@ -13,8 +13,20 @@ export interface Props {
 
 const CREATE_BOARD = gql`
   mutation CreateBoard($name: String!, $password: String!) {
-    createBoard(input: { name: $name, password: $password }) {
-      id
+    createBoard(
+      input: {
+        name: $name
+        password: $password
+        columns: [
+          { name: "Not Started" }
+          { name: "In Progress" }
+          { name: "Done" }
+        ]
+      }
+    ) {
+      board {
+        id
+      }
     }
   }
 `;
@@ -23,7 +35,7 @@ class CreateBoardMutation extends Mutation<CreateBoard, CreateBoardInput> {}
 
 class Board extends React.Component<Props> {
   _handleBoardCreation = async (data: CreateBoard) => {
-    const boardId = data.createBoard.id;
+    const boardId = data.createBoard.board.id;
     redirect({}, `/board/${boardId}`);
   };
 

@@ -6,7 +6,7 @@ import { Context } from "../utils";
 @Resolver(() => Column)
 export default class ColumnResolvers {
   @FieldResolver(() => [Card])
-  async cards(@Root() column: Column, @Ctx() ctx: Context): Promise<Card[]> {
-    return ctx.prisma.cards({ where: { column: column.name } });
+  cards(@Root() column: Column, @Ctx() ctx: Context): Promise<Card[]> {
+    return ctx.prisma.column({ id: column.id }).cards();
   }
 }

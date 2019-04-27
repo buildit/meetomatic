@@ -1,5 +1,5 @@
 import { ObjectType, Field, InputType } from "type-graphql";
-import Column from "./column";
+import Column, { CreateColumnInput } from "./column";
 import User from "./user";
 
 @ObjectType()
@@ -24,4 +24,13 @@ export class CreateBoardInput {
 
   @Field()
   password: string;
+
+  @Field(() => [CreateColumnInput])
+  columns?: CreateColumnInput[];
+}
+
+@ObjectType()
+export class CreateBoardPayload {
+  @Field()
+  board: Board;
 }

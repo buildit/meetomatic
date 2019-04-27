@@ -22,7 +22,10 @@ const GET_BOARD = gql`
         cards {
           id
           description
-          column
+          column {
+            id
+            name
+          }
           owner {
             id
             name
@@ -36,15 +39,20 @@ const GET_BOARD = gql`
 
 class CreateCardMutation extends Mutation<CreateCard, CreateCardVariables> {}
 const CREATE_CARD = gql`
-  mutation CreateCard($description: String!, $column: String!) {
-    createCard(input: { description: $description, column: $column }) {
-      id
-      description
-      column
-      owner {
-        name
+  mutation CreateCard($description: String!, $columnId: String!) {
+    createCard(input: { description: $description, columnId: $columnId }) {
+      card {
         id
-        email
+        description
+        column {
+          id
+          name
+        }
+        owner {
+          name
+          id
+          email
+        }
       }
     }
   }
@@ -97,8 +105,10 @@ export default class BoardPage extends React.Component<Props, State> {
             query: GET_BOARD,
             variables: { id: this.props.id }
           });
-          column = board.columns.find(c => c.name === data.createCard.column);
-          column.cards.push(data.createCard);
+          column = board.columns.find(
+            c => c.id === data.createCard.card.column.id
+          );
+          column.cards.push(data.createCard.card);
           cache.writeQuery({
             query: GET_BOARD,
             variables: { id: this.props.id },
@@ -123,7 +133,7 @@ export default class BoardPage extends React.Component<Props, State> {
                     onAddNewCard={columnId =>
                       createCard({
                         variables: {
-                          column: columnId,
+                          columnId: columnId,
                           description: this.state.newCardTitle
                         }
                       })

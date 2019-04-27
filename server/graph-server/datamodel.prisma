@@ -8,14 +8,24 @@ type User {
 type Card {
   id: ID! @unique @id
   description: String!
-  owner: User
-  column: String!
+  owner: User!
+  column: Column!
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
 }
+
+type Column {
+  id: ID! @unique @id
+  owner: User!
+  name: String!
+  cards: [Card]!
+  board: Board!
+}
+
 type Board {
-  id: ID! @unique
+  id: ID! @unique @id
   name: String!
   password: String!
   owner: User!
+  columns: [Column]!
 }

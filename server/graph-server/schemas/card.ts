@@ -1,5 +1,6 @@
 import { ObjectType, Field, InputType } from "type-graphql";
 import User from "./user";
+import Column from "./column";
 
 @ObjectType()
 export default class Card {
@@ -10,9 +11,9 @@ export default class Card {
   description: string;
 
   @Field()
-  column: string;
+  column?: Column;
 
-  @Field({ nullable: true })
+  @Field()
   owner?: User;
 }
 
@@ -22,5 +23,11 @@ export class CreateCardInput {
   description: string;
 
   @Field()
-  column: string;
+  columnId: string;
+}
+
+@ObjectType()
+export class CreateCardPayload {
+  @Field()
+  card: Card;
 }

@@ -18,8 +18,8 @@ type Board {
 type Card {
   id: String!
   description: String!
-  column: String!
-  owner: User
+  column: Column!
+  owner: User!
 }
 
 type Column {
@@ -31,11 +31,24 @@ type Column {
 input CreateBoardInput {
   name: String!
   password: String!
+  columns: [CreateColumnInput!]!
+}
+
+type CreateBoardPayload {
+  board: Board!
 }
 
 input CreateCardInput {
   description: String!
-  column: String!
+  columnId: String!
+}
+
+type CreateCardPayload {
+  card: Card!
+}
+
+input CreateColumnInput {
+  name: String!
 }
 
 input LoginInput {
@@ -44,10 +57,10 @@ input LoginInput {
 }
 
 type Mutation {
-  createCard(input: CreateCardInput!): Card!
+  createCard(input: CreateCardInput!): CreateCardPayload!
   signup(input: SignUpInput!): AuthPayload!
   login(input: LoginInput!): AuthPayload!
-  createBoard(input: CreateBoardInput!): Board!
+  createBoard(input: CreateBoardInput!): CreateBoardPayload!
 }
 
 type Query {
