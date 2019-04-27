@@ -17,4 +17,5 @@ type Board {
   id: ID! @unique
   name: String!
   password: String!
+  owner: User!
 }

@@ -9,3 +9,14 @@ export interface ColumnState {
   name: string;
   cards: CardState[];
 }
+
+export interface UserState {
+  id: string;
+  name: string;
+  email: string;
+}
+export interface BoardState {
+  id: string;
+  name: string;
+  owner: UserState;
+}

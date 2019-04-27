@@ -22,6 +22,7 @@ type Board {
   id: ID!
   name: String!
   password: String!
+  owner: User!
 }
 
 type BoardConnection {
@@ -33,6 +34,7 @@ type BoardConnection {
 input BoardCreateInput {
   name: String!
   password: String!
+  owner: UserCreateOneInput!
 }
 
 type BoardEdge {
@@ -80,6 +82,7 @@ input BoardSubscriptionWhereInput {
 input BoardUpdateInput {
   name: String
   password: String
+  owner: UserUpdateOneRequiredInput
 }
 
 input BoardUpdateManyMutationInput {
@@ -130,6 +133,7 @@ input BoardWhereInput {
   password_not_starts_with: String
   password_ends_with: String
   password_not_ends_with: String
+  owner: UserWhereInput
   AND: [BoardWhereInput!]
   OR: [BoardWhereInput!]
   NOT: [BoardWhereInput!]
@@ -440,6 +444,13 @@ input UserUpdateOneInput {
   upsert: UserUpsertNestedInput
   delete: Boolean
   disconnect: Boolean
+  connect: UserWhereUniqueInput
+}
+
+input UserUpdateOneRequiredInput {
+  create: UserCreateInput
+  update: UserUpdateDataInput
+  upsert: UserUpsertNestedInput
   connect: UserWhereUniqueInput
 }
 

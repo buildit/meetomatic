@@ -32,6 +32,10 @@ export class MeetoMaticServer {
     const handle = nextApp.getRequestHandler();
 
     nextApp.prepare().then(() => {
+      this.server.get("/board/create", (req, res) => {
+        nextApp.render(req, res, "/createboard");
+      });
+
       this.server.get("/board/:id", (req, res) => {
         nextApp.render(req, res, "/board", { id: req.params.id });
       });

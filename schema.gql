@@ -12,6 +12,7 @@ type Board {
   id: String!
   name: String!
   columns: [Column!]
+  owner: User!
 }
 
 type Card {

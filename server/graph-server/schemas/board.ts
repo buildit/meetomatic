@@ -1,5 +1,6 @@
 import { ObjectType, Field, InputType } from "type-graphql";
 import Column from "./column";
+import User from "./user";
 
 @ObjectType()
 export default class Board {
@@ -11,6 +12,9 @@ export default class Board {
 
   @Field(() => [Column], { nullable: true })
   columns?: Column[];
+
+  @Field(() => User)
+  owner?: User;
 }
 
 @InputType()
