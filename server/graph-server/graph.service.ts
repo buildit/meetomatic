@@ -26,6 +26,7 @@ export default class graphService implements GraphService {
     });
     const server = new ApolloServer({
       schema,
+
       context: async function(context) {
         const result: Context = {
           ...context,

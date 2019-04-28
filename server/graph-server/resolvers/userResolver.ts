@@ -7,9 +7,9 @@ import User, { AuthPayload, SignUpInput, LoginInput } from "../schemas/user";
 @Resolver(() => User)
 export default class {
   @Query(() => User, { nullable: true })
-  async currentUser(@Ctx() ctx: Context): Promise<User> {
+  currentUser(@Ctx() ctx: Context): Promise<User> {
     // Note: When we reintroduce users sign up and login use getUser(ctx) instead
-    return await getSystemUser(ctx);
+    return getSystemUser(ctx);
   }
 
   @Mutation(() => AuthPayload)

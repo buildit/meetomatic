@@ -15,13 +15,13 @@ import User from "../schemas/user";
 @Resolver(() => Board)
 export default class BoardResolvers {
   @Query(() => [Board])
-  async boards(@Ctx() ctx: Context): Promise<Board[]> {
-    return await ctx.prisma.boards({ where: { owner: { id: ctx.user.id } } });
+   boards(@Ctx() ctx: Context): Promise<Board[]> {
+    return ctx.prisma.boards({ where: { owner: { id: ctx.user.id } } });
   }
 
   @Query(() => Board, { nullable: true })
-  async board(@Arg("id") id: string, @Ctx() ctx: Context): Promise<Board> {
-    return await ctx.prisma.board({ id: id });
+  board(@Arg("id") id: string, @Ctx() ctx: Context): Promise<Board> {
+    return ctx.prisma.board({ id: id });
   }
 
   @Mutation(() => CreateBoardPayload)
