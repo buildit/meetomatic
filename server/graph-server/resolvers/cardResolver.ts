@@ -7,9 +7,15 @@ import {
   FieldResolver,
   Root
 } from "type-graphql";
-import Card, { CreateCardInput, CreateCardPayload } from "../schemas/card";
+import Card, {
+  CreateCardInput,
+  CreateCardPayload,
+  UpdateCardPayload,
+  UpdateCardInput
+} from "../schemas/card";
 import User from "../schemas/user";
 import Column from "../schemas/column";
+import { CardUpdateInput } from "../generated/prisma-client";
 
 @Resolver(() => Card)
 export default class {
@@ -18,26 +24,54 @@ export default class {
     @Arg("input") input: CreateCardInput,
     @Ctx() ctx: Context
   ): Promise<CreateCardPayload> {
-    const card = ctx.prisma.createCard({
+    const card = await ctx.prisma.createCard({
       description: input.description,
       column: { connect: { id: input.columnId } },
       owner: { connect: { id: ctx.user.id } }
     });
-
-    const newCard = await card;
-    const owner = await ctx.prisma.card({ id: newCard.id }).owner();
-
     return {
-      card: {
-        id: newCard.id,
-        description: newCard.description,
-        // column: newCard.column,
-        owner: {
-          name: owner.name,
-          email: owner.email,
-          id: owner.id
-        }
+      card
+    };
+  }
+
+  @Mutation(() => UpdateCardPayload)
+  async updateCard(
+    @Arg("id") id: string,
+    @Arg("input") input: UpdateCardInput,
+    @Ctx() ctx: Context
+  ): Promise<UpdateCardPayload | any> {
+    const card = await ctx.prisma
+      .card({ id })
+      .$fragment<{ id: string; column: { id: string; board: { id: string } } }>(
+        `fragment EnsureColumn on Card { id, column { id, name, board { id, name } }}`
+      );
+
+    if (!card) {
+      throw Error(`Card ${id} does not exist`);
+    }
+    const data: CardUpdateInput = {};
+
+    if (input.setColumn) {
+      const { setColumn } = input;
+      const destColumn = await ctx.prisma
+        .column({ id: setColumn.columnId })
+        .$fragment<{ id: string; board: { id: string } }>(
+          `fragment EnsureBoard on Column { id, board { id }}`
+        );
+      if (!destColumn) {
+        throw Error(`Column ${setColumn.columnId} does not exist`);
       }
+      if (card.column.board.id !== destColumn.board.id) {
+        throw Error("Cannot move cards between boards.");
+      }
+      data.column = { connect: { id: setColumn.columnId } };
+    }
+    const updatedCard = await ctx.prisma.updateCard({
+      where: { id },
+      data
+    });
+    return {
+      card: updatedCard
     };
   }
 

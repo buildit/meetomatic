@@ -27,7 +27,25 @@ export class CreateCardInput {
 }
 
 @ObjectType()
-export class CreateCardPayload {
+class CardPayload {
   @Field()
   card: Card;
 }
+
+@ObjectType()
+export class CreateCardPayload extends CardPayload {}
+
+@InputType()
+export class SetCardColumnInput {
+  @Field()
+  columnId: string;
+}
+
+@InputType()
+export class UpdateCardInput {
+  @Field({ nullable: true })
+  setColumn?: SetCardColumnInput;
+}
+
+@ObjectType()
+export class UpdateCardPayload extends CardPayload {}
