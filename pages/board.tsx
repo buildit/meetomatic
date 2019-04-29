@@ -9,6 +9,7 @@ import gql from "graphql-tag";
 import { Board, BoardVariables } from "./types/Board";
 import { CreateCard, CreateCardVariables } from "./types/CreateCard";
 import { ColumnState } from "types";
+import { MoveCard, MoveCardVariables } from "./types/MoveCard";
 
 class BoardQuery extends Query<Board, BoardVariables> {}
 const GET_BOARD = gql`
@@ -58,6 +59,20 @@ const CREATE_CARD = gql`
   }
 `;
 
+class MoveCardMutation extends Mutation<MoveCard, MoveCardVariables> {}
+const MOVE_CARD = gql`
+  mutation MoveCard($id: String!, $columnId: String!) {
+    updateCard(id: $id, input: { setColumn: { columnId: $columnId } }) {
+      card {
+        id
+        column {
+          id
+        }
+      }
+    }
+  }
+`;
+
 export interface Props {
   id: string;
 }
@@ -86,7 +101,7 @@ export default class BoardPage extends React.Component<Props, State> {
 
   moveCard = (/*columnIndex, rowIndex, destColumnIndex, destRowIndex*/) => {};
 
-  onDragEnd = () => {
+  _handleMoveCard = () => {
     // const columnIndex = event.source.droppableId.split("-")[1];
     // const rowIndex = event.source.index;
     // const destColumnIndex = event.destination.droppableId.split("-")[1];
@@ -94,7 +109,7 @@ export default class BoardPage extends React.Component<Props, State> {
     // this.moveCard(columnIndex, rowIndex, destColumnIndex, destRowIndex);
   };
 
-  renderColumn(column: ColumnState, index: number) {
+  _renderColumn(column: ColumnState, index: number) {
     return (
       <CreateCardMutation
         key={column.id}
@@ -152,11 +167,30 @@ export default class BoardPage extends React.Component<Props, State> {
     );
   }
 
+  _renderBoard(data: Board) {
+    return (
+      <MoveCardMutation mutation={MOVE_CARD}>
+        {_moveCard => {
+          return (
+            <div className="mom-board">
+              <DragDropContext onDragEnd={this._handleMoveCard}>
+                {data.board.columns.map((c, i) => this._renderColumn(c, i))}
+              </DragDropContext>
+            </div>
+          );
+        }}
+      </MoveCardMutation>
+    );
+  }
+
   render() {
-    const self = this;
     return (
       <div className="mom-container">
-        <BoardQuery query={GET_BOARD} variables={{ id: this.props.id }}>
+        <BoardQuery
+          query={GET_BOARD}
+          variables={{ id: this.props.id }}
+          pollInterval={1000}
+        >
           {({ data, loading }) => {
             if (loading) {
               return <div>Loading...</div>;
@@ -164,11 +198,7 @@ export default class BoardPage extends React.Component<Props, State> {
             return (
               <div>
                 <div>{data.board.name}</div>
-                <div className="mom-board">
-                  <DragDropContext onDragEnd={self.onDragEnd}>
-                    {data.board.columns.map((c, i) => this.renderColumn(c, i))}
-                  </DragDropContext>
-                </div>
+                {this._renderBoard(data)}
               </div>
             );
           }}
