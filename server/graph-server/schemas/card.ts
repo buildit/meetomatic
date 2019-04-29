@@ -42,9 +42,17 @@ export class SetCardColumnInput {
 }
 
 @InputType()
+export class SetCardDescriptionInput {
+  @Field()
+  description: string;
+}
+
+@InputType()
 export class UpdateCardInput {
   @Field({ nullable: true })
   setColumn?: SetCardColumnInput;
+  @Field({ nullable: true })
+  setDescription?: SetCardDescriptionInput;
 }
 
 @ObjectType()

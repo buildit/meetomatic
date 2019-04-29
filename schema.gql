@@ -78,6 +78,10 @@ input SetCardColumnInput {
   columnId: String!
 }
 
+input SetCardDescriptionInput {
+  description: String!
+}
+
 input SignUpInput {
   email: String!
   password: String!
@@ -86,6 +90,7 @@ input SignUpInput {
 
 input UpdateCardInput {
   setColumn: SetCardColumnInput
+  setDescription: SetCardDescriptionInput
 }
 
 type UpdateCardPayload {
