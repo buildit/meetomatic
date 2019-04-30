@@ -1,8 +1,7 @@
 import * as React from "react";
 import CardInterface from "./Card.interface";
+import CardVote from "../CardVote/CardVote";
 import { Draggable } from "react-beautiful-dnd";
-
-const REQUIRED_VOTES = 3;
 
 export default class Card extends React.Component<CardInterface, {}> {
   constructor(props: CardInterface) {
@@ -10,8 +9,8 @@ export default class Card extends React.Component<CardInterface, {}> {
   }
   render() {
     return (
-      <Draggable draggableId={this.props.title} index={this.props.index}>
-        {(provided, snapshot) => (
+      <Draggable className="grav-c-card" draggableId={this.props.title} index={this.props.index}>
+        {(provided) => (
           <div
             ref={provided.innerRef}
             {...provided.draggableProps}
@@ -19,9 +18,7 @@ export default class Card extends React.Component<CardInterface, {}> {
           >
             <div className="grav-c-card">
               <p className="grav-c-card__body">{this.props.title}</p>
-              <p className="mom-c-votes">
-                {this.props.votes} {this.props.votes > 1 ? "votes" : "vote"}
-              </p>
+                <CardVote voteCount={this.props.votes} handleVotes={this.props.handleVotes} cardId={this.props.cardId} />
             </div>
           </div>
         )}

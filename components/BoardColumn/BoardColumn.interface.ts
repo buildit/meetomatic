@@ -1,8 +1,10 @@
 export default interface Card {
+  id: string;
   index: number;
   title: string;
-  NewCardTitle: string;
+  newCardTitle: string;
   cards: Array<any>;
   addNewCard: any;
   handleCardChange: any;
+  handleVotes: any;
 }
