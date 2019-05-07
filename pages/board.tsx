@@ -22,7 +22,7 @@ const GET_BOARD = gql`
         cards {
           id
           description
-          column {  
+          column {
             id
             name
           }
