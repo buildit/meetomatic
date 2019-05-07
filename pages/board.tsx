@@ -99,14 +99,17 @@ export default class BoardPage extends React.Component<Props, State> {
     this.setState({ newCardTitle: "" });
   };
 
-  moveCard = (/*columnIndex, rowIndex, destColumnIndex, destRowIndex*/) => {};
+  _handleMoveCard = (event) => {
+    console.log(event);
+    const sourceCol = event.source.droppableId
+    const destCol  = event.destination.droppableId;
+    const card  = event.draggableId;
 
-  _handleMoveCard = () => {
-    // const columnIndex = event.source.droppableId.split("-")[1];
-    // const rowIndex = event.source.index;
-    // const destColumnIndex = event.destination.droppableId.split("-")[1];
-    // const destRowIndex = event.destination.index;
-    // this.moveCard(columnIndex, rowIndex, destColumnIndex, destRowIndex);
+    console.log(sourceCol);
+    console.log(destCol);
+    console.log(card);
+
+    // moveCardMutation(card, destCol);
   };
 
   _renderColumn(column: ColumnState, index: number) {
@@ -133,7 +136,7 @@ export default class BoardPage extends React.Component<Props, State> {
       >
         {createCard => {
           return (
-            <Droppable droppableId={`column-${index}`}>
+            <Droppable droppableId={column.id}>
               {provided => (
                 <div
                   className="mom-board__column"
@@ -173,7 +176,16 @@ export default class BoardPage extends React.Component<Props, State> {
         {_moveCard => {
           return (
             <div className="mom-board">
-              <DragDropContext onDragEnd={this._handleMoveCard}>
+              <DragDropContext 
+                onDragEnd={(e) => {
+                  _moveCard({
+                    variables: {
+                      id: e.draggableId,
+                      columnId: e.destination.droppableId
+                    }
+                  })
+                }}
+              >
                 {data.board.columns.map((c, i) => this._renderColumn(c, i))}
               </DragDropContext>
             </div>

@@ -71,6 +71,7 @@ export default class {
       // TODO: validate description
       data.description = input.setDescription.description;
     }
+    
     const updatedCard = await ctx.prisma.updateCard({
       where: { id },
       data
