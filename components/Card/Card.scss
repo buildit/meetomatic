@@ -14,8 +14,27 @@
     margin-top: 0;
     margin-bottom: 1rem;
   }
+
+  .grav-c-form-group:first-of-type {
+    margin-top: 0;
+  }
 }
 
 .mom-c-votes {
   text-align: right;
+}
+
+.grav-c-button-link {
+  padding-left: 0;
+  padding-right: 0;
+  border: initial;
+  text-align: initial;
+  text-decoration: underline; 
+  color: $grav-co-secondary-deep-ocean;
+  background-color: initial;
+
+  &:hover {
+    color: $grav-co-secondary-tealy-mc-tealface;
+    background-color: initial;
+  }
 }
