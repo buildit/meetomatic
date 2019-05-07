@@ -22,19 +22,6 @@
 
 // === Components layer ===
 @import 'gravity-ui-web/05-components/components.all';
-// @import 'gravity-ui-web/05-components/forms.all';
-// TODO: get Gravity Next setup as an npm package
-
-.grav-c-form-group {
-  > label {
-    display: block;
-  }
-
-  > input {
-    margin-top: $grav-sp-s;
-  }
-}
-
 @import './pages/board';
 @import './components/Card/Card';
 
