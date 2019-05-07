@@ -14,8 +14,25 @@
     margin-top: 0;
     margin-bottom: 1rem;
   }
+
+  .grav-c-form-group:first-of-type {
+    margin-top: 0;
+  }
 }
 
 .mom-c-votes {
   text-align: right;
+}
+
+.grav-c-button-link {
+  padding-left: 0;
+  padding-right: 0;
+  border: initial;
+  text-align: initial;
+  text-decoration: underline; 
+  background-color: initial;
+
+  &:hover {
+    background-color: initial;
+  }
 }
