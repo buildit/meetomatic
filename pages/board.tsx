@@ -99,18 +99,6 @@ export default class BoardPage extends React.Component<Props, State> {
     this.setState({ newCardTitle: "" });
   };
 
-  _handleMoveCard = (event) => {
-    console.log(event);
-    const sourceCol = event.source.droppableId
-    const destCol  = event.destination.droppableId;
-    const card  = event.draggableId;
-
-    console.log(sourceCol);
-    console.log(destCol);
-    console.log(card);
-
-    // moveCardMutation(card, destCol);
-  };
 
   _renderColumn(column: ColumnState, index: number) {
     return (
@@ -179,10 +167,50 @@ export default class BoardPage extends React.Component<Props, State> {
               <DragDropContext 
                 onDragEnd={(e) => {
                   _moveCard({
-                    variables: {
-                      id: e.draggableId,
-                      columnId: e.destination.droppableId
-                    }
+                      variables: {
+                        id: e.draggableId,
+                        columnId: e.destination.droppableId
+                      },
+                      optimisticResponse: {
+                        updateCard: {
+                         __typename: "UpdateCardPayload",
+                         card: {
+                          __typename: "Card",
+                          id: e.draggableId,
+                          column: {
+                            __typename: "Column",
+                            id: e.destination.droppableId
+                          }
+                         }
+                        }
+                      },
+                      update: (proxy, { data: { updateCard } }) => {
+                        console.log(updateCard);
+                        // Read the data from our cache for this query.
+                        const data = proxy.readQuery({
+                          query: GET_BOARD,
+                          variables: { id: this.props.id },
+                        });
+
+                        // // Remove
+                        // data['board'].columns.forEach(col => {
+                        //     const val = col.cards.filter((card, cardIndex) => {
+                        //      if (card.id === updateCard.card.id) {
+                        //        return { id: cardIndex, item: card};
+                        //      }
+                        //     })
+
+                        //     if((val).length > 0) {
+                        //      col.cards.splice(val["id"], 1);
+                        //     }
+                        // })
+
+                        console.log(data);
+                        proxy.writeQuery({ query: {
+                          query: GET_BOARD,
+                          variables: { id: this.props.id },
+                        }, data });
+                      }
                   })
                 }}
               >
