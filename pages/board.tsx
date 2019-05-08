@@ -192,24 +192,24 @@ export default class BoardPage extends React.Component<Props, State> {
                           variables: { id: this.props.id },
                         });
 
-                        // // Remove
-                        // data['board'].columns.forEach(col => {
-                        //     const val = col.cards.filter((card, cardIndex) => {
-                        //      if (card.id === updateCard.card.id) {
-                        //        return { id: cardIndex, item: card};
-                        //      }
-                        //     })
+                        // Remove
+                        data['board'].columns.forEach(col => {
+                            const val = col.cards.filter((card, cardIndex) => {
+                             if (card.id === updateCard.card.id) {
+                               return { id: cardIndex, item: card};
+                             }
+                            })
 
-                        //     if((val).length > 0) {
-                        //      col.cards.splice(val["id"], 1);
-                        //     }
-                        // })
+                            if((val).length > 0) {
+                             col.cards.splice(val["id"], 1);
+                            }
+                        })
 
                         console.log(data);
-                        proxy.writeQuery({ query: {
+                        proxy.writeQuery({
                           query: GET_BOARD,
-                          variables: { id: this.props.id },
-                        }, data });
+                          data
+                        });
                       }
                   })
                 }}
