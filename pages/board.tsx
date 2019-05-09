@@ -10,6 +10,7 @@ import { Board, BoardVariables } from "./types/Board";
 import { CreateCard, CreateCardVariables } from "./types/CreateCard";
 import { ColumnState } from "types";
 import { MoveCard, MoveCardVariables } from "./types/MoveCard";
+import { cpus } from "os";
 
 class BoardQuery extends Query<Board, BoardVariables> {}
 const GET_BOARD = gql`
@@ -185,27 +186,30 @@ export default class BoardPage extends React.Component<Props, State> {
                         }
                       },
                       update: (proxy, { data: { updateCard } }) => {
-                        console.log(updateCard);
                         // Read the data from our cache for this query.
                         const data = proxy.readQuery({
                           query: GET_BOARD,
                           variables: { id: this.props.id },
                         });
 
-                        // Remove
-                        data['board'].columns.forEach(col => {
-                            const val = col.cards.filter((card, cardIndex) => {
-                             if (card.id === updateCard.card.id) {
-                               return { id: cardIndex, item: card};
-                             }
-                            })
+                        let card = null;
+                       
+                        for(let i=0; i<data['board'].columns.length; i++) {
+                          card =  data['board'].columns[i].cards.filter(card => card.id === updateCard.card.id)
+                         
+                          data['board'].columns[i].cards.splice(card.id, 1);
+                          if (card.length > 0){
+                            break;
+                          }
+                        }
 
-                            if((val).length > 0) {
-                             col.cards.splice(val["id"], 1);
-                            }
-                        })
+                        const dest = data['board'].
+                        columns.filter(col => col.id === updateCard.card.column.id);
+                        
+                        if(dest[0].cards.filter(card => card.id === card.id).length >0){
+                         dest[0].cards.unshift(card[0]);
+                        }
 
-                        console.log(data);
                         proxy.writeQuery({
                           query: GET_BOARD,
                           data
