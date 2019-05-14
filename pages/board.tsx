@@ -1,16 +1,20 @@
 import * as React from "react";
 import BoardColumn from "../components/BoardColumn/BoardColumn";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
-// import * as io from "socket.io-client";
 import * as SocketIO from "socket.io";
 import "../styles.scss";
-import { Query, Mutation } from "react-apollo";
+import { Query, Mutation, MutationResult } from "react-apollo";
 import gql from "graphql-tag";
-import { Board, BoardVariables } from "./types/Board";
+import {
+  Board,
+  BoardVariables,
+  Board_board_columns_cards,
+  Board_board_columns
+} from "./types/Board";
 import { CreateCard, CreateCardVariables } from "./types/CreateCard";
 import { ColumnState } from "types";
 import { MoveCard, MoveCardVariables } from "./types/MoveCard";
-import { cpus } from "os";
+import { DataProxy } from "apollo-cache";
 
 class BoardQuery extends Query<Board, BoardVariables> {}
 const GET_BOARD = gql`
@@ -82,7 +86,7 @@ interface State {
   newCardTitle: string;
 }
 
-export default class BoardPage extends React.Component<Props, State> {
+class BoardPage extends React.Component<Props, State> {
   protected getSocket = () => this.socket;
   private socket: SocketIO.Socket;
 
@@ -100,28 +104,72 @@ export default class BoardPage extends React.Component<Props, State> {
     this.setState({ newCardTitle: "" });
   };
 
+  _handleCreatedCard = (cache: DataProxy, { data }: { data: CreateCard }) => {
+    const { board } = cache.readQuery<Board>({
+      query: GET_BOARD,
+      variables: { id: this.props.id }
+    });
+    const column = board.columns.find(
+      c => c.id === data.createCard.card.column.id
+    );
+    column.cards.push(data.createCard.card);
+    cache.writeQuery({
+      query: GET_BOARD,
+      variables: { id: this.props.id },
+      data: { board }
+    });
+  };
+
+  _handleMovedCard = (cache: DataProxy, result: MutationResult<MoveCard>) => {
+    const updateCard = result.data.updateCard;
+    // Read the data from our cache for this query.
+    const data = cache.readQuery<Board, BoardVariables>({
+      query: GET_BOARD,
+      variables: { id: this.props.id }
+    });
+
+    let cardSourceIndex = -1;
+    let sourceColumn: Board_board_columns;
+
+    // Find the column that the card currently belongs to.
+    for (const column of data.board.columns) {
+      const index = column.cards.findIndex(c => c.id === updateCard.card.id);
+      if (index > -1) {
+        cardSourceIndex = index;
+        sourceColumn = column;
+        break;
+      }
+    }
+
+    // If we found the card and the source column !- dest column, move the card
+    if (sourceColumn && cardSourceIndex !== -1) {
+      let card: Board_board_columns_cards;
+      card = sourceColumn.cards[cardSourceIndex];
+      sourceColumn.cards.splice(cardSourceIndex, 1);
+      const destColumn = data.board.columns.find(
+        c => c.id === updateCard.card.column.id
+      );
+      destColumn.cards.push(card);
+
+      cache.writeQuery<Board, BoardVariables>({
+        query: GET_BOARD,
+        variables: { id: this.props.id },
+        data
+      });
+    }
+  };
 
   _renderColumn(column: ColumnState, index: number) {
     return (
       <CreateCardMutation
         key={column.id}
         mutation={CREATE_CARD}
-        onCompleted={this._handleCreateCardComplete}
-        update={(cache, { data }) => {
-          const { board } = cache.readQuery<Board>({
-            query: GET_BOARD,
-            variables: { id: this.props.id }
-          });
-          column = board.columns.find(
-            c => c.id === data.createCard.card.column.id
-          );
-          column.cards.push(data.createCard.card);
-          cache.writeQuery({
-            query: GET_BOARD,
-            variables: { id: this.props.id },
-            data: { board }
-          });
+        variables={{
+          columnId: column.id,
+          description: this.state.newCardTitle
         }}
+        onCompleted={this._handleCreateCardComplete}
+        update={this._handleCreatedCard}
       >
         {createCard => {
           return (
@@ -137,14 +185,7 @@ export default class BoardPage extends React.Component<Props, State> {
                     id={column.id}
                     name={column.name}
                     cards={column.cards}
-                    onAddNewCard={columnId =>
-                      createCard({
-                        variables: {
-                          columnId: columnId,
-                          description: this.state.newCardTitle
-                        }
-                      })
-                    }
+                    onAddNewCard={() => createCard()}
                     onNewCardTitleChange={this._handleCardChange}
                     newCardTitle={this.state.newCardTitle}
                     showAdd={index === 0}
@@ -161,61 +202,31 @@ export default class BoardPage extends React.Component<Props, State> {
 
   _renderBoard(data: Board) {
     return (
-      <MoveCardMutation mutation={MOVE_CARD}>
-        {_moveCard => {
+      <MoveCardMutation mutation={MOVE_CARD} update={this._handleMovedCard}>
+        {moveCard => {
           return (
             <div className="mom-board">
-              <DragDropContext 
-                onDragEnd={(e) => {
-                  _moveCard({
-                      variables: {
-                        id: e.draggableId,
-                        columnId: e.destination.droppableId
-                      },
-                      optimisticResponse: {
-                        updateCard: {
-                         __typename: "UpdateCardPayload",
-                         card: {
+              <DragDropContext
+                onDragEnd={e => {
+                  moveCard({
+                    variables: {
+                      columnId: e.destination.droppableId,
+                      id: e.draggableId
+                    },
+                    optimisticResponse: {
+                      updateCard: {
+                        __typename: "UpdateCardPayload",
+                        card: {
                           __typename: "Card",
                           id: e.draggableId,
                           column: {
                             __typename: "Column",
                             id: e.destination.droppableId
                           }
-                         }
                         }
-                      },
-                      update: (proxy, { data: { updateCard } }) => {
-                        // Read the data from our cache for this query.
-                        const data = proxy.readQuery({
-                          query: GET_BOARD,
-                          variables: { id: this.props.id },
-                        });
-
-                        let card = null;
-                       
-                        for(let i=0; i<data['board'].columns.length; i++) {
-                          card =  data['board'].columns[i].cards.filter(card => card.id === updateCard.card.id)
-                         
-                          data['board'].columns[i].cards.splice(card.id, 1);
-                          if (card.length > 0){
-                            break;
-                          }
-                        }
-
-                        const dest = data['board'].
-                        columns.filter(col => col.id === updateCard.card.column.id);
-                        
-                        if(dest[0].cards.filter(card => card.id === card.id).length >0){
-                         dest[0].cards.unshift(card[0]);
-                        }
-
-                        proxy.writeQuery({
-                          query: GET_BOARD,
-                          data
-                        });
                       }
-                  })
+                    }
+                  });
                 }}
               >
                 {data.board.columns.map((c, i) => this._renderColumn(c, i))}
@@ -233,7 +244,7 @@ export default class BoardPage extends React.Component<Props, State> {
         <BoardQuery
           query={GET_BOARD}
           variables={{ id: this.props.id }}
-          pollInterval={1000}
+          // pollInterval={1000}
         >
           {({ data, loading }) => {
             if (loading) {
@@ -251,3 +262,5 @@ export default class BoardPage extends React.Component<Props, State> {
     );
   }
 }
+
+export default BoardPage;
