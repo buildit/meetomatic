@@ -108,8 +108,7 @@ export default class {
 
   @Subscription({
     topics: "cardCreated",
-    filter({ args, payload, context }) {
-      console.log(context);
+    filter({ args, payload }) {
       return args.boardId === payload.boardId;
     }
   })
