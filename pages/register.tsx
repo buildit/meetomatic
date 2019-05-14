@@ -1,5 +1,5 @@
 import React from "react";
-import { gql } from "apollo-boost";
+import gql from "graphql-tag";
 import { Mutation, withApollo } from "react-apollo";
 import cookie from "cookie";
 import redirect from "../lib/redirect";

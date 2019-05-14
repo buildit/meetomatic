@@ -1,5 +1,6 @@
 import * as jwt from "jsonwebtoken";
 import { Prisma, User } from "./generated/prisma-client";
+import { PubSub } from "apollo-server";
 
 export interface Context {
   prisma: Prisma;
@@ -8,6 +9,7 @@ export interface Context {
     appSecret: String;
   };
   user: User;
+  pubsub: PubSub;
 }
 
 export async function getSystemUser(ctx: Context): Promise<User> {

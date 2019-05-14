@@ -15,7 +15,7 @@ import User from "../schemas/user";
 @Resolver(() => Board)
 export default class BoardResolvers {
   @Query(() => [Board])
-   boards(@Ctx() ctx: Context): Promise<Board[]> {
+  boards(@Ctx() ctx: Context): Promise<Board[]> {
     return ctx.prisma.boards({ where: { owner: { id: ctx.user.id } } });
   }
 

@@ -2,7 +2,7 @@ import "../styles.scss";
 import App, { Container, DefaultAppIProps } from "next/app";
 import React from "react";
 import { ApolloProvider, getDataFromTree } from "react-apollo";
-import { gql } from "apollo-boost";
+import gql from "graphql-tag";
 import redirect from "../lib/redirect";
 import cookie from "cookie";
 import initApolloClient from "../lib/initApollo";

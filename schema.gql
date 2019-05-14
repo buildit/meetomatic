@@ -22,6 +22,11 @@ type Card {
   owner: User!
 }
 
+type CardCreatedNotification {
+  card: Card!
+  boardId: String!
+}
+
 type CardPayload {
   card: Card!
 }
@@ -86,6 +91,10 @@ input SignUpInput {
   email: String!
   password: String!
   name: String!
+}
+
+type Subscription {
+  cardCreated(boardId: String!): CardCreatedNotification!
 }
 
 input UpdateCardInput {

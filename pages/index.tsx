@@ -1,6 +1,6 @@
 import * as React from "react";
 import Link from "next/link";
-import { gql } from "apollo-boost";
+import gql from "graphql-tag";
 import { Query } from "react-apollo";
 import { UserBoardList } from "./types/UserBoardList";
 import { BoardState } from "types";

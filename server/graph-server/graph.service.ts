@@ -1,5 +1,5 @@
 import { GraphService } from "./graph.service.interface";
-import { ApolloServer } from "apollo-server";
+import { ApolloServer, PubSub } from "apollo-server";
 import { prisma } from "./generated/prisma-client";
 import { getSystemUser, Context } from "./utils";
 import { buildSchema } from "type-graphql";
@@ -14,7 +14,9 @@ const config = {
 
 export default class graphService implements GraphService {
   async init() {
+    const pubsub = new PubSub();
     const schema = await buildSchema({
+      pubSub: pubsub,
       resolvers: [
         CardResolvers,
         UserResolvers,
@@ -32,6 +34,7 @@ export default class graphService implements GraphService {
           ...context,
           prisma,
           config,
+          pubsub,
           user: null
         };
         // Note: Should this be in middleware?

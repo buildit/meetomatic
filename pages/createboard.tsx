@@ -1,6 +1,6 @@
 import * as React from "react";
 import "../styles.scss";
-import { ApolloClient, InMemoryCache, gql } from "apollo-boost";
+import gql from "graphql-tag";
 import { Mutation, withApollo } from "react-apollo";
 import redirect from "../lib/redirect";
 import CreateBoardWidget from "../components/CreateBoard/CreateBoard";
@@ -8,7 +8,7 @@ import { CreateBoard } from "./types/CreateBoard";
 import { CreateBoardInput } from "server/graph-server/schemas/board";
 
 export interface Props {
-  client: ApolloClient<InMemoryCache>;
+  client: any;
 }
 
 const CREATE_BOARD = gql`
