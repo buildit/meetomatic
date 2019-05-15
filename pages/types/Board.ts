@@ -6,6 +6,13 @@
 // GraphQL query operation: Board
 // ====================================================
 
+export interface Board_board_owner {
+  __typename: "User";
+  id: string;
+  name: string;
+  email: string;
+}
+
 export interface Board_board_columns_cards_column {
   __typename: "Column";
   id: string;
@@ -38,6 +45,7 @@ export interface Board_board {
   __typename: "Board";
   id: string;
   name: string;
+  owner: Board_board_owner;
   columns: Board_board_columns[] | null;
 }
 
