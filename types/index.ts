@@ -18,4 +18,5 @@ export interface BoardState {
   id: string;
   name: string;
   owner: UserState;
+  columns?: ColumnState[];
 }

@@ -57,3 +57,9 @@ export class UpdateCardInput {
 
 @ObjectType()
 export class UpdateCardPayload extends CardPayload {}
+
+@ObjectType()
+export class CardCreatedNotification extends CreateCardPayload {
+  @Field()
+  boardId: string;
+}

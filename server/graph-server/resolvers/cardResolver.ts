@@ -5,13 +5,17 @@ import {
   Arg,
   Ctx,
   FieldResolver,
-  Root
+  Root,
+  PubSub,
+  Publisher,
+  Subscription
 } from "type-graphql";
 import Card, {
   CreateCardInput,
   CreateCardPayload,
   UpdateCardPayload,
-  UpdateCardInput
+  UpdateCardInput,
+  CardCreatedNotification
 } from "../schemas/card";
 import User from "../schemas/user";
 import Column from "../schemas/column";
@@ -22,13 +26,24 @@ export default class {
   @Mutation(() => CreateCardPayload)
   async createCard(
     @Arg("input") input: CreateCardInput,
-    @Ctx() ctx: Context
+    @Ctx() ctx: Context,
+    @PubSub("cardCreated") publish: Publisher<CardCreatedNotification>
   ): Promise<CreateCardPayload> {
+    const column = await ctx.prisma
+      .column({ id: input.columnId })
+      .$fragment<{ id: string; board: { id: string } }>(
+        `fragment EnsureBoard on Column { id, board { id }}`
+      );
+    if (!column) {
+      throw Error(`Column ${input.columnId} does not exist`);
+    }
+
     const card = await ctx.prisma.createCard({
       description: input.description,
       column: { connect: { id: input.columnId } },
       owner: { connect: { id: ctx.user.id } }
     });
+    await publish({ card, boardId: column.board.id });
     return {
       card
     };
@@ -71,6 +86,7 @@ export default class {
       // TODO: validate description
       data.description = input.setDescription.description;
     }
+
     const updatedCard = await ctx.prisma.updateCard({
       where: { id },
       data
@@ -88,5 +104,21 @@ export default class {
   @FieldResolver(() => Column)
   column(@Root() card: Card, @Ctx() ctx: Context): Promise<Column> {
     return ctx.prisma.card({ id: card.id }).column();
+  }
+
+  @Subscription({
+    topics: "cardCreated",
+    filter({ args, payload }) {
+      return args.boardId === payload.boardId;
+    }
+  })
+  cardCreated(
+    @Root() createCardPayload: CardCreatedNotification,
+    @Arg("boardId") boardId: string
+  ): CardCreatedNotification {
+    return {
+      ...createCardPayload,
+      boardId
+    };
   }
 }
