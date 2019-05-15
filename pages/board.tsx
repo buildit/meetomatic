@@ -1,6 +1,5 @@
 import * as React from "react";
 import BoardWidget from "../components/Board/Board";
-import * as SocketIO from "socket.io";
 import "../styles.scss";
 import { Query, MutationResult, withApollo } from "react-apollo";
 import gql from "graphql-tag";
@@ -112,8 +111,6 @@ interface State {
 }
 
 class BoardPage extends React.Component<Props, State> {
-  protected getSocket = () => this.socket;
-  private socket: SocketIO.Socket;
   private subscription;
 
   static getInitialProps(ctx) {
@@ -208,7 +205,7 @@ class BoardPage extends React.Component<Props, State> {
       }
     }
 
-    // If we found the card and the source column !- dest column, move the card
+    // If we found the card and the source column != dest column, move the card
     if (sourceColumn && cardSourceIndex !== -1) {
       let card: Board_board_columns_cards;
       card = sourceColumn.cards[cardSourceIndex];

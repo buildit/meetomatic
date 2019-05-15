@@ -7,6 +7,10 @@ import { ApolloLink, Observable, split } from "apollo-link";
 import { getMainDefinition } from "apollo-utilities";
 import { SubscriptionClient } from "subscriptions-transport-ws";
 
+/**
+ * If we are own the client we create an Http and WebSocket link.
+ * We send Query and Mutation requests over Http and Subscriptions over the Ws
+ */
 const wsLink = process.browser
   ? new WebSocketLink(
       new SubscriptionClient("ws://localhost:4000/graphql", { reconnect: true })
