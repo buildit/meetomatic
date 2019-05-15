@@ -7,19 +7,18 @@ import {
   FieldResolver,
   Root,
   PubSub,
-  Publisher,
-  Subscription
+  Publisher
 } from "type-graphql";
 import Card, {
   CreateCardInput,
   CreateCardPayload,
   UpdateCardPayload,
-  UpdateCardInput,
-  CardCreatedNotification
+  UpdateCardInput
 } from "../schemas/card";
 import User from "../schemas/user";
 import Column from "../schemas/column";
 import { CardUpdateInput } from "../generated/prisma-client";
+import { BoardNotification, CardUpdates } from "../schemas/notifications";
 
 @Resolver(() => Card)
 export default class {
@@ -27,7 +26,7 @@ export default class {
   async createCard(
     @Arg("input") input: CreateCardInput,
     @Ctx() ctx: Context,
-    @PubSub("cardCreated") publish: Publisher<CardCreatedNotification>
+    @PubSub("boardNotification") publish: Publisher<BoardNotification>
   ): Promise<CreateCardPayload> {
     const column = await ctx.prisma
       .column({ id: input.columnId })
@@ -43,7 +42,10 @@ export default class {
       column: { connect: { id: input.columnId } },
       owner: { connect: { id: ctx.user.id } }
     });
-    await publish({ card, boardId: column.board.id });
+    await publish({
+      updates: [{ card, name: CardUpdates.Created }],
+      boardId: column.board.id
+    });
     return {
       card
     };
@@ -53,7 +55,8 @@ export default class {
   async updateCard(
     @Arg("id") id: string,
     @Arg("input") input: UpdateCardInput,
-    @Ctx() ctx: Context
+    @Ctx() ctx: Context,
+    @PubSub("boardNotification") publish: Publisher<BoardNotification>
   ): Promise<UpdateCardPayload | any> {
     const card = await ctx.prisma
       .card({ id })
@@ -64,8 +67,9 @@ export default class {
     if (!card) {
       throw Error(`Card ${id} does not exist`);
     }
-    const data: CardUpdateInput = {};
 
+    const data: CardUpdateInput = {};
+    const updates: CardUpdates[] = [];
     if (input.setColumn) {
       const { setColumn } = input;
       const destColumn = await ctx.prisma
@@ -80,17 +84,25 @@ export default class {
         throw Error("Cannot move cards between boards.");
       }
       data.column = { connect: { id: setColumn.columnId } };
+      updates.push(CardUpdates.Moved);
     }
 
     if (input.setDescription) {
       // TODO: validate description
       data.description = input.setDescription.description;
+      updates.push(CardUpdates.Renamed);
     }
 
     const updatedCard = await ctx.prisma.updateCard({
       where: { id },
       data
     });
+
+    await publish({
+      updates: updates.map(name => ({ card: updatedCard, name })),
+      boardId: card.column.board.id
+    });
+
     return {
       card: updatedCard
     };
@@ -104,21 +116,5 @@ export default class {
   @FieldResolver(() => Column)
   column(@Root() card: Card, @Ctx() ctx: Context): Promise<Column> {
     return ctx.prisma.card({ id: card.id }).column();
-  }
-
-  @Subscription({
-    topics: "cardCreated",
-    filter({ args, payload }) {
-      return args.boardId === payload.boardId;
-    }
-  })
-  cardCreated(
-    @Root() createCardPayload: CardCreatedNotification,
-    @Arg("boardId") boardId: string
-  ): CardCreatedNotification {
-    return {
-      ...createCardPayload,
-      boardId
-    };
   }
 }

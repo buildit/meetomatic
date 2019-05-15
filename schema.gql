@@ -15,6 +15,13 @@ type Board {
   owner: User!
 }
 
+type BoardNotification {
+  boardId: String!
+  updates: [BoardUpdate!]!
+}
+
+union BoardUpdate = CardCreatedUpdate | CardMovedUpdate
+
 type Card {
   id: String!
   description: String!
@@ -22,9 +29,12 @@ type Card {
   owner: User!
 }
 
-type CardCreatedNotification {
+type CardCreatedUpdate {
   card: Card!
-  boardId: String!
+}
+
+type CardMovedUpdate {
+  card: Card!
 }
 
 type CardPayload {
@@ -94,7 +104,7 @@ input SignUpInput {
 }
 
 type Subscription {
-  cardCreated(boardId: String!): CardCreatedNotification!
+  boardUpdated(boardId: String!): BoardNotification!
 }
 
 input UpdateCardInput {

@@ -17,7 +17,6 @@ export default class CreateBoard extends React.Component<CreateFormProps> {
 
   _handleSubmit(e: { preventDefault: () => void }) {
     e.preventDefault();
-    console.log(this.props);
     this.props.createBoard(
       this.nameInput.current.value,
       this.passwordInput.current.value

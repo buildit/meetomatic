@@ -5,12 +5,14 @@ import {
   Root,
   FieldResolver,
   Ctx,
-  Mutation
+  Mutation,
+  Subscription
 } from "type-graphql";
 import Board, { CreateBoardInput, CreateBoardPayload } from "../schemas/board";
 import Column from "../schemas/column";
 import { Context } from "../utils";
 import User from "../schemas/user";
+import { BoardNotification } from "../schemas/notifications";
 
 @Resolver(() => Board)
 export default class BoardResolvers {
@@ -29,7 +31,6 @@ export default class BoardResolvers {
     @Arg("input") input: CreateBoardInput,
     @Ctx() ctx: Context
   ): Promise<CreateBoardPayload> {
-    console.log(input.columns);
     const board = await ctx.prisma.createBoard({
       name: input.name,
       password: input.password,
@@ -52,5 +53,21 @@ export default class BoardResolvers {
   @FieldResolver()
   async columns(@Root() board: Board, @Ctx() ctx: Context): Promise<Column[]> {
     return await ctx.prisma.board({ id: board.id }).columns();
+  }
+
+  @Subscription(() => BoardNotification, {
+    topics: "boardNotification",
+    filter({ args, payload }) {
+      return args.boardId === payload.boardId;
+    }
+  })
+  boardUpdated(
+    @Root() boardNotification: BoardNotification,
+    @Arg("boardId") boardId: string
+  ): BoardNotification {
+    return {
+      ...boardNotification,
+      boardId
+    };
   }
 }

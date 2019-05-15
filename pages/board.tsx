@@ -1,7 +1,7 @@
 import * as React from "react";
 import BoardWidget from "../components/Board/Board";
 import "../styles.scss";
-import { Query, MutationResult, withApollo } from "react-apollo";
+import { Query, withApollo } from "react-apollo";
 import gql from "graphql-tag";
 import {
   Board,
@@ -13,7 +13,7 @@ import { CreateCard, CreateCardVariables } from "./types/CreateCard";
 import { MoveCard, MoveCardVariables } from "./types/MoveCard";
 import { DataProxy } from "apollo-cache";
 import ApolloClient from "apollo-client";
-import { CardCreated, CardCreatedVariables } from "./types/CardCreated";
+import { BoardUpdated, BoardUpdatedVariables } from "./types/BoardUpdated";
 
 class BoardQuery extends Query<Board, BoardVariables> {}
 const GET_BOARD = gql`
@@ -80,23 +80,37 @@ const MOVE_CARD = gql`
   }
 `;
 
-const CARD_CREATED_SUBSCRIPTION = gql`
-  subscription CardCreated($boardId: String!) {
-    cardCreated(boardId: $boardId) {
-      card {
-        id
-        description
-        column {
-          id
-          name
+const BOARD_UPDATED_SUBSCRIPTION = gql`
+  subscription BoardUpdated($boardId: String!) {
+    boardUpdated(boardId: $boardId) {
+      boardId
+      updates {
+        __typename
+        ... on CardCreatedUpdate {
+          card {
+            id
+            description
+            column {
+              id
+              name
+            }
+            owner {
+              name
+              id
+              email
+            }
+          }
         }
-        owner {
-          name
-          id
-          email
+        __typename
+        ... on CardMovedUpdate {
+          card {
+            id
+            column {
+              id
+            }
+          }
         }
       }
-      boardId
     }
   }
 `;
@@ -123,21 +137,34 @@ class BoardPage extends React.Component<Props, State> {
 
   componentDidMount() {
     this.subscription = this.props.client
-      .subscribe<{ data: CardCreated }, CardCreatedVariables>({
-        query: CARD_CREATED_SUBSCRIPTION,
+      .subscribe<{ data: BoardUpdated }, BoardUpdatedVariables>({
+        query: BOARD_UPDATED_SUBSCRIPTION,
         variables: {
           boardId: this.props.id
         }
       })
       .subscribe(({ data }) => {
-        // If we a get a new card notificaiton, turn it in to a CreateCardPayload
+        // If we a get a board notificaiton, turn it in to a Payload
         // and use the existing logic for updating the store
-        this._handleCreatedCard(this.props.client.cache, {
-          data: {
-            createCard: {
-              __typename: "CreateCardPayload",
-              card: data.cardCreated.card
-            }
+        data.boardUpdated.updates.forEach(update => {
+          if (update.__typename === "CardCreatedUpdate") {
+            this._handleCreatedCard(this.props.client, {
+              data: {
+                createCard: {
+                  __typename: "CreateCardPayload",
+                  card: update.card
+                }
+              }
+            });
+          } else if (update.__typename === "CardMovedUpdate") {
+            this._handleMovedCard(this.props.client, {
+              data: {
+                updateCard: {
+                  __typename: "UpdateCardPayload",
+                  card: update.card
+                }
+              }
+            });
           }
         });
       });
@@ -184,10 +211,10 @@ class BoardPage extends React.Component<Props, State> {
    *
    * Update our board cache by moving the card between columns
    */
-  _handleMovedCard = (cache: DataProxy, result: MutationResult<MoveCard>) => {
-    const updateCard = result.data.updateCard;
+  _handleMovedCard = (cache: DataProxy, { data }: { data: MoveCard }) => {
+    const updateCard = data.updateCard;
     // Read the data from our cache for this query.
-    const data = cache.readQuery<Board, BoardVariables>({
+    const { board } = cache.readQuery<Board, BoardVariables>({
       query: GET_BOARD,
       variables: { id: this.props.id }
     });
@@ -196,7 +223,7 @@ class BoardPage extends React.Component<Props, State> {
     let sourceColumn: Board_board_columns;
 
     // Find the column that the card currently belongs to.
-    for (const column of data.board.columns) {
+    for (const column of board.columns) {
       const index = column.cards.findIndex(c => c.id === updateCard.card.id);
       if (index > -1) {
         cardSourceIndex = index;
@@ -210,15 +237,14 @@ class BoardPage extends React.Component<Props, State> {
       let card: Board_board_columns_cards;
       card = sourceColumn.cards[cardSourceIndex];
       sourceColumn.cards.splice(cardSourceIndex, 1);
-      const destColumn = data.board.columns.find(
+      const destColumn = board.columns.find(
         c => c.id === updateCard.card.column.id
       );
       destColumn.cards.push(card);
-
       cache.writeQuery<Board, BoardVariables>({
         query: GET_BOARD,
         variables: { id: this.props.id },
-        data
+        data: { board }
       });
     }
   };
