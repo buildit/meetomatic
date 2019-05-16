@@ -11,10 +11,16 @@ export interface MoveCard_updateCard_card_column {
   id: string;
 }
 
+export interface MoveCard_updateCard_card_owner {
+  __typename: "User";
+  id: string;
+}
+
 export interface MoveCard_updateCard_card {
   __typename: "Card";
   id: string;
   column: MoveCard_updateCard_card_column;
+  owner: MoveCard_updateCard_card_owner;
 }
 
 export interface MoveCard_updateCard {

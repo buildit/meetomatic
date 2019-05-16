@@ -20,7 +20,7 @@ type BoardNotification {
   updates: [BoardUpdate!]!
 }
 
-union BoardUpdate = CardCreatedUpdate | CardMovedUpdate
+union BoardUpdate = CardCreatedUpdate | CardMovedUpdate | CardRenamedUpdate
 
 type Card {
   id: String!
@@ -38,6 +38,10 @@ type CardMovedUpdate {
 }
 
 type CardPayload {
+  card: Card!
+}
+
+type CardRenamedUpdate {
   card: Card!
 }
 

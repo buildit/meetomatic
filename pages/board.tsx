@@ -10,10 +10,20 @@ import {
   Board_board_columns
 } from "./types/Board";
 import { CreateCard, CreateCardVariables } from "./types/CreateCard";
-import { MoveCard, MoveCardVariables } from "./types/MoveCard";
+import {
+  MoveCard,
+  MoveCardVariables,
+  MoveCard_updateCard
+} from "./types/MoveCard";
 import { DataProxy } from "apollo-cache";
 import ApolloClient from "apollo-client";
 import { BoardUpdated, BoardUpdatedVariables } from "./types/BoardUpdated";
+import {
+  RenameCard,
+  RenameCardVariables,
+  RenameCard_updateCard
+} from "./types/RenameCard";
+import { Card } from "./types/Card";
 
 class BoardQuery extends Query<Board, BoardVariables> {}
 const GET_BOARD = gql`
@@ -47,37 +57,68 @@ const GET_BOARD = gql`
   }
 `;
 
+const CARD_FRAGMENT = gql`
+  fragment Card on Card {
+    id
+    description
+    column {
+      id
+      name
+    }
+    owner {
+      name
+      id
+      email
+    }
+  }
+`;
+const CARD_UPDATE_FRAGMENT = gql`
+  fragment CardUpdate on Card {
+    id
+    column {
+      id
+    }
+    owner {
+      id
+    }
+  }
+`;
+
 const CREATE_CARD = gql`
   mutation CreateCard($description: String!, $columnId: String!) {
     createCard(input: { description: $description, columnId: $columnId }) {
       card {
-        id
-        description
-        column {
-          id
-          name
-        }
-        owner {
-          name
-          id
-          email
-        }
+        ...Card
       }
     }
   }
+  ${CARD_FRAGMENT}
 `;
 
 const MOVE_CARD = gql`
   mutation MoveCard($id: String!, $columnId: String!) {
     updateCard(id: $id, input: { setColumn: { columnId: $columnId } }) {
       card {
-        id
-        column {
-          id
-        }
+        ...CardUpdate
       }
     }
   }
+  ${CARD_UPDATE_FRAGMENT}
+`;
+
+const RENAME_CARD = gql`
+  mutation RenameCard($id: String!, $description: String!) {
+    updateCard(
+      id: $id
+      input: { setDescription: { description: $description } }
+    ) {
+      card {
+        description
+        ...CardUpdate
+      }
+    }
+  }
+  ${CARD_UPDATE_FRAGMENT}
 `;
 
 const BOARD_UPDATED_SUBSCRIPTION = gql`
@@ -88,31 +129,25 @@ const BOARD_UPDATED_SUBSCRIPTION = gql`
         __typename
         ... on CardCreatedUpdate {
           card {
-            id
-            description
-            column {
-              id
-              name
-            }
-            owner {
-              name
-              id
-              email
-            }
+            ...Card
           }
         }
         __typename
         ... on CardMovedUpdate {
           card {
-            id
-            column {
-              id
-            }
+            ...Card
+          }
+        }
+        __typename
+        ... on CardRenamedUpdate {
+          card {
+            ...Card
           }
         }
       }
     }
   }
+  ${CARD_FRAGMENT}
 `;
 
 export interface Props {
@@ -174,6 +209,34 @@ class BoardPage extends React.Component<Props, State> {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
+  }
+
+  _createCardUpdateRespone(
+    card: Card
+  ): RenameCard_updateCard | MoveCard_updateCard {
+    return {
+      __typename: "UpdateCardPayload",
+      card: {
+        __typename: "Card",
+        id: card.id,
+        description: card.description,
+        column: {
+          __typename: card.column.__typename,
+          id: card.column.id
+        },
+        owner: {
+          __typename: card.owner.__typename,
+          id: card.owner.id
+        }
+      }
+    };
+  }
+
+  _getCard(cardId: string): Card {
+    return this.props.client.readFragment<Card>({
+      id: `Card:${cardId}`,
+      fragment: CARD_FRAGMENT
+    });
   }
 
   _handleNewCardTitleChange = (value: string) =>
@@ -249,6 +312,19 @@ class BoardPage extends React.Component<Props, State> {
     }
   };
 
+  _handleRenamedCard = (
+    cache: DataProxy,
+    { data: { updateCard } }: { data: RenameCard }
+  ) => {
+    const card = this._getCard(updateCard.card.id);
+    card.description = updateCard.card.description;
+    cache.writeFragment({
+      id: updateCard.card.id,
+      fragment: CARD_FRAGMENT,
+      data: card
+    });
+  };
+
   /**
    * User wants to a create a new card
    */
@@ -267,6 +343,10 @@ class BoardPage extends React.Component<Props, State> {
    * User wants to move a card
    */
   _handleMoveCard = (id: string, columnId: string) => {
+    const card = this._getCard(id);
+    const optimisticResponse = this._createCardUpdateRespone(card);
+    optimisticResponse.card.column.id = columnId;
+
     this.props.client.mutate<MoveCard, MoveCardVariables>({
       mutation: MOVE_CARD,
       variables: {
@@ -274,20 +354,37 @@ class BoardPage extends React.Component<Props, State> {
         id
       },
       optimisticResponse: {
-        updateCard: {
-          __typename: "UpdateCardPayload",
-          card: {
-            __typename: "Card",
-            id,
-            column: {
-              __typename: "Column",
-              id: columnId
-            }
-          }
-        }
+        updateCard: optimisticResponse
       },
       update: this._handleMovedCard
     });
+  };
+
+  _handleRenameCard = (id: string, description: string) => {
+    const card = this._getCard(id);
+    const optimisticResponse = this._createCardUpdateRespone(card);
+    this.props.client.mutate<RenameCard, RenameCardVariables>({
+      mutation: RENAME_CARD,
+      variables: {
+        id,
+        description
+      },
+      optimisticResponse: {
+        updateCard: {
+          __typename: optimisticResponse.__typename,
+          card: {
+            ...optimisticResponse.card,
+            description
+          }
+        }
+      },
+      update: this._handleRenamedCard
+    });
+  };
+
+  _handleClickCard = cardId => {
+    const card = this._getCard(cardId);
+    this._handleRenameCard(cardId, card.description + "Clicked");
   };
 
   render() {
@@ -310,6 +407,7 @@ class BoardPage extends React.Component<Props, State> {
                   onNewCardTitleChange={this._handleNewCardTitleChange}
                   onAddNewCard={this._handleCreateCard}
                   onMoveCard={this._handleMoveCard}
+                  onClickCard={this._handleClickCard}
                 />
               </div>
             );
