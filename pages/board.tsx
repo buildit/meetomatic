@@ -162,7 +162,7 @@ interface State {
   cardId: string;
 }
 
-Modal.setAppElement("#board");
+Modal && Modal.setAppElement("#board");
 
 class BoardPage extends React.Component<Props, State> {
   private subscription;
@@ -233,7 +233,8 @@ class BoardPage extends React.Component<Props, State> {
         description: card.description,
         column: {
           __typename: card.column.__typename,
-          id: card.column.id
+          id: card.column.id,
+          name: card.column.name
         },
         owner: {
           __typename: card.owner.__typename,
@@ -380,9 +381,7 @@ class BoardPage extends React.Component<Props, State> {
   };
 
   _handleClickCard = cardId => {
-    const card = this._getCard(cardId);
     this.setState({ cardId });
-    // this._handleRenameCard(cardId, card.description + "Clicked");
   };
 
   _renderCardModal() {
