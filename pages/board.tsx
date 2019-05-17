@@ -1,6 +1,5 @@
 import * as React from "react";
 import BoardWidget from "../components/Board/Board";
-import "../styles.scss";
 import { Query, withApollo } from "react-apollo";
 import gql from "graphql-tag";
 import {
@@ -26,7 +25,7 @@ import {
 import { Card } from "./types/Card";
 
 class BoardQuery extends Query<Board, BoardVariables> {}
-const GET_BOARD = gql`
+export const GET_BOARD = gql`
   query Board($id: String!) {
     board(id: $id) {
       id
@@ -44,7 +43,6 @@ const GET_BOARD = gql`
           description
           column {
             id
-            name
           }
           owner {
             id
@@ -77,6 +75,7 @@ const CARD_UPDATE_FRAGMENT = gql`
     id
     column {
       id
+      name
     }
     owner {
       id
@@ -84,7 +83,7 @@ const CARD_UPDATE_FRAGMENT = gql`
   }
 `;
 
-const CREATE_CARD = gql`
+export const CREATE_CARD = gql`
   mutation CreateCard($description: String!, $columnId: String!) {
     createCard(input: { description: $description, columnId: $columnId }) {
       card {
@@ -121,7 +120,7 @@ const RENAME_CARD = gql`
   ${CARD_UPDATE_FRAGMENT}
 `;
 
-const BOARD_UPDATED_SUBSCRIPTION = gql`
+export const BOARD_UPDATED_SUBSCRIPTION = gql`
   subscription BoardUpdated($boardId: String!) {
     boardUpdated(boardId: $boardId) {
       boardId
@@ -153,6 +152,7 @@ const BOARD_UPDATED_SUBSCRIPTION = gql`
 export interface Props {
   id: string;
   client: ApolloClient<any>;
+  subscribeToUpdates: boolean;
 }
 
 interface State {
@@ -162,6 +162,9 @@ interface State {
 class BoardPage extends React.Component<Props, State> {
   private subscription;
 
+  static defaultProps = {
+    subscribeToUpdates: true
+  };
   static getInitialProps(ctx) {
     return ctx.query;
   }
@@ -171,38 +174,40 @@ class BoardPage extends React.Component<Props, State> {
   };
 
   componentDidMount() {
-    this.subscription = this.props.client
-      .subscribe<{ data: BoardUpdated }, BoardUpdatedVariables>({
-        query: BOARD_UPDATED_SUBSCRIPTION,
-        variables: {
-          boardId: this.props.id
-        }
-      })
-      .subscribe(({ data }) => {
-        // If we a get a board notificaiton, turn it in to a Payload
-        // and use the existing logic for updating the store
-        data.boardUpdated.updates.forEach(update => {
-          if (update.__typename === "CardCreatedUpdate") {
-            this._handleCreatedCard(this.props.client, {
-              data: {
-                createCard: {
-                  __typename: "CreateCardPayload",
-                  card: update.card
-                }
-              }
-            });
-          } else if (update.__typename === "CardMovedUpdate") {
-            this._handleMovedCard(this.props.client, {
-              data: {
-                updateCard: {
-                  __typename: "UpdateCardPayload",
-                  card: update.card
-                }
-              }
-            });
+    if (this.props.subscribeToUpdates) {
+      this.subscription = this.props.client
+        .subscribe<{ data: BoardUpdated }, BoardUpdatedVariables>({
+          query: BOARD_UPDATED_SUBSCRIPTION,
+          variables: {
+            boardId: this.props.id
           }
+        })
+        .subscribe(({ data }) => {
+          // If we a get a board notificaiton, turn it in to a Payload
+          // and use the existing logic for updating the store
+          data.boardUpdated.updates.forEach(update => {
+            if (update.__typename === "CardCreatedUpdate") {
+              this._handleCreatedCard(this.props.client, {
+                data: {
+                  createCard: {
+                    __typename: "CreateCardPayload",
+                    card: update.card
+                  }
+                }
+              });
+            } else if (update.__typename === "CardMovedUpdate") {
+              this._handleMovedCard(this.props.client, {
+                data: {
+                  updateCard: {
+                    __typename: "UpdateCardPayload",
+                    card: update.card
+                  }
+                }
+              });
+            }
+          });
         });
-      });
+    }
   }
 
   componentWillUnmount() {
@@ -393,11 +398,11 @@ class BoardPage extends React.Component<Props, State> {
         <BoardQuery query={GET_BOARD} variables={{ id: this.props.id }}>
           {({ data, loading }) => {
             if (loading) {
-              return <div>Loading...</div>;
+              return <div className="loading">Loading...</div>;
             }
             return (
               <div>
-                <div>{data.board.name}</div>
+                <div className="board-title">{data.board.name}</div>
                 <BoardWidget
                   id={data.board.id}
                   name={data.board.name}

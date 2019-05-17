@@ -1,11 +1,11 @@
+jest.mock("../../lib/redirect");
 import * as React from "react";
 import { mount } from "enzyme";
-import CreateBoardPage, { CREATE_BOARD } from "../createboard";
+import CreateBoardPage, { CREATE_BOARD } from "../../pages/createboard";
 import { MockedProvider } from "react-apollo/test-utils";
-import { CreateBoard } from "../types/CreateBoard";
+import { CreateBoard } from "../../pages/types/CreateBoard";
 import wait from "../../lib/wait";
 import redirect from "../../lib/redirect";
-jest.mock("../../lib/redirect");
 
 const data: CreateBoard = {
   createBoard: {

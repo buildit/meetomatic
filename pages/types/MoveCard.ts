@@ -9,6 +9,7 @@
 export interface MoveCard_updateCard_card_column {
   __typename: "Column";
   id: string;
+  name: string;
 }
 
 export interface MoveCard_updateCard_card_owner {
