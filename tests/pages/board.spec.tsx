@@ -36,8 +36,7 @@ const data: Board = {
             description: "Not Started",
             column: {
               __typename: "Column",
-              id: "Col2",
-              name: "Done"
+              id: "Col2"
             },
             owner: {
               __typename: "User",

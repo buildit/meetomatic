@@ -23,6 +23,8 @@ import {
   RenameCard_updateCard
 } from "./types/RenameCard";
 import { Card } from "./types/Card";
+import Modal from "react-modal";
+import EditCardForm from "../components/EditCardForm/EditCardForm";
 
 class BoardQuery extends Query<Board, BoardVariables> {}
 export const GET_BOARD = gql`
@@ -157,7 +159,10 @@ export interface Props {
 
 interface State {
   newCardTitle: string;
+  cardId: string;
 }
+
+Modal.setAppElement("#board");
 
 class BoardPage extends React.Component<Props, State> {
   private subscription;
@@ -170,7 +175,8 @@ class BoardPage extends React.Component<Props, State> {
   }
 
   state = {
-    newCardTitle: ""
+    newCardTitle: "",
+    cardId: ""
   };
 
   componentDidMount() {
@@ -317,19 +323,6 @@ class BoardPage extends React.Component<Props, State> {
     }
   };
 
-  _handleRenamedCard = (
-    cache: DataProxy,
-    { data: { updateCard } }: { data: RenameCard }
-  ) => {
-    const card = this._getCard(updateCard.card.id);
-    card.description = updateCard.card.description;
-    cache.writeFragment({
-      id: updateCard.card.id,
-      fragment: CARD_FRAGMENT,
-      data: card
-    });
-  };
-
   /**
    * User wants to a create a new card
    */
@@ -382,19 +375,35 @@ class BoardPage extends React.Component<Props, State> {
             description
           }
         }
-      },
-      update: this._handleRenamedCard
+      }
     });
   };
 
   _handleClickCard = cardId => {
     const card = this._getCard(cardId);
-    this._handleRenameCard(cardId, card.description + "Clicked");
+    this.setState({ cardId });
+    // this._handleRenameCard(cardId, card.description + "Clicked");
   };
+
+  _renderCardModal() {
+    if (this.state.cardId) {
+      const card = this._getCard(this.state.cardId);
+      return (
+        <Modal
+          className="card-modal"
+          isOpen={true}
+          onRequestClose={() => this.setState({ cardId: "" })}
+        >
+          <EditCardForm {...card} onRenameCard={this._handleRenameCard} />
+        </Modal>
+      );
+    }
+    return null;
+  }
 
   render() {
     return (
-      <div className="mom-container">
+      <div id="board" className="mom-container">
         <BoardQuery query={GET_BOARD} variables={{ id: this.props.id }}>
           {({ data, loading }) => {
             if (loading) {
@@ -418,6 +427,7 @@ class BoardPage extends React.Component<Props, State> {
             );
           }}
         </BoardQuery>
+        {this._renderCardModal()}
       </div>
     );
   }
