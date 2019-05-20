@@ -10,6 +10,7 @@ interface BoardColumnProps extends ColumnState, Partial<BoardDefaultProps> {
   newCardTitle: string;
   onAddNewCard(columnId: string): void;
   onNewCardTitleChange(value: string): void;
+  onClickCard(id: string): void;
 }
 
 export default class BoardColumn extends React.Component<BoardColumnProps, {}> {
@@ -25,8 +26,7 @@ export default class BoardColumn extends React.Component<BoardColumnProps, {}> {
         <h2 className="mom-board__column-title">{this.props.name}</h2>
         {this.props.cards &&
           this.props.cards.length > 0 &&
-          this.props.cards
-          .map((card, index) => {
+          this.props.cards.map((card, index) => {
             return (
               <Card
                 id={card.id}
@@ -34,6 +34,7 @@ export default class BoardColumn extends React.Component<BoardColumnProps, {}> {
                 index={index}
                 description={card.description}
                 votes={0}
+                onClick={this.props.onClickCard}
               />
             );
           })}

@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 
 interface CreateFormProps {
   createBoard(name: string, password: string): any;
@@ -17,7 +17,6 @@ export default class CreateBoard extends React.Component<CreateFormProps> {
 
   _handleSubmit(e: { preventDefault: () => void }) {
     e.preventDefault();
-    console.log(this.props);
     this.props.createBoard(
       this.nameInput.current.value,
       this.passwordInput.current.value
@@ -33,6 +32,7 @@ export default class CreateBoard extends React.Component<CreateFormProps> {
         <form onSubmit={this._handleSubmit}>
           <div>
             <input
+              id="boardname"
               disabled={isProcessing}
               ref={this.nameInput}
               type="text"
@@ -41,6 +41,7 @@ export default class CreateBoard extends React.Component<CreateFormProps> {
           </div>
           <div>
             <input
+              id="boardpassword"
               disabled={isProcessing}
               ref={this.passwordInput}
               type="password"

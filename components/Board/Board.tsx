@@ -11,6 +11,7 @@ interface BoardProps extends BoardState, Partial<BoardDefaultProps> {
   onAddNewCard(columnId: string): void;
   onNewCardTitleChange(value: string): void;
   onMoveCard(cardId: string, destColumnId: string): void;
+  onClickCard(cardId: string): void;
 }
 
 export default class Board extends React.Component<BoardProps, {}> {
@@ -36,10 +37,11 @@ export default class Board extends React.Component<BoardProps, {}> {
                       id={column.id}
                       name={column.name}
                       cards={column.cards}
-                      onAddNewCard={this._handleAddNewCard}
-                      onNewCardTitleChange={this.props.onNewCardTitleChange}
                       newCardTitle={this.props.newCardTitle}
                       showAdd={i === 0}
+                      onAddNewCard={this._handleAddNewCard}
+                      onNewCardTitleChange={this.props.onNewCardTitleChange}
+                      onClickCard={this.props.onClickCard}
                     />
                     {provided.placeholder}
                   </div>

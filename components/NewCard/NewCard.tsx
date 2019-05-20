@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 
 export interface State {
   showForm: boolean;
@@ -20,7 +20,7 @@ export default class NewCard extends React.Component<Props, State> {
 
     this.state = {
       showForm: false
-    }
+    };
   }
 
   toggleCardForm() {
@@ -41,24 +41,31 @@ export default class NewCard extends React.Component<Props, State> {
   render() {
     return (
       <div className="grav-c-card">
-       <button className="grav-c-button-link" type="button" onClick={this.toggleCardForm} aria-pressed={this.state.showForm}>Add a new card</button>
-       {this.state.showForm ? (
-      <form onSubmit={this.handleSubmit}>
-        <h3 className="grav-c-card__title">New card</h3>
-        <div className="grav-c-form-group">
-          <label htmlFor="boardName">Title</label>
-          <input
-            id="boardName"
-            type="text"
-            name="name"
-            value={this.props.newCardTitle}
-            required
-            onChange={this.handleChange}
-          />
-        </div>
-        <button type="submit">Add card</button>
-      </form>
-       ) : null}
+        <button
+          className="grav-c-button-link add-card-link"
+          type="button"
+          onClick={this.toggleCardForm}
+          aria-pressed={this.state.showForm}
+        >
+          Add a new card
+        </button>
+        {this.state.showForm ? (
+          <form className="add-card-form" onSubmit={this.handleSubmit}>
+            <h3 className="grav-c-card__title">New card</h3>
+            <div className="grav-c-form-group">
+              <label htmlFor="boardName">Title</label>
+              <input
+                id="boardName"
+                type="text"
+                name="name"
+                value={this.props.newCardTitle}
+                required
+                onChange={this.handleChange}
+              />
+            </div>
+            <button type="submit">Add card</button>
+          </form>
+        ) : null}
       </div>
     );
   }

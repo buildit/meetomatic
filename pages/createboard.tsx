@@ -1,5 +1,4 @@
 import * as React from "react";
-import "../styles.scss";
 import gql from "graphql-tag";
 import { Mutation, withApollo } from "react-apollo";
 import redirect from "../lib/redirect";
@@ -11,7 +10,7 @@ export interface Props {
   client: any;
 }
 
-const CREATE_BOARD = gql`
+export const CREATE_BOARD = gql`
   mutation CreateBoard($name: String!, $password: String!) {
     createBoard(
       input: {
