@@ -44,6 +44,7 @@ export interface Board_board {
   __typename: "Board";
   id: string;
   name: string;
+  maxVotes: number;
   owner: Board_board_owner;
   columns: Board_board_columns[] | null;
 }

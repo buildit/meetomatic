@@ -32,6 +32,7 @@ export const GET_BOARD = gql`
     board(id: $id) {
       id
       name
+      maxVotes
       owner {
         id
         name

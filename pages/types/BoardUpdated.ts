@@ -6,6 +6,10 @@
 // GraphQL subscription operation: BoardUpdated
 // ====================================================
 
+export interface BoardUpdated_boardUpdated_updates_CardUpvotedUpdate {
+  __typename: "CardUpvotedUpdate";
+}
+
 export interface BoardUpdated_boardUpdated_updates_CardCreatedUpdate_card_column {
   __typename: "Column";
   id: string;
@@ -84,7 +88,7 @@ export interface BoardUpdated_boardUpdated_updates_CardRenamedUpdate {
   card: BoardUpdated_boardUpdated_updates_CardRenamedUpdate_card;
 }
 
-export type BoardUpdated_boardUpdated_updates = BoardUpdated_boardUpdated_updates_CardCreatedUpdate | BoardUpdated_boardUpdated_updates_CardMovedUpdate | BoardUpdated_boardUpdated_updates_CardRenamedUpdate;
+export type BoardUpdated_boardUpdated_updates = BoardUpdated_boardUpdated_updates_CardUpvotedUpdate | BoardUpdated_boardUpdated_updates_CardCreatedUpdate | BoardUpdated_boardUpdated_updates_CardMovedUpdate | BoardUpdated_boardUpdated_updates_CardRenamedUpdate;
 
 export interface BoardUpdated_boardUpdated {
   __typename: "BoardNotification";

@@ -10,6 +10,9 @@ export default class Board {
   @Field()
   name: string;
 
+  @Field()
+  maxVotes: number;
+
   @Field(() => [Column], { nullable: true })
   columns?: Column[];
 

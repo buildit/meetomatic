@@ -32,6 +32,7 @@ type Board {
   password: String!
   owner: User!
   columns(where: ColumnWhereInput, orderBy: ColumnOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Column!]
+  maxVotes: Int!
 }
 
 type BoardConnection {
@@ -46,6 +47,7 @@ input BoardCreateInput {
   password: String!
   owner: UserCreateOneInput!
   columns: ColumnCreateManyWithoutBoardInput
+  maxVotes: Int
 }
 
 input BoardCreateOneWithoutColumnsInput {
@@ -58,6 +60,7 @@ input BoardCreateWithoutColumnsInput {
   name: String!
   password: String!
   owner: UserCreateOneInput!
+  maxVotes: Int
 }
 
 type BoardEdge {
@@ -72,6 +75,8 @@ enum BoardOrderByInput {
   name_DESC
   password_ASC
   password_DESC
+  maxVotes_ASC
+  maxVotes_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -82,6 +87,7 @@ type BoardPreviousValues {
   id: ID!
   name: String!
   password: String!
+  maxVotes: Int!
 }
 
 type BoardSubscriptionPayload {
@@ -107,11 +113,13 @@ input BoardUpdateInput {
   password: String
   owner: UserUpdateOneRequiredInput
   columns: ColumnUpdateManyWithoutBoardInput
+  maxVotes: Int
 }
 
 input BoardUpdateManyMutationInput {
   name: String
   password: String
+  maxVotes: Int
 }
 
 input BoardUpdateOneRequiredWithoutColumnsInput {
@@ -125,6 +133,7 @@ input BoardUpdateWithoutColumnsDataInput {
   name: String
   password: String
   owner: UserUpdateOneRequiredInput
+  maxVotes: Int
 }
 
 input BoardUpsertWithoutColumnsInput {
@@ -179,6 +188,14 @@ input BoardWhereInput {
   columns_every: ColumnWhereInput
   columns_some: ColumnWhereInput
   columns_none: ColumnWhereInput
+  maxVotes: Int
+  maxVotes_not: Int
+  maxVotes_in: [Int!]
+  maxVotes_not_in: [Int!]
+  maxVotes_lt: Int
+  maxVotes_lte: Int
+  maxVotes_gt: Int
+  maxVotes_gte: Int
   AND: [BoardWhereInput!]
   OR: [BoardWhereInput!]
   NOT: [BoardWhereInput!]

@@ -37,4 +37,5 @@ type Board {
   password: String!
   owner: User!
   columns: [Column]!
+  maxVotes: Int! @default(value: 6)
 }

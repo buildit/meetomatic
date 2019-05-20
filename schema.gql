@@ -11,6 +11,7 @@ type AuthPayload {
 type Board {
   id: String!
   name: String!
+  maxVotes: Float!
   columns: [Column!]
   owner: User!
 }
