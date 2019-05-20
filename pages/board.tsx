@@ -162,7 +162,7 @@ interface State {
   cardId: string;
 }
 
-Modal && Modal.setAppElement("#board");
+// Modal && Modal.setAppElement("#board");
 
 class BoardPage extends React.Component<Props, State> {
   private subscription;
