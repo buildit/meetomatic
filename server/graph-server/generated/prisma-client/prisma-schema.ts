@@ -932,7 +932,7 @@ input UserWhereUniqueInput {
 type Vote {
   id: ID!
   owner: User!
-  upVote: Boolean!
+  upvote: Boolean!
   card: Card!
   createdAt: DateTime!
 }
@@ -946,7 +946,7 @@ type VoteConnection {
 input VoteCreateInput {
   id: ID
   owner: UserCreateOneInput!
-  upVote: Boolean!
+  upvote: Boolean!
   card: CardCreateOneWithoutVotesInput!
 }
 
@@ -958,7 +958,7 @@ input VoteCreateManyWithoutCardInput {
 input VoteCreateWithoutCardInput {
   id: ID
   owner: UserCreateOneInput!
-  upVote: Boolean!
+  upvote: Boolean!
 }
 
 type VoteEdge {
@@ -969,8 +969,8 @@ type VoteEdge {
 enum VoteOrderByInput {
   id_ASC
   id_DESC
-  upVote_ASC
-  upVote_DESC
+  upvote_ASC
+  upvote_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -979,7 +979,7 @@ enum VoteOrderByInput {
 
 type VotePreviousValues {
   id: ID!
-  upVote: Boolean!
+  upvote: Boolean!
   createdAt: DateTime!
 }
 
@@ -998,8 +998,8 @@ input VoteScalarWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
-  upVote: Boolean
-  upVote_not: Boolean
+  upvote: Boolean
+  upvote_not: Boolean
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -1033,16 +1033,16 @@ input VoteSubscriptionWhereInput {
 
 input VoteUpdateInput {
   owner: UserUpdateOneRequiredInput
-  upVote: Boolean
+  upvote: Boolean
   card: CardUpdateOneRequiredWithoutVotesInput
 }
 
 input VoteUpdateManyDataInput {
-  upVote: Boolean
+  upvote: Boolean
 }
 
 input VoteUpdateManyMutationInput {
-  upVote: Boolean
+  upvote: Boolean
 }
 
 input VoteUpdateManyWithoutCardInput {
@@ -1064,7 +1064,7 @@ input VoteUpdateManyWithWhereNestedInput {
 
 input VoteUpdateWithoutCardDataInput {
   owner: UserUpdateOneRequiredInput
-  upVote: Boolean
+  upvote: Boolean
 }
 
 input VoteUpdateWithWhereUniqueWithoutCardInput {
@@ -1094,8 +1094,8 @@ input VoteWhereInput {
   id_ends_with: ID
   id_not_ends_with: ID
   owner: UserWhereInput
-  upVote: Boolean
-  upVote_not: Boolean
+  upvote: Boolean
+  upvote_not: Boolean
   card: CardWhereInput
   createdAt: DateTime
   createdAt_not: DateTime

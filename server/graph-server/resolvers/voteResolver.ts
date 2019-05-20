@@ -11,24 +11,27 @@ import {
 import { Context } from "../utils";
 import Vote, { CreateVotePayload, CreateVoteInput } from "../schemas/vote";
 import User from "../schemas/user";
-import { BoardNotification } from "../schemas/notifications";
+import { BoardNotification, CardUpdates } from "../schemas/notifications";
 
 @Resolver(() => Vote)
 export default class VoteResolvers {
   @Mutation(() => CreateVotePayload)
-  async createCard(
+  async createVote(
     @Arg("input") input: CreateVoteInput,
     @Ctx() ctx: Context,
-    @PubSub("boardNotification") _publish: Publisher<BoardNotification>
+    @PubSub("boardNotification") publish: Publisher<BoardNotification>
   ): Promise<CreateVotePayload> {
     /*
       Todo:
       - Pull the number of allowed votes from the board setting (these don't exist )
       - Pull the number of votes on this board for the current user
       - Validate the user has enough remaining votes
-      - Send a subscription notification
     */
-    const card = await ctx.prisma.card({ id: input.cardId });
+    const card = await ctx.prisma
+      .card({ id: input.cardId })
+      .$fragment<{ id: string; column: { id: string; board: { id: string } } }>(
+        `fragment EnsureColumn on Card { id, column { id, name, board { id, name } }}`
+      );
     if (!card) {
       throw Error(`Card ${input.cardId} does not exist`);
     }
@@ -36,12 +39,12 @@ export default class VoteResolvers {
     const vote = await ctx.prisma.createVote({
       card: { connect: { id: input.cardId } },
       owner: { connect: { id: ctx.user.id } },
-      upVote: input.upVote
+      upvote: input.upvote
     });
-    // await publish({
-    //   updates: [{ vote, cardId: input.cardId, name: CardUpdates.VoteCreated }],
-    //   boardId: column.board.id
-    // });
+    await publish({
+      updates: [{ vote, name: CardUpdates.Upvoted }],
+      boardId: card.column.board.id
+    });
     return {
       vote
     };

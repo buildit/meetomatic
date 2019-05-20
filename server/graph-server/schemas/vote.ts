@@ -8,7 +8,7 @@ export default class Vote {
   id: string;
 
   @Field()
-  upVote: boolean;
+  upvote: boolean;
 
   @Field()
   owner?: User;
@@ -20,7 +20,7 @@ export default class Vote {
 @InputType()
 export class CreateVoteInput {
   @Field()
-  upVote: boolean;
+  upvote: boolean;
 
   @Field()
   cardId: string;

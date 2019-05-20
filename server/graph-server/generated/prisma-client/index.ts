@@ -298,8 +298,8 @@ export type CardOrderByInput =
 export type VoteOrderByInput =
   | "id_ASC"
   | "id_DESC"
-  | "upVote_ASC"
-  | "upVote_DESC"
+  | "upvote_ASC"
+  | "upvote_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "updatedAt_ASC"
@@ -365,8 +365,8 @@ export interface VoteWhereInput {
   id_ends_with?: ID_Input;
   id_not_ends_with?: ID_Input;
   owner?: UserWhereInput;
-  upVote?: Boolean;
-  upVote_not?: Boolean;
+  upvote?: Boolean;
+  upvote_not?: Boolean;
   card?: CardWhereInput;
   createdAt?: DateTimeInput;
   createdAt_not?: DateTimeInput;
@@ -415,8 +415,8 @@ export interface VoteScalarWhereInput {
   id_not_starts_with?: ID_Input;
   id_ends_with?: ID_Input;
   id_not_ends_with?: ID_Input;
-  upVote?: Boolean;
-  upVote_not?: Boolean;
+  upvote?: Boolean;
+  upvote_not?: Boolean;
   createdAt?: DateTimeInput;
   createdAt_not?: DateTimeInput;
   createdAt_in?: DateTimeInput[] | DateTimeInput;
@@ -449,7 +449,7 @@ export interface VoteSubscriptionWhereInput {
 export interface VoteCreateWithoutCardInput {
   id?: ID_Input;
   owner: UserCreateOneInput;
-  upVote: Boolean;
+  upvote: Boolean;
 }
 
 export interface UserWhereInput {
@@ -621,7 +621,7 @@ export interface ColumnUpdateManyWithoutBoardInput {
 
 export interface VoteUpdateInput {
   owner?: UserUpdateOneRequiredInput;
-  upVote?: Boolean;
+  upvote?: Boolean;
   card?: CardUpdateOneRequiredWithoutVotesInput;
 }
 
@@ -644,7 +644,7 @@ export interface ColumnUpdateWithoutBoardDataInput {
 export interface VoteCreateInput {
   id?: ID_Input;
   owner: UserCreateOneInput;
-  upVote: Boolean;
+  upvote: Boolean;
   card: CardCreateOneWithoutVotesInput;
 }
 
@@ -730,7 +730,7 @@ export interface BoardUpsertWithoutColumnsInput {
 
 export interface VoteUpdateWithoutCardDataInput {
   owner?: UserUpdateOneRequiredInput;
-  upVote?: Boolean;
+  upvote?: Boolean;
 }
 
 export interface UserCreateOneInput {
@@ -873,11 +873,11 @@ export interface ColumnSubscriptionWhereInput {
 }
 
 export interface VoteUpdateManyDataInput {
-  upVote?: Boolean;
+  upvote?: Boolean;
 }
 
 export interface VoteUpdateManyMutationInput {
-  upVote?: Boolean;
+  upvote?: Boolean;
 }
 
 export interface CardUpsertWithWhereUniqueWithoutColumnInput {
@@ -1141,7 +1141,7 @@ export interface NodeNode {
 
 export interface VotePreviousValues {
   id: ID_Output;
-  upVote: Boolean;
+  upvote: Boolean;
   createdAt: DateTimeOutput;
 }
 
@@ -1149,7 +1149,7 @@ export interface VotePreviousValuesPromise
   extends Promise<VotePreviousValues>,
     Fragmentable {
   id: () => Promise<ID_Output>;
-  upVote: () => Promise<Boolean>;
+  upvote: () => Promise<Boolean>;
   createdAt: () => Promise<DateTimeOutput>;
 }
 
@@ -1157,7 +1157,7 @@ export interface VotePreviousValuesSubscription
   extends Promise<AsyncIterator<VotePreviousValues>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
-  upVote: () => Promise<AsyncIterator<Boolean>>;
+  upvote: () => Promise<AsyncIterator<Boolean>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
@@ -1567,14 +1567,14 @@ export interface CardEdgeSubscription
 
 export interface Vote {
   id: ID_Output;
-  upVote: Boolean;
+  upvote: Boolean;
   createdAt: DateTimeOutput;
 }
 
 export interface VotePromise extends Promise<Vote>, Fragmentable {
   id: () => Promise<ID_Output>;
   owner: <T = UserPromise>() => T;
-  upVote: () => Promise<Boolean>;
+  upvote: () => Promise<Boolean>;
   card: <T = CardPromise>() => T;
   createdAt: () => Promise<DateTimeOutput>;
 }
@@ -1584,7 +1584,7 @@ export interface VoteSubscription
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   owner: <T = UserSubscription>() => T;
-  upVote: () => Promise<AsyncIterator<Boolean>>;
+  upvote: () => Promise<AsyncIterator<Boolean>>;
   card: <T = CardSubscription>() => T;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }

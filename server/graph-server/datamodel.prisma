@@ -8,7 +8,7 @@ type User {
 type Vote {
   id: ID! @unique @id
   owner: User!
-  upVote: Boolean!
+  upvote: Boolean!
   card: Card!
   createdAt: DateTime! @createdAt
 }

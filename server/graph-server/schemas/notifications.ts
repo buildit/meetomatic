@@ -1,10 +1,12 @@
 import { ObjectType, Field, createUnionType } from "type-graphql";
 import { CreateCardPayload, UpdateCardPayload } from "./card";
+import { CreateVotePayload } from "./vote";
 
 export enum CardUpdates {
   Created = "CardCreated",
   Moved = "CardMoved",
-  Renamed = "CardRenamed"
+  Renamed = "CardRenamed",
+  Upvoted = "CardUpvoted"
 }
 @ObjectType()
 export class CardCreatedUpdate extends CreateCardPayload {
@@ -21,18 +23,35 @@ export class CardRenamedUpdate extends UpdateCardPayload {
   name: CardUpdates = CardUpdates.Renamed;
 }
 
+@ObjectType()
+export class CardUpvotedUpdate extends CreateVotePayload {
+  name: CardUpdates = CardUpdates.Upvoted;
+}
+
 const BoardUpdateUnion = createUnionType({
   name: "BoardUpdate", // the name of the GraphQL union
-  types: [CardCreatedUpdate, CardMovedUpdate, CardRenamedUpdate], // array of object types classes,
+  types: [
+    CardCreatedUpdate,
+    CardMovedUpdate,
+    CardRenamedUpdate,
+    CardUpvotedUpdate
+  ], // array of object types classes,
   resolveType: (
-    value: CardCreatedUpdate | CardMovedUpdate | CardRenamedUpdate
+    value:
+      | CardCreatedUpdate
+      | CardMovedUpdate
+      | CardRenamedUpdate
+      | CardUpvotedUpdate
   ) => {
-    if (value.name === CardUpdates.Created) {
-      return CardCreatedUpdate;
-    } else if (value.name === CardUpdates.Moved) {
-      return CardMovedUpdate;
-    } else if (value.name === CardUpdates.Renamed) {
-      return CardRenamedUpdate;
+    switch (value.name) {
+      case CardUpdates.Created:
+        return CardCreatedUpdate;
+      case CardUpdates.Moved:
+        return CardMovedUpdate;
+      case CardUpdates.Renamed:
+        return CardRenamedUpdate;
+      case CardUpdates.Upvoted:
+        return CardUpvotedUpdate;
     }
   }
 });
