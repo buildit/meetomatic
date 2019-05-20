@@ -75,13 +75,22 @@ input CreateColumnInput {
   name: String!
 }
 
+input CreateVoteInput {
+  upVote: Boolean!
+  cardId: String!
+}
+
+type CreateVotePayload {
+  vote: Vote!
+}
+
 input LoginInput {
   email: String!
   password: String!
 }
 
 type Mutation {
-  createCard(input: CreateCardInput!): CreateCardPayload!
+  createCard(input: CreateVoteInput!): CreateVotePayload!
   updateCard(input: UpdateCardInput!, id: String!): UpdateCardPayload!
   signup(input: SignUpInput!): AuthPayload!
   login(input: LoginInput!): AuthPayload!
@@ -132,4 +141,8 @@ type Vote {
   upVote: Boolean!
   owner: User!
   card: Card!
+}
+
+type VotePayload {
+  vote: Vote!
 }
