@@ -16,7 +16,6 @@ export interface Board_board_owner {
 export interface Board_board_columns_cards_column {
   __typename: "Column";
   id: string;
-  name: string;
 }
 
 export interface Board_board_columns_cards_owner {

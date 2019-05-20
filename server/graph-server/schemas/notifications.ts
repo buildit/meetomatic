@@ -16,14 +16,23 @@ export class CardMovedUpdate extends UpdateCardPayload {
   name: CardUpdates = CardUpdates.Moved;
 }
 
+@ObjectType()
+export class CardRenamedUpdate extends UpdateCardPayload {
+  name: CardUpdates = CardUpdates.Renamed;
+}
+
 const BoardUpdateUnion = createUnionType({
   name: "BoardUpdate", // the name of the GraphQL union
-  types: [CardCreatedUpdate, CardMovedUpdate], // array of object types classes,
-  resolveType: (value: CardCreatedUpdate | CardMovedUpdate) => {
-    if (value.name === "CardCreated") {
+  types: [CardCreatedUpdate, CardMovedUpdate, CardRenamedUpdate], // array of object types classes,
+  resolveType: (
+    value: CardCreatedUpdate | CardMovedUpdate | CardRenamedUpdate
+  ) => {
+    if (value.name === CardUpdates.Created) {
       return CardCreatedUpdate;
-    } else if (value.name === "CardMoved") {
+    } else if (value.name === CardUpdates.Moved) {
       return CardMovedUpdate;
+    } else if (value.name === CardUpdates.Renamed) {
+      return CardRenamedUpdate;
     }
   }
 });

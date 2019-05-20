@@ -35,12 +35,22 @@ export interface BoardUpdated_boardUpdated_updates_CardCreatedUpdate {
 export interface BoardUpdated_boardUpdated_updates_CardMovedUpdate_card_column {
   __typename: "Column";
   id: string;
+  name: string;
+}
+
+export interface BoardUpdated_boardUpdated_updates_CardMovedUpdate_card_owner {
+  __typename: "User";
+  name: string;
+  id: string;
+  email: string;
 }
 
 export interface BoardUpdated_boardUpdated_updates_CardMovedUpdate_card {
   __typename: "Card";
   id: string;
+  description: string;
   column: BoardUpdated_boardUpdated_updates_CardMovedUpdate_card_column;
+  owner: BoardUpdated_boardUpdated_updates_CardMovedUpdate_card_owner;
 }
 
 export interface BoardUpdated_boardUpdated_updates_CardMovedUpdate {
@@ -48,9 +58,33 @@ export interface BoardUpdated_boardUpdated_updates_CardMovedUpdate {
   card: BoardUpdated_boardUpdated_updates_CardMovedUpdate_card;
 }
 
-export type BoardUpdated_boardUpdated_updates =
-  | BoardUpdated_boardUpdated_updates_CardCreatedUpdate
-  | BoardUpdated_boardUpdated_updates_CardMovedUpdate;
+export interface BoardUpdated_boardUpdated_updates_CardRenamedUpdate_card_column {
+  __typename: "Column";
+  id: string;
+  name: string;
+}
+
+export interface BoardUpdated_boardUpdated_updates_CardRenamedUpdate_card_owner {
+  __typename: "User";
+  name: string;
+  id: string;
+  email: string;
+}
+
+export interface BoardUpdated_boardUpdated_updates_CardRenamedUpdate_card {
+  __typename: "Card";
+  id: string;
+  description: string;
+  column: BoardUpdated_boardUpdated_updates_CardRenamedUpdate_card_column;
+  owner: BoardUpdated_boardUpdated_updates_CardRenamedUpdate_card_owner;
+}
+
+export interface BoardUpdated_boardUpdated_updates_CardRenamedUpdate {
+  __typename: "CardRenamedUpdate";
+  card: BoardUpdated_boardUpdated_updates_CardRenamedUpdate_card;
+}
+
+export type BoardUpdated_boardUpdated_updates = BoardUpdated_boardUpdated_updates_CardCreatedUpdate | BoardUpdated_boardUpdated_updates_CardMovedUpdate | BoardUpdated_boardUpdated_updates_CardRenamedUpdate;
 
 export interface BoardUpdated_boardUpdated {
   __typename: "BoardNotification";

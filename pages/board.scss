@@ -7,7 +7,7 @@
   grid-template-columns: 1fr 1fr 1fr;
   min-height: 100vh;
 
-  &__column{
+  &__column {
     padding: 1rem 0.5rem;
     border-right: 1px rgb(162, 162, 162) dashed;
 
@@ -15,9 +15,24 @@
       border-right: none;
     }
   }
-  
+
   &__column-title {
     text-align: center;
     margin-bottom: 1rem;
   }
+}
+
+.card-modal {
+  position: absolute;
+  top: 50%;
+  left: 30%;
+  right: auto;
+  bottom: auto;
+  border: 1px solid rgb(204, 204, 204);
+  background: rgb(255, 255, 255);
+  overflow: auto;
+  border-radius: 4px;
+  outline: none;
+  padding: 20px;
+  width: 50%;
 }
