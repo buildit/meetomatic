@@ -19,6 +19,7 @@ import User from "../schemas/user";
 import Column from "../schemas/column";
 import { CardUpdateInput } from "../generated/prisma-client";
 import { BoardNotification, CardUpdates } from "../schemas/notifications";
+import Vote from "../schemas/vote";
 
 @Resolver(() => Card)
 export default class {
@@ -116,5 +117,10 @@ export default class {
   @FieldResolver(() => Column)
   column(@Root() card: Card, @Ctx() ctx: Context): Promise<Column> {
     return ctx.prisma.card({ id: card.id }).column();
+  }
+
+  @FieldResolver(() => [Vote])
+  votes(@Root() card: Card, @Ctx() ctx: Context): Promise<Vote[]> {
+    return ctx.prisma.card({ id: card.id }).votes();
   }
 }

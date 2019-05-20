@@ -27,6 +27,7 @@ type Card {
   description: String!
   column: Column!
   owner: User!
+  votes: [Vote!]
 }
 
 type CardCreatedUpdate {
@@ -124,4 +125,11 @@ type User {
   id: String!
   email: String!
   name: String!
+}
+
+type Vote {
+  id: String!
+  upVote: Boolean!
+  owner: User!
+  card: Card!
 }

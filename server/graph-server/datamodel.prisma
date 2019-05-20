@@ -5,9 +5,18 @@ type User {
   password: String!
 }
 
+type Vote {
+  id: ID! @unique @id
+  owner: User!
+  upVote: Boolean!
+  card: Card!
+  createdAt: DateTime! @createdAt
+}
+
 type Card {
   id: ID! @unique @id
   description: String!
+  votes: [Vote]
   owner: User!
   column: Column!
   createdAt: DateTime! @createdAt

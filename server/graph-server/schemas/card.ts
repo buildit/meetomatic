@@ -1,6 +1,7 @@
 import { ObjectType, Field, InputType } from "type-graphql";
 import User from "./user";
 import Column from "./column";
+import Vote from "./vote";
 
 @ObjectType()
 export default class Card {
@@ -15,6 +16,9 @@ export default class Card {
 
   @Field()
   owner?: User;
+
+  @Field(() => [Vote], { nullable: true })
+  votes?: Vote[];
 }
 
 @InputType()
