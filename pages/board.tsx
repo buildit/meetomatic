@@ -7,7 +7,7 @@ import {
   BoardVariables,
   Board_board_columns_cards,
   Board_board_columns
-} from "./types/Board";
+} from "../client/types/Board";
 import { CreateCard, CreateCardVariables } from "./types/CreateCard";
 import {
   MoveCard,
@@ -25,38 +25,9 @@ import {
 import { Card } from "./types/Card";
 import Modal from "react-modal";
 import EditCardForm from "../components/EditCardForm/EditCardForm";
+import { GET_BOARD } from "../client/queries";
 
 class BoardQuery extends Query<Board, BoardVariables> {}
-export const GET_BOARD = gql`
-  query Board($id: String!) {
-    board(id: $id) {
-      id
-      name
-      maxVotes
-      owner {
-        id
-        name
-        email
-      }
-      columns {
-        id
-        name
-        cards {
-          id
-          description
-          column {
-            id
-          }
-          owner {
-            id
-            name
-            email
-          }
-        }
-      }
-    }
-  }
-`;
 
 const CARD_FRAGMENT = gql`
   fragment Card on Card {
@@ -70,6 +41,12 @@ const CARD_FRAGMENT = gql`
       name
       id
       email
+    }
+    votes {
+      id
+      owner {
+        id
+      }
     }
   }
 `;
@@ -381,7 +358,7 @@ class BoardPage extends React.Component<Props, State> {
     });
   };
 
-  _handleClickCard = cardId => {
+  _handleClickCard = async cardId => {
     this.setState({ cardId });
   };
 
@@ -409,6 +386,10 @@ class BoardPage extends React.Component<Props, State> {
             if (loading) {
               return <div className="loading">Loading...</div>;
             }
+            if (!data || !data.board) {
+              return null;
+            }
+
             return (
               <div>
                 <div className="board-title">{data.board.name}</div>

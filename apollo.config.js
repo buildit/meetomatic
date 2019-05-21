@@ -4,6 +4,6 @@ module.exports = {
       name: "meetomatic",
       localSchemaFile: "./schema.gql"
     },
-    includes: ["./pages/**/*.tsx"]
+    includes: ["./pages/**/*.tsx", "client/**/*.ts"]
   }
 };

@@ -25,12 +25,24 @@ export interface Board_board_columns_cards_owner {
   email: string;
 }
 
+export interface Board_board_columns_cards_votes_owner {
+  __typename: "User";
+  id: string;
+}
+
+export interface Board_board_columns_cards_votes {
+  __typename: "Vote";
+  id: string;
+  owner: Board_board_columns_cards_votes_owner;
+}
+
 export interface Board_board_columns_cards {
   __typename: "Card";
   id: string;
   description: string;
   column: Board_board_columns_cards_column;
   owner: Board_board_columns_cards_owner;
+  votes: Board_board_columns_cards_votes[] | null;
 }
 
 export interface Board_board_columns {
@@ -43,6 +55,7 @@ export interface Board_board_columns {
 export interface Board_board {
   __typename: "Board";
   id: string;
+  remainingVotes: number;
   name: string;
   maxVotes: number;
   owner: Board_board_owner;

@@ -19,10 +19,22 @@ export interface Card_owner {
   email: string;
 }
 
+export interface Card_votes_owner {
+  __typename: "User";
+  id: string;
+}
+
+export interface Card_votes {
+  __typename: "Vote";
+  id: string;
+  owner: Card_votes_owner;
+}
+
 export interface Card {
   __typename: "Card";
   id: string;
   description: string;
   column: Card_column;
   owner: Card_owner;
+  votes: Card_votes[] | null;
 }
