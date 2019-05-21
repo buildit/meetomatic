@@ -21,19 +21,27 @@ export default class VoteResolvers {
     @Ctx() ctx: Context,
     @PubSub("boardNotification") publish: Publisher<BoardNotification>
   ): Promise<CreateVotePayload> {
-    /*
-      Todo:
-      - Pull the number of allowed votes from the board setting (these don't exist )
-      - Pull the number of votes on this board for the current user
-      - Validate the user has enough remaining votes
-    */
-    const card = await ctx.prisma
-      .card({ id: input.cardId })
-      .$fragment<{ id: string; column: { id: string; board: { id: string } } }>(
-        `fragment EnsureColumn on Card { id, column { id, name, board { id, name } }}`
-      );
+    const card = await ctx.prisma.card({ id: input.cardId }).$fragment<{
+      id: string;
+      column: { id: string; board: { id: string; maxVotes: number } };
+    }>(`fragment EnsureColumn on Card { id, column { id, name, board { id, maxVotes } }}`);
     if (!card) {
       throw Error(`Card ${input.cardId} does not exist`);
+    }
+
+    // Get an aggregate count of votes on this board belonging to this user.
+    const { count: voteCount } = await ctx.prisma
+      .votesConnection({
+        where: {
+          AND: [
+            { owner: { id: ctx.user.id } },
+            { card: { column: { board: { id: card.column.board.id } } } }
+          ]
+        }
+      })
+      .aggregate();
+    if (voteCount >= card.column.board.maxVotes) {
+      throw Error("You have no more vote left on this board");
     }
 
     const vote = await ctx.prisma.createVote({

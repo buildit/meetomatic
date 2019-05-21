@@ -1,17 +1,23 @@
 import * as React from "react";
 import { mount } from "enzyme";
-import BoardPage, { GET_BOARD, CREATE_CARD } from "../../pages/board";
+import BoardPage, { CREATE_CARD } from "../../pages/board";
 import { MockedProvider } from "react-apollo/test-utils";
-import { Board, BoardVariables } from "../../pages/types/Board";
+import { Board, BoardVariables } from "../../client/types/Board";
 import wait from "../../lib/wait";
 import Card from "../../components/Card/Card";
 import { CreateCardVariables, CreateCard } from "pages/types/CreateCard";
+import { GET_BOARD, GET_USER } from "../../client/queries";
+import boardResolvers from "../../client/boardResolvers";
+import { CurrentUser } from "../../client/types/CurrentUser";
+import { Query } from "react-apollo";
 
 const data: Board = {
   board: {
     __typename: "Board",
     id: "12345",
     name: "My Board",
+    maxVotes: 6,
+    remainingVotes: 6,
     owner: {
       __typename: "User",
       id: "User1",
@@ -43,7 +49,8 @@ const data: Board = {
               email: "user2@meetomatic.com",
               id: "User2",
               name: "User Two"
-            }
+            },
+            votes: []
           }
         ]
       }
@@ -63,10 +70,30 @@ const loadBoardMock = {
   result: { data }
 };
 
+const currentUser: CurrentUser = {
+  currentUser: {
+    __typename: "User",
+    id: "User1",
+    email: "user@meetomatic.com",
+    name: "User One"
+  }
+};
+
+const currentUserMock = {
+  request: {
+    query: GET_USER
+  },
+  result: { data: currentUser }
+};
+
 function createBoardPage(props, mocks: any[]) {
   return mount<MockedProvider>(
-    <MockedProvider mocks={mocks} addTypename={true}>
-      <BoardPage subscribeToUpdates={false} {...props} />
+    <MockedProvider mocks={mocks} resolvers={boardResolvers} addTypename={true}>
+      <Query query={GET_USER}>
+        {() => {
+          return <BoardPage subscribeToUpdates={false} {...props} />;
+        }}
+      </Query>
     </MockedProvider>
   );
 }
@@ -74,21 +101,32 @@ function createBoardPage(props, mocks: any[]) {
 describe("<BoardPage />", () => {
   describe("render", () => {
     it("should render loading state", () => {
-      const wrapper = createBoardPage({ id: "12345" }, [loadBoardMock]);
+      const wrapper = createBoardPage({ id: "12345" }, [
+        loadBoardMock,
+        currentUserMock
+      ]);
       expect(wrapper.find(".loading")).toHaveLength(1);
     });
 
     it("should render board title", async () => {
-      const wrapper = createBoardPage({ id: "12345" }, [loadBoardMock]);
+      const wrapper = createBoardPage({ id: "12345" }, [
+        loadBoardMock,
+        currentUserMock
+      ]);
+      await wait(0);
       await wait(0);
       wrapper.update();
       const board = wrapper.find(BoardPage);
-      expect(board).toHaveLength(1);
       expect(wrapper.find(".board-title").text()).toEqual("My Board");
+      expect(board).toHaveLength(1);
     });
 
     it("should render BoardWidget", async () => {
-      const wrapper = createBoardPage({ id: "12345" }, [loadBoardMock]);
+      const wrapper = createBoardPage({ id: "12345" }, [
+        loadBoardMock,
+        currentUserMock
+      ]);
+      await wait(0);
       await wait(0);
       wrapper.update();
       const widget = wrapper.find("Board");
@@ -121,7 +159,8 @@ describe("<BoardPage />", () => {
             id: "User1",
             email: "user@meetomatic.com",
             name: "User One"
-          }
+          },
+          votes: []
         }
       }
     };
@@ -135,8 +174,10 @@ describe("<BoardPage />", () => {
     it("does add new card to cache", async () => {
       const wrapper = createBoardPage({ id: "12345" }, [
         loadBoardMock,
+        currentUserMock,
         createCardMock
       ]);
+      await wait(0);
       await wait(0);
       wrapper.update();
       expect(wrapper.find(Card)).toHaveLength(1);
