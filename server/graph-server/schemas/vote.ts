@@ -1,4 +1,4 @@
-import { Field, ObjectType, InputType } from "type-graphql";
+import { Field, InputType, ObjectType } from "type-graphql";
 import User from "./user";
 import Card from "./card";
 
@@ -34,3 +34,10 @@ class VotePayload {
 
 @ObjectType()
 export class CreateVotePayload extends VotePayload {}
+
+@ObjectType()
+export class DeleteVotePayload {
+  @Field()
+  id: string;
+  cardId: string;
+}

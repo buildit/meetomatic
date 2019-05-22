@@ -7,7 +7,7 @@
 // ====================================================
 
 export interface BoardUpdated_boardUpdated_updates_CardUpvotedUpdate {
-  __typename: "CardUpvotedUpdate";
+  __typename: "CardUpvotedUpdate" | "CardVoteDeletedUpdate";
 }
 
 export interface BoardUpdated_boardUpdated_updates_CardCreatedUpdate_card_column {

@@ -1,12 +1,13 @@
 import { ObjectType, Field, createUnionType } from "type-graphql";
 import { CreateCardPayload, UpdateCardPayload } from "./card";
-import { CreateVotePayload } from "./vote";
+import { CreateVotePayload, DeleteVotePayload } from "./vote";
 
 export enum CardUpdates {
   Created = "CardCreated",
   Moved = "CardMoved",
   Renamed = "CardRenamed",
-  Upvoted = "CardUpvoted"
+  Upvoted = "CardUpvoted",
+  VoteDeleted = "CardVoteDeleted"
 }
 @ObjectType()
 export class CardCreatedUpdate extends CreateCardPayload {
@@ -28,13 +29,19 @@ export class CardUpvotedUpdate extends CreateVotePayload {
   name: CardUpdates = CardUpdates.Upvoted;
 }
 
+@ObjectType()
+export class CardVoteDeletedUpdate extends DeleteVotePayload {
+  name: CardUpdates = CardUpdates.VoteDeleted;
+}
+
 const BoardUpdateUnion = createUnionType({
   name: "BoardUpdate", // the name of the GraphQL union
   types: [
     CardCreatedUpdate,
     CardMovedUpdate,
     CardRenamedUpdate,
-    CardUpvotedUpdate
+    CardUpvotedUpdate,
+    CardVoteDeletedUpdate
   ], // array of object types classes,
   resolveType: (
     value:
@@ -42,6 +49,7 @@ const BoardUpdateUnion = createUnionType({
       | CardMovedUpdate
       | CardRenamedUpdate
       | CardUpvotedUpdate
+      | CardVoteDeletedUpdate
   ) => {
     switch (value.name) {
       case CardUpdates.Created:
@@ -52,6 +60,8 @@ const BoardUpdateUnion = createUnionType({
         return CardRenamedUpdate;
       case CardUpdates.Upvoted:
         return CardUpvotedUpdate;
+      case CardUpdates.VoteDeleted:
+        return CardVoteDeletedUpdate;
     }
   }
 });

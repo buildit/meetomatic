@@ -21,7 +21,7 @@ type BoardNotification {
   updates: [BoardUpdate!]!
 }
 
-union BoardUpdate = CardCreatedUpdate | CardMovedUpdate | CardRenamedUpdate | CardUpvotedUpdate
+union BoardUpdate = CardCreatedUpdate | CardMovedUpdate | CardRenamedUpdate | CardUpvotedUpdate | CardVoteDeletedUpdate
 
 type Card {
   id: String!
@@ -49,6 +49,10 @@ type CardRenamedUpdate {
 
 type CardUpvotedUpdate {
   vote: Vote!
+}
+
+type CardVoteDeletedUpdate {
+  id: String!
 }
 
 type Column {
@@ -89,6 +93,10 @@ type CreateVotePayload {
   vote: Vote!
 }
 
+type DeleteVotePayload {
+  id: String!
+}
+
 input LoginInput {
   email: String!
   password: String!
@@ -101,6 +109,7 @@ type Mutation {
   login(input: LoginInput!): AuthPayload!
   createBoard(input: CreateBoardInput!): CreateBoardPayload!
   createVote(input: CreateVoteInput!): CreateVotePayload!
+  deleteVote(id: String!): DeleteVotePayload!
 }
 
 type Query {
