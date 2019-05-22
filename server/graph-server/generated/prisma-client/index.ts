@@ -41,100 +41,120 @@ export interface Prisma {
    */
 
   board: (where: BoardWhereUniqueInput) => BoardPromise;
-  boards: (args?: {
-    where?: BoardWhereInput;
-    orderBy?: BoardOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => FragmentableArray<Board>;
-  boardsConnection: (args?: {
-    where?: BoardWhereInput;
-    orderBy?: BoardOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => BoardConnectionPromise;
+  boards: (
+    args?: {
+      where?: BoardWhereInput;
+      orderBy?: BoardOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => FragmentableArray<Board>;
+  boardsConnection: (
+    args?: {
+      where?: BoardWhereInput;
+      orderBy?: BoardOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => BoardConnectionPromise;
   card: (where: CardWhereUniqueInput) => CardPromise;
-  cards: (args?: {
-    where?: CardWhereInput;
-    orderBy?: CardOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => FragmentableArray<Card>;
-  cardsConnection: (args?: {
-    where?: CardWhereInput;
-    orderBy?: CardOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => CardConnectionPromise;
+  cards: (
+    args?: {
+      where?: CardWhereInput;
+      orderBy?: CardOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => FragmentableArray<Card>;
+  cardsConnection: (
+    args?: {
+      where?: CardWhereInput;
+      orderBy?: CardOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => CardConnectionPromise;
   column: (where: ColumnWhereUniqueInput) => ColumnPromise;
-  columns: (args?: {
-    where?: ColumnWhereInput;
-    orderBy?: ColumnOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => FragmentableArray<Column>;
-  columnsConnection: (args?: {
-    where?: ColumnWhereInput;
-    orderBy?: ColumnOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => ColumnConnectionPromise;
+  columns: (
+    args?: {
+      where?: ColumnWhereInput;
+      orderBy?: ColumnOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => FragmentableArray<Column>;
+  columnsConnection: (
+    args?: {
+      where?: ColumnWhereInput;
+      orderBy?: ColumnOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => ColumnConnectionPromise;
   user: (where: UserWhereUniqueInput) => UserPromise;
-  users: (args?: {
-    where?: UserWhereInput;
-    orderBy?: UserOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => FragmentableArray<User>;
-  usersConnection: (args?: {
-    where?: UserWhereInput;
-    orderBy?: UserOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => UserConnectionPromise;
+  users: (
+    args?: {
+      where?: UserWhereInput;
+      orderBy?: UserOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => FragmentableArray<User>;
+  usersConnection: (
+    args?: {
+      where?: UserWhereInput;
+      orderBy?: UserOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => UserConnectionPromise;
   vote: (where: VoteWhereUniqueInput) => VotePromise;
-  votes: (args?: {
-    where?: VoteWhereInput;
-    orderBy?: VoteOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => FragmentableArray<Vote>;
-  votesConnection: (args?: {
-    where?: VoteWhereInput;
-    orderBy?: VoteOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => VoteConnectionPromise;
+  votes: (
+    args?: {
+      where?: VoteWhereInput;
+      orderBy?: VoteOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => FragmentableArray<Vote>;
+  votesConnection: (
+    args?: {
+      where?: VoteWhereInput;
+      orderBy?: VoteOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => VoteConnectionPromise;
   node: (args: { id: ID_Output }) => Node;
 
   /**
@@ -142,83 +162,80 @@ export interface Prisma {
    */
 
   createBoard: (data: BoardCreateInput) => BoardPromise;
-  updateBoard: (args: {
-    data: BoardUpdateInput;
-    where: BoardWhereUniqueInput;
-  }) => BoardPromise;
-  updateManyBoards: (args: {
-    data: BoardUpdateManyMutationInput;
-    where?: BoardWhereInput;
-  }) => BatchPayloadPromise;
-  upsertBoard: (args: {
-    where: BoardWhereUniqueInput;
-    create: BoardCreateInput;
-    update: BoardUpdateInput;
-  }) => BoardPromise;
+  updateBoard: (
+    args: { data: BoardUpdateInput; where: BoardWhereUniqueInput }
+  ) => BoardPromise;
+  updateManyBoards: (
+    args: { data: BoardUpdateManyMutationInput; where?: BoardWhereInput }
+  ) => BatchPayloadPromise;
+  upsertBoard: (
+    args: {
+      where: BoardWhereUniqueInput;
+      create: BoardCreateInput;
+      update: BoardUpdateInput;
+    }
+  ) => BoardPromise;
   deleteBoard: (where: BoardWhereUniqueInput) => BoardPromise;
   deleteManyBoards: (where?: BoardWhereInput) => BatchPayloadPromise;
   createCard: (data: CardCreateInput) => CardPromise;
-  updateCard: (args: {
-    data: CardUpdateInput;
-    where: CardWhereUniqueInput;
-  }) => CardPromise;
-  updateManyCards: (args: {
-    data: CardUpdateManyMutationInput;
-    where?: CardWhereInput;
-  }) => BatchPayloadPromise;
-  upsertCard: (args: {
-    where: CardWhereUniqueInput;
-    create: CardCreateInput;
-    update: CardUpdateInput;
-  }) => CardPromise;
+  updateCard: (
+    args: { data: CardUpdateInput; where: CardWhereUniqueInput }
+  ) => CardPromise;
+  updateManyCards: (
+    args: { data: CardUpdateManyMutationInput; where?: CardWhereInput }
+  ) => BatchPayloadPromise;
+  upsertCard: (
+    args: {
+      where: CardWhereUniqueInput;
+      create: CardCreateInput;
+      update: CardUpdateInput;
+    }
+  ) => CardPromise;
   deleteCard: (where: CardWhereUniqueInput) => CardPromise;
   deleteManyCards: (where?: CardWhereInput) => BatchPayloadPromise;
   createColumn: (data: ColumnCreateInput) => ColumnPromise;
-  updateColumn: (args: {
-    data: ColumnUpdateInput;
-    where: ColumnWhereUniqueInput;
-  }) => ColumnPromise;
-  updateManyColumns: (args: {
-    data: ColumnUpdateManyMutationInput;
-    where?: ColumnWhereInput;
-  }) => BatchPayloadPromise;
-  upsertColumn: (args: {
-    where: ColumnWhereUniqueInput;
-    create: ColumnCreateInput;
-    update: ColumnUpdateInput;
-  }) => ColumnPromise;
+  updateColumn: (
+    args: { data: ColumnUpdateInput; where: ColumnWhereUniqueInput }
+  ) => ColumnPromise;
+  updateManyColumns: (
+    args: { data: ColumnUpdateManyMutationInput; where?: ColumnWhereInput }
+  ) => BatchPayloadPromise;
+  upsertColumn: (
+    args: {
+      where: ColumnWhereUniqueInput;
+      create: ColumnCreateInput;
+      update: ColumnUpdateInput;
+    }
+  ) => ColumnPromise;
   deleteColumn: (where: ColumnWhereUniqueInput) => ColumnPromise;
   deleteManyColumns: (where?: ColumnWhereInput) => BatchPayloadPromise;
   createUser: (data: UserCreateInput) => UserPromise;
-  updateUser: (args: {
-    data: UserUpdateInput;
-    where: UserWhereUniqueInput;
-  }) => UserPromise;
-  updateManyUsers: (args: {
-    data: UserUpdateManyMutationInput;
-    where?: UserWhereInput;
-  }) => BatchPayloadPromise;
-  upsertUser: (args: {
-    where: UserWhereUniqueInput;
-    create: UserCreateInput;
-    update: UserUpdateInput;
-  }) => UserPromise;
+  updateUser: (
+    args: { data: UserUpdateInput; where: UserWhereUniqueInput }
+  ) => UserPromise;
+  updateManyUsers: (
+    args: { data: UserUpdateManyMutationInput; where?: UserWhereInput }
+  ) => BatchPayloadPromise;
+  upsertUser: (
+    args: {
+      where: UserWhereUniqueInput;
+      create: UserCreateInput;
+      update: UserUpdateInput;
+    }
+  ) => UserPromise;
   deleteUser: (where: UserWhereUniqueInput) => UserPromise;
   deleteManyUsers: (where?: UserWhereInput) => BatchPayloadPromise;
   createVote: (data: VoteCreateInput) => VotePromise;
-  updateVote: (args: {
-    data: VoteUpdateInput;
-    where: VoteWhereUniqueInput;
-  }) => VotePromise;
-  updateManyVotes: (args: {
-    data: VoteUpdateManyMutationInput;
-    where?: VoteWhereInput;
-  }) => BatchPayloadPromise;
-  upsertVote: (args: {
-    where: VoteWhereUniqueInput;
-    create: VoteCreateInput;
-    update: VoteUpdateInput;
-  }) => VotePromise;
+  updateVote: (
+    args: { data: VoteUpdateInput; where: VoteWhereUniqueInput }
+  ) => VotePromise;
+  upsertVote: (
+    args: {
+      where: VoteWhereUniqueInput;
+      create: VoteCreateInput;
+      update: VoteUpdateInput;
+    }
+  ) => VotePromise;
   deleteVote: (where: VoteWhereUniqueInput) => VotePromise;
   deleteManyVotes: (where?: VoteWhereInput) => BatchPayloadPromise;
 
@@ -278,8 +295,6 @@ export type CardOrderByInput =
 export type VoteOrderByInput =
   | "id_ASC"
   | "id_DESC"
-  | "upvote_ASC"
-  | "upvote_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "updatedAt_ASC"
@@ -315,20 +330,17 @@ export type UserOrderByInput =
 
 export type MutationType = "CREATED" | "UPDATED" | "DELETED";
 
-export interface CardUpdateWithoutColumnDataInput {
-  description?: String;
-  votes?: VoteUpdateManyWithoutCardInput;
-  owner?: UserUpdateOneRequiredInput;
+export interface CardUpdateWithWhereUniqueWithoutColumnInput {
+  where: CardWhereUniqueInput;
+  data: CardUpdateWithoutColumnDataInput;
 }
 
 export type BoardWhereUniqueInput = AtLeastOne<{
   id: ID_Input;
 }>;
 
-export interface VoteUpsertWithWhereUniqueWithoutCardInput {
-  where: VoteWhereUniqueInput;
-  update: VoteUpdateWithoutCardDataInput;
-  create: VoteCreateWithoutCardInput;
+export interface VoteUpdateWithoutCardDataInput {
+  owner?: UserUpdateOneRequiredInput;
 }
 
 export interface VoteWhereInput {
@@ -347,8 +359,6 @@ export interface VoteWhereInput {
   id_ends_with?: ID_Input;
   id_not_ends_with?: ID_Input;
   owner?: UserWhereInput;
-  upvote?: Boolean;
-  upvote_not?: Boolean;
   card?: CardWhereInput;
   createdAt?: DateTimeInput;
   createdAt_not?: DateTimeInput;
@@ -363,24 +373,70 @@ export interface VoteWhereInput {
   NOT?: VoteWhereInput[] | VoteWhereInput;
 }
 
-export interface CardCreateManyWithoutColumnInput {
-  create?: CardCreateWithoutColumnInput[] | CardCreateWithoutColumnInput;
-  connect?: CardWhereUniqueInput[] | CardWhereUniqueInput;
+export interface VoteUpsertWithWhereUniqueWithoutCardInput {
+  where: VoteWhereUniqueInput;
+  update: VoteUpdateWithoutCardDataInput;
+  create: VoteCreateWithoutCardInput;
 }
 
-export interface BoardCreateWithoutColumnsInput {
+export interface BoardWhereInput {
   id?: ID_Input;
-  name: String;
-  password: String;
-  owner: UserCreateOneInput;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  name?: String;
+  name_not?: String;
+  name_in?: String[] | String;
+  name_not_in?: String[] | String;
+  name_lt?: String;
+  name_lte?: String;
+  name_gt?: String;
+  name_gte?: String;
+  name_contains?: String;
+  name_not_contains?: String;
+  name_starts_with?: String;
+  name_not_starts_with?: String;
+  name_ends_with?: String;
+  name_not_ends_with?: String;
+  password?: String;
+  password_not?: String;
+  password_in?: String[] | String;
+  password_not_in?: String[] | String;
+  password_lt?: String;
+  password_lte?: String;
+  password_gt?: String;
+  password_gte?: String;
+  password_contains?: String;
+  password_not_contains?: String;
+  password_starts_with?: String;
+  password_not_starts_with?: String;
+  password_ends_with?: String;
+  password_not_ends_with?: String;
+  owner?: UserWhereInput;
+  columns_every?: ColumnWhereInput;
+  columns_some?: ColumnWhereInput;
+  columns_none?: ColumnWhereInput;
   maxVotes?: Int;
-}
-
-export interface CardCreateWithoutColumnInput {
-  id?: ID_Input;
-  description: String;
-  votes?: VoteCreateManyWithoutCardInput;
-  owner: UserCreateOneInput;
+  maxVotes_not?: Int;
+  maxVotes_in?: Int[] | Int;
+  maxVotes_not_in?: Int[] | Int;
+  maxVotes_lt?: Int;
+  maxVotes_lte?: Int;
+  maxVotes_gt?: Int;
+  maxVotes_gte?: Int;
+  AND?: BoardWhereInput[] | BoardWhereInput;
+  OR?: BoardWhereInput[] | BoardWhereInput;
+  NOT?: BoardWhereInput[] | BoardWhereInput;
 }
 
 export interface VoteScalarWhereInput {
@@ -398,8 +454,6 @@ export interface VoteScalarWhereInput {
   id_not_starts_with?: ID_Input;
   id_ends_with?: ID_Input;
   id_not_ends_with?: ID_Input;
-  upvote?: Boolean;
-  upvote_not?: Boolean;
   createdAt?: DateTimeInput;
   createdAt_not?: DateTimeInput;
   createdAt_in?: DateTimeInput[] | DateTimeInput;
@@ -411,11 +465,6 @@ export interface VoteScalarWhereInput {
   AND?: VoteScalarWhereInput[] | VoteScalarWhereInput;
   OR?: VoteScalarWhereInput[] | VoteScalarWhereInput;
   NOT?: VoteScalarWhereInput[] | VoteScalarWhereInput;
-}
-
-export interface VoteCreateManyWithoutCardInput {
-  create?: VoteCreateWithoutCardInput[] | VoteCreateWithoutCardInput;
-  connect?: VoteWhereUniqueInput[] | VoteWhereUniqueInput;
 }
 
 export interface CardWhereInput {
@@ -473,10 +522,10 @@ export interface CardWhereInput {
   NOT?: CardWhereInput[] | CardWhereInput;
 }
 
-export interface VoteCreateWithoutCardInput {
-  id?: ID_Input;
-  owner: UserCreateOneInput;
-  upvote: Boolean;
+export interface CardUpsertWithWhereUniqueWithoutColumnInput {
+  where: CardWhereUniqueInput;
+  update: CardUpdateWithoutColumnDataInput;
+  create: CardCreateWithoutColumnInput;
 }
 
 export interface UserWhereInput {
@@ -541,347 +590,6 @@ export interface UserWhereInput {
   NOT?: UserWhereInput[] | UserWhereInput;
 }
 
-export interface BoardUpdateInput {
-  name?: String;
-  password?: String;
-  owner?: UserUpdateOneRequiredInput;
-  columns?: ColumnUpdateManyWithoutBoardInput;
-  maxVotes?: Int;
-}
-
-export interface ColumnWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  owner?: UserWhereInput;
-  name?: String;
-  name_not?: String;
-  name_in?: String[] | String;
-  name_not_in?: String[] | String;
-  name_lt?: String;
-  name_lte?: String;
-  name_gt?: String;
-  name_gte?: String;
-  name_contains?: String;
-  name_not_contains?: String;
-  name_starts_with?: String;
-  name_not_starts_with?: String;
-  name_ends_with?: String;
-  name_not_ends_with?: String;
-  cards_every?: CardWhereInput;
-  cards_some?: CardWhereInput;
-  cards_none?: CardWhereInput;
-  board?: BoardWhereInput;
-  AND?: ColumnWhereInput[] | ColumnWhereInput;
-  OR?: ColumnWhereInput[] | ColumnWhereInput;
-  NOT?: ColumnWhereInput[] | ColumnWhereInput;
-}
-
-export interface UserUpdateOneRequiredInput {
-  create?: UserCreateInput;
-  update?: UserUpdateDataInput;
-  upsert?: UserUpsertNestedInput;
-  connect?: UserWhereUniqueInput;
-}
-
-export interface BoardSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: BoardWhereInput;
-  AND?: BoardSubscriptionWhereInput[] | BoardSubscriptionWhereInput;
-  OR?: BoardSubscriptionWhereInput[] | BoardSubscriptionWhereInput;
-  NOT?: BoardSubscriptionWhereInput[] | BoardSubscriptionWhereInput;
-}
-
-export interface UserUpdateDataInput {
-  name?: String;
-  email?: String;
-  password?: String;
-}
-
-export interface CardUpsertWithoutVotesInput {
-  update: CardUpdateWithoutVotesDataInput;
-  create: CardCreateWithoutVotesInput;
-}
-
-export interface UserUpsertNestedInput {
-  update: UserUpdateDataInput;
-  create: UserCreateInput;
-}
-
-export interface CardUpdateOneRequiredWithoutVotesInput {
-  create?: CardCreateWithoutVotesInput;
-  update?: CardUpdateWithoutVotesDataInput;
-  upsert?: CardUpsertWithoutVotesInput;
-  connect?: CardWhereUniqueInput;
-}
-
-export interface ColumnUpdateManyWithoutBoardInput {
-  create?: ColumnCreateWithoutBoardInput[] | ColumnCreateWithoutBoardInput;
-  delete?: ColumnWhereUniqueInput[] | ColumnWhereUniqueInput;
-  connect?: ColumnWhereUniqueInput[] | ColumnWhereUniqueInput;
-  set?: ColumnWhereUniqueInput[] | ColumnWhereUniqueInput;
-  disconnect?: ColumnWhereUniqueInput[] | ColumnWhereUniqueInput;
-  update?:
-    | ColumnUpdateWithWhereUniqueWithoutBoardInput[]
-    | ColumnUpdateWithWhereUniqueWithoutBoardInput;
-  upsert?:
-    | ColumnUpsertWithWhereUniqueWithoutBoardInput[]
-    | ColumnUpsertWithWhereUniqueWithoutBoardInput;
-  deleteMany?: ColumnScalarWhereInput[] | ColumnScalarWhereInput;
-  updateMany?:
-    | ColumnUpdateManyWithWhereNestedInput[]
-    | ColumnUpdateManyWithWhereNestedInput;
-}
-
-export interface VoteUpdateInput {
-  owner?: UserUpdateOneRequiredInput;
-  upvote?: Boolean;
-  card?: CardUpdateOneRequiredWithoutVotesInput;
-}
-
-export interface ColumnUpdateWithWhereUniqueWithoutBoardInput {
-  where: ColumnWhereUniqueInput;
-  data: ColumnUpdateWithoutBoardDataInput;
-}
-
-export interface CardCreateOneWithoutVotesInput {
-  create?: CardCreateWithoutVotesInput;
-  connect?: CardWhereUniqueInput;
-}
-
-export interface ColumnUpdateWithoutBoardDataInput {
-  owner?: UserUpdateOneRequiredInput;
-  name?: String;
-  cards?: CardUpdateManyWithoutColumnInput;
-}
-
-export interface VoteCreateInput {
-  id?: ID_Input;
-  owner: UserCreateOneInput;
-  upvote: Boolean;
-  card: CardCreateOneWithoutVotesInput;
-}
-
-export interface CardUpdateManyWithoutColumnInput {
-  create?: CardCreateWithoutColumnInput[] | CardCreateWithoutColumnInput;
-  delete?: CardWhereUniqueInput[] | CardWhereUniqueInput;
-  connect?: CardWhereUniqueInput[] | CardWhereUniqueInput;
-  set?: CardWhereUniqueInput[] | CardWhereUniqueInput;
-  disconnect?: CardWhereUniqueInput[] | CardWhereUniqueInput;
-  update?:
-    | CardUpdateWithWhereUniqueWithoutColumnInput[]
-    | CardUpdateWithWhereUniqueWithoutColumnInput;
-  upsert?:
-    | CardUpsertWithWhereUniqueWithoutColumnInput[]
-    | CardUpsertWithWhereUniqueWithoutColumnInput;
-  deleteMany?: CardScalarWhereInput[] | CardScalarWhereInput;
-  updateMany?:
-    | CardUpdateManyWithWhereNestedInput[]
-    | CardUpdateManyWithWhereNestedInput;
-}
-
-export interface UserUpdateInput {
-  name?: String;
-  email?: String;
-  password?: String;
-}
-
-export interface CardUpdateWithWhereUniqueWithoutColumnInput {
-  where: CardWhereUniqueInput;
-  data: CardUpdateWithoutColumnDataInput;
-}
-
-export interface ColumnUpdateManyMutationInput {
-  name?: String;
-}
-
-export interface BoardUpdateOneRequiredWithoutColumnsInput {
-  create?: BoardCreateWithoutColumnsInput;
-  update?: BoardUpdateWithoutColumnsDataInput;
-  upsert?: BoardUpsertWithoutColumnsInput;
-  connect?: BoardWhereUniqueInput;
-}
-
-export interface ColumnCreateInput {
-  id?: ID_Input;
-  owner: UserCreateOneInput;
-  name: String;
-  cards?: CardCreateManyWithoutColumnInput;
-  board: BoardCreateOneWithoutColumnsInput;
-}
-
-export interface VoteUpdateManyWithoutCardInput {
-  create?: VoteCreateWithoutCardInput[] | VoteCreateWithoutCardInput;
-  delete?: VoteWhereUniqueInput[] | VoteWhereUniqueInput;
-  connect?: VoteWhereUniqueInput[] | VoteWhereUniqueInput;
-  set?: VoteWhereUniqueInput[] | VoteWhereUniqueInput;
-  disconnect?: VoteWhereUniqueInput[] | VoteWhereUniqueInput;
-  update?:
-    | VoteUpdateWithWhereUniqueWithoutCardInput[]
-    | VoteUpdateWithWhereUniqueWithoutCardInput;
-  upsert?:
-    | VoteUpsertWithWhereUniqueWithoutCardInput[]
-    | VoteUpsertWithWhereUniqueWithoutCardInput;
-  deleteMany?: VoteScalarWhereInput[] | VoteScalarWhereInput;
-  updateMany?:
-    | VoteUpdateManyWithWhereNestedInput[]
-    | VoteUpdateManyWithWhereNestedInput;
-}
-
-export type VoteWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
-
-export interface VoteUpdateWithWhereUniqueWithoutCardInput {
-  where: VoteWhereUniqueInput;
-  data: VoteUpdateWithoutCardDataInput;
-}
-
-export interface BoardUpsertWithoutColumnsInput {
-  update: BoardUpdateWithoutColumnsDataInput;
-  create: BoardCreateWithoutColumnsInput;
-}
-
-export interface VoteUpdateWithoutCardDataInput {
-  owner?: UserUpdateOneRequiredInput;
-  upvote?: Boolean;
-}
-
-export interface UserCreateOneInput {
-  create?: UserCreateInput;
-  connect?: UserWhereUniqueInput;
-}
-
-export interface ColumnUpdateWithoutCardsDataInput {
-  owner?: UserUpdateOneRequiredInput;
-  name?: String;
-  board?: BoardUpdateOneRequiredWithoutColumnsInput;
-}
-
-export interface ColumnCreateManyWithoutBoardInput {
-  create?: ColumnCreateWithoutBoardInput[] | ColumnCreateWithoutBoardInput;
-  connect?: ColumnWhereUniqueInput[] | ColumnWhereUniqueInput;
-}
-
-export interface BoardWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  name?: String;
-  name_not?: String;
-  name_in?: String[] | String;
-  name_not_in?: String[] | String;
-  name_lt?: String;
-  name_lte?: String;
-  name_gt?: String;
-  name_gte?: String;
-  name_contains?: String;
-  name_not_contains?: String;
-  name_starts_with?: String;
-  name_not_starts_with?: String;
-  name_ends_with?: String;
-  name_not_ends_with?: String;
-  password?: String;
-  password_not?: String;
-  password_in?: String[] | String;
-  password_not_in?: String[] | String;
-  password_lt?: String;
-  password_lte?: String;
-  password_gt?: String;
-  password_gte?: String;
-  password_contains?: String;
-  password_not_contains?: String;
-  password_starts_with?: String;
-  password_not_starts_with?: String;
-  password_ends_with?: String;
-  password_not_ends_with?: String;
-  owner?: UserWhereInput;
-  columns_every?: ColumnWhereInput;
-  columns_some?: ColumnWhereInput;
-  columns_none?: ColumnWhereInput;
-  maxVotes?: Int;
-  maxVotes_not?: Int;
-  maxVotes_in?: Int[] | Int;
-  maxVotes_not_in?: Int[] | Int;
-  maxVotes_lt?: Int;
-  maxVotes_lte?: Int;
-  maxVotes_gt?: Int;
-  maxVotes_gte?: Int;
-  AND?: BoardWhereInput[] | BoardWhereInput;
-  OR?: BoardWhereInput[] | BoardWhereInput;
-  NOT?: BoardWhereInput[] | BoardWhereInput;
-}
-
-export interface VoteSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: VoteWhereInput;
-  AND?: VoteSubscriptionWhereInput[] | VoteSubscriptionWhereInput;
-  OR?: VoteSubscriptionWhereInput[] | VoteSubscriptionWhereInput;
-  NOT?: VoteSubscriptionWhereInput[] | VoteSubscriptionWhereInput;
-}
-
-export interface VoteUpdateManyWithWhereNestedInput {
-  where: VoteScalarWhereInput;
-  data: VoteUpdateManyDataInput;
-}
-
-export interface ColumnSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: ColumnWhereInput;
-  AND?: ColumnSubscriptionWhereInput[] | ColumnSubscriptionWhereInput;
-  OR?: ColumnSubscriptionWhereInput[] | ColumnSubscriptionWhereInput;
-  NOT?: ColumnSubscriptionWhereInput[] | ColumnSubscriptionWhereInput;
-}
-
-export interface VoteUpdateManyDataInput {
-  upvote?: Boolean;
-}
-
-export interface VoteUpdateManyMutationInput {
-  upvote?: Boolean;
-}
-
-export interface CardUpsertWithWhereUniqueWithoutColumnInput {
-  where: CardWhereUniqueInput;
-  update: CardUpdateWithoutColumnDataInput;
-  create: CardCreateWithoutColumnInput;
-}
-
-export type CardWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
-
 export interface CardScalarWhereInput {
   id?: ID_Input;
   id_not?: ID_Input;
@@ -932,25 +640,324 @@ export interface CardScalarWhereInput {
   NOT?: CardScalarWhereInput[] | CardScalarWhereInput;
 }
 
-export type ColumnWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
+export interface ColumnWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  owner?: UserWhereInput;
+  name?: String;
+  name_not?: String;
+  name_in?: String[] | String;
+  name_not_in?: String[] | String;
+  name_lt?: String;
+  name_lte?: String;
+  name_gt?: String;
+  name_gte?: String;
+  name_contains?: String;
+  name_not_contains?: String;
+  name_starts_with?: String;
+  name_not_starts_with?: String;
+  name_ends_with?: String;
+  name_not_ends_with?: String;
+  cards_every?: CardWhereInput;
+  cards_some?: CardWhereInput;
+  cards_none?: CardWhereInput;
+  board?: BoardWhereInput;
+  AND?: ColumnWhereInput[] | ColumnWhereInput;
+  OR?: ColumnWhereInput[] | ColumnWhereInput;
+  NOT?: ColumnWhereInput[] | ColumnWhereInput;
+}
+
+export interface VoteCreateWithoutCardInput {
+  id?: ID_Input;
+  owner: UserCreateOneInput;
+}
+
+export interface BoardCreateOneWithoutColumnsInput {
+  create?: BoardCreateWithoutColumnsInput;
+  connect?: BoardWhereUniqueInput;
+}
+
+export interface BoardUpdateInput {
+  name?: String;
+  password?: String;
+  owner?: UserUpdateOneRequiredInput;
+  columns?: ColumnUpdateManyWithoutBoardInput;
+  maxVotes?: Int;
+}
 
 export interface CardUpdateManyWithWhereNestedInput {
   where: CardScalarWhereInput;
   data: CardUpdateManyDataInput;
 }
 
-export type UserWhereUniqueInput = AtLeastOne<{
+export interface UserUpdateOneRequiredInput {
+  create?: UserCreateInput;
+  update?: UserUpdateDataInput;
+  upsert?: UserUpsertNestedInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface UserSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: UserWhereInput;
+  AND?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
+  OR?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
+  NOT?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
+}
+
+export interface UserUpdateDataInput {
+  name?: String;
+  email?: String;
+  password?: String;
+}
+
+export interface CardSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: CardWhereInput;
+  AND?: CardSubscriptionWhereInput[] | CardSubscriptionWhereInput;
+  OR?: CardSubscriptionWhereInput[] | CardSubscriptionWhereInput;
+  NOT?: CardSubscriptionWhereInput[] | CardSubscriptionWhereInput;
+}
+
+export interface UserUpsertNestedInput {
+  update: UserUpdateDataInput;
+  create: UserCreateInput;
+}
+
+export interface BoardSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: BoardWhereInput;
+  AND?: BoardSubscriptionWhereInput[] | BoardSubscriptionWhereInput;
+  OR?: BoardSubscriptionWhereInput[] | BoardSubscriptionWhereInput;
+  NOT?: BoardSubscriptionWhereInput[] | BoardSubscriptionWhereInput;
+}
+
+export interface ColumnUpdateManyWithoutBoardInput {
+  create?: ColumnCreateWithoutBoardInput[] | ColumnCreateWithoutBoardInput;
+  delete?: ColumnWhereUniqueInput[] | ColumnWhereUniqueInput;
+  connect?: ColumnWhereUniqueInput[] | ColumnWhereUniqueInput;
+  set?: ColumnWhereUniqueInput[] | ColumnWhereUniqueInput;
+  disconnect?: ColumnWhereUniqueInput[] | ColumnWhereUniqueInput;
+  update?:
+    | ColumnUpdateWithWhereUniqueWithoutBoardInput[]
+    | ColumnUpdateWithWhereUniqueWithoutBoardInput;
+  upsert?:
+    | ColumnUpsertWithWhereUniqueWithoutBoardInput[]
+    | ColumnUpsertWithWhereUniqueWithoutBoardInput;
+  deleteMany?: ColumnScalarWhereInput[] | ColumnScalarWhereInput;
+  updateMany?:
+    | ColumnUpdateManyWithWhereNestedInput[]
+    | ColumnUpdateManyWithWhereNestedInput;
+}
+
+export interface CardUpdateWithoutVotesDataInput {
+  description?: String;
+  owner?: UserUpdateOneRequiredInput;
+  column?: ColumnUpdateOneRequiredWithoutCardsInput;
+}
+
+export interface ColumnUpdateWithWhereUniqueWithoutBoardInput {
+  where: ColumnWhereUniqueInput;
+  data: ColumnUpdateWithoutBoardDataInput;
+}
+
+export interface CardUpdateOneRequiredWithoutVotesInput {
+  create?: CardCreateWithoutVotesInput;
+  update?: CardUpdateWithoutVotesDataInput;
+  upsert?: CardUpsertWithoutVotesInput;
+  connect?: CardWhereUniqueInput;
+}
+
+export interface ColumnUpdateWithoutBoardDataInput {
+  owner?: UserUpdateOneRequiredInput;
+  name?: String;
+  cards?: CardUpdateManyWithoutColumnInput;
+}
+
+export interface CardCreateWithoutVotesInput {
+  id?: ID_Input;
+  description: String;
+  owner: UserCreateOneInput;
+  column: ColumnCreateOneWithoutCardsInput;
+}
+
+export interface CardUpdateManyWithoutColumnInput {
+  create?: CardCreateWithoutColumnInput[] | CardCreateWithoutColumnInput;
+  delete?: CardWhereUniqueInput[] | CardWhereUniqueInput;
+  connect?: CardWhereUniqueInput[] | CardWhereUniqueInput;
+  set?: CardWhereUniqueInput[] | CardWhereUniqueInput;
+  disconnect?: CardWhereUniqueInput[] | CardWhereUniqueInput;
+  update?:
+    | CardUpdateWithWhereUniqueWithoutColumnInput[]
+    | CardUpdateWithWhereUniqueWithoutColumnInput;
+  upsert?:
+    | CardUpsertWithWhereUniqueWithoutColumnInput[]
+    | CardUpsertWithWhereUniqueWithoutColumnInput;
+  deleteMany?: CardScalarWhereInput[] | CardScalarWhereInput;
+  updateMany?:
+    | CardUpdateManyWithWhereNestedInput[]
+    | CardUpdateManyWithWhereNestedInput;
+}
+
+export interface CardCreateOneWithoutVotesInput {
+  create?: CardCreateWithoutVotesInput;
+  connect?: CardWhereUniqueInput;
+}
+
+export interface CardUpdateManyMutationInput {
+  description?: String;
+}
+
+export interface UserUpdateManyMutationInput {
+  name?: String;
+  email?: String;
+  password?: String;
+}
+
+export interface CardUpdateWithoutColumnDataInput {
+  description?: String;
+  votes?: VoteUpdateManyWithoutCardInput;
+  owner?: UserUpdateOneRequiredInput;
+}
+
+export type VoteWhereUniqueInput = AtLeastOne<{
   id: ID_Input;
 }>;
+
+export interface VoteUpdateManyWithoutCardInput {
+  create?: VoteCreateWithoutCardInput[] | VoteCreateWithoutCardInput;
+  delete?: VoteWhereUniqueInput[] | VoteWhereUniqueInput;
+  connect?: VoteWhereUniqueInput[] | VoteWhereUniqueInput;
+  set?: VoteWhereUniqueInput[] | VoteWhereUniqueInput;
+  disconnect?: VoteWhereUniqueInput[] | VoteWhereUniqueInput;
+  update?:
+    | VoteUpdateWithWhereUniqueWithoutCardInput[]
+    | VoteUpdateWithWhereUniqueWithoutCardInput;
+  upsert?:
+    | VoteUpsertWithWhereUniqueWithoutCardInput[]
+    | VoteUpsertWithWhereUniqueWithoutCardInput;
+  deleteMany?: VoteScalarWhereInput[] | VoteScalarWhereInput;
+}
+
+export interface ColumnUpdateInput {
+  owner?: UserUpdateOneRequiredInput;
+  name?: String;
+  cards?: CardUpdateManyWithoutColumnInput;
+  board?: BoardUpdateOneRequiredWithoutColumnsInput;
+}
+
+export interface VoteUpdateWithWhereUniqueWithoutCardInput {
+  where: VoteWhereUniqueInput;
+  data: VoteUpdateWithoutCardDataInput;
+}
+
+export interface UserCreateOneInput {
+  create?: UserCreateInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface ColumnUpsertWithoutCardsInput {
+  update: ColumnUpdateWithoutCardsDataInput;
+  create: ColumnCreateWithoutCardsInput;
+}
+
+export interface ColumnCreateManyWithoutBoardInput {
+  create?: ColumnCreateWithoutBoardInput[] | ColumnCreateWithoutBoardInput;
+  connect?: ColumnWhereUniqueInput[] | ColumnWhereUniqueInput;
+}
+
+export interface BoardUpsertWithoutColumnsInput {
+  update: BoardUpdateWithoutColumnsDataInput;
+  create: BoardCreateWithoutColumnsInput;
+}
+
+export interface CardCreateManyWithoutColumnInput {
+  create?: CardCreateWithoutColumnInput[] | CardCreateWithoutColumnInput;
+  connect?: CardWhereUniqueInput[] | CardWhereUniqueInput;
+}
+
+export interface BoardUpdateWithoutColumnsDataInput {
+  name?: String;
+  password?: String;
+  owner?: UserUpdateOneRequiredInput;
+  maxVotes?: Int;
+}
+
+export interface VoteCreateManyWithoutCardInput {
+  create?: VoteCreateWithoutCardInput[] | VoteCreateWithoutCardInput;
+  connect?: VoteWhereUniqueInput[] | VoteWhereUniqueInput;
+}
+
+export interface BoardUpdateOneRequiredWithoutColumnsInput {
+  create?: BoardCreateWithoutColumnsInput;
+  update?: BoardUpdateWithoutColumnsDataInput;
+  upsert?: BoardUpsertWithoutColumnsInput;
+  connect?: BoardWhereUniqueInput;
+}
+
+export interface ColumnSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: ColumnWhereInput;
+  AND?: ColumnSubscriptionWhereInput[] | ColumnSubscriptionWhereInput;
+  OR?: ColumnSubscriptionWhereInput[] | ColumnSubscriptionWhereInput;
+  NOT?: ColumnSubscriptionWhereInput[] | ColumnSubscriptionWhereInput;
+}
+
+export interface ColumnUpdateWithoutCardsDataInput {
+  owner?: UserUpdateOneRequiredInput;
+  name?: String;
+  board?: BoardUpdateOneRequiredWithoutColumnsInput;
+}
+
+export interface CardUpsertWithoutVotesInput {
+  update: CardUpdateWithoutVotesDataInput;
+  create: CardCreateWithoutVotesInput;
+}
+
+export interface ColumnUpdateOneRequiredWithoutCardsInput {
+  create?: ColumnCreateWithoutCardsInput;
+  update?: ColumnUpdateWithoutCardsDataInput;
+  upsert?: ColumnUpsertWithoutCardsInput;
+  connect?: ColumnWhereUniqueInput;
+}
+
+export interface VoteUpdateInput {
+  owner?: UserUpdateOneRequiredInput;
+  card?: CardUpdateOneRequiredWithoutVotesInput;
+}
 
 export interface CardUpdateManyDataInput {
   description?: String;
 }
 
-export interface CardUpdateManyMutationInput {
-  description?: String;
+export interface VoteCreateInput {
+  id?: ID_Input;
+  owner: UserCreateOneInput;
+  card: CardCreateOneWithoutVotesInput;
 }
 
 export interface ColumnUpsertWithWhereUniqueWithoutBoardInput {
@@ -959,11 +966,8 @@ export interface ColumnUpsertWithWhereUniqueWithoutBoardInput {
   create: ColumnCreateWithoutBoardInput;
 }
 
-export interface BoardUpdateWithoutColumnsDataInput {
+export interface ColumnUpdateManyMutationInput {
   name?: String;
-  password?: String;
-  owner?: UserUpdateOneRequiredInput;
-  maxVotes?: Int;
 }
 
 export interface ColumnScalarWhereInput {
@@ -1000,68 +1004,18 @@ export interface ColumnScalarWhereInput {
   NOT?: ColumnScalarWhereInput[] | ColumnScalarWhereInput;
 }
 
-export interface UserCreateInput {
+export interface BoardCreateInput {
   id?: ID_Input;
   name: String;
-  email: String;
   password: String;
+  owner: UserCreateOneInput;
+  columns?: ColumnCreateManyWithoutBoardInput;
+  maxVotes?: Int;
 }
 
 export interface ColumnUpdateManyWithWhereNestedInput {
   where: ColumnScalarWhereInput;
   data: ColumnUpdateManyDataInput;
-}
-
-export interface UserSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: UserWhereInput;
-  AND?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
-  OR?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
-  NOT?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
-}
-
-export interface ColumnUpdateManyDataInput {
-  name?: String;
-}
-
-export interface CardUpdateWithoutVotesDataInput {
-  description?: String;
-  owner?: UserUpdateOneRequiredInput;
-  column?: ColumnUpdateOneRequiredWithoutCardsInput;
-}
-
-export interface BoardUpdateManyMutationInput {
-  name?: String;
-  password?: String;
-  maxVotes?: Int;
-}
-
-export interface UserUpdateManyMutationInput {
-  name?: String;
-  email?: String;
-  password?: String;
-}
-
-export interface ColumnUpdateOneRequiredWithoutCardsInput {
-  create?: ColumnCreateWithoutCardsInput;
-  update?: ColumnUpdateWithoutCardsDataInput;
-  upsert?: ColumnUpsertWithoutCardsInput;
-  connect?: ColumnWhereUniqueInput;
-}
-
-export interface ColumnUpsertWithoutCardsInput {
-  update: ColumnUpdateWithoutCardsDataInput;
-  create: ColumnCreateWithoutCardsInput;
-}
-
-export interface CardUpdateInput {
-  description?: String;
-  votes?: VoteUpdateManyWithoutCardInput;
-  owner?: UserUpdateOneRequiredInput;
-  column?: ColumnUpdateOneRequiredWithoutCardsInput;
 }
 
 export interface ColumnCreateWithoutBoardInput {
@@ -1071,9 +1025,42 @@ export interface ColumnCreateWithoutBoardInput {
   cards?: CardCreateManyWithoutColumnInput;
 }
 
-export interface BoardCreateOneWithoutColumnsInput {
-  create?: BoardCreateWithoutColumnsInput;
-  connect?: BoardWhereUniqueInput;
+export interface ColumnUpdateManyDataInput {
+  name?: String;
+}
+
+export interface VoteSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: VoteWhereInput;
+  AND?: VoteSubscriptionWhereInput[] | VoteSubscriptionWhereInput;
+  OR?: VoteSubscriptionWhereInput[] | VoteSubscriptionWhereInput;
+  NOT?: VoteSubscriptionWhereInput[] | VoteSubscriptionWhereInput;
+}
+
+export interface BoardUpdateManyMutationInput {
+  name?: String;
+  password?: String;
+  maxVotes?: Int;
+}
+
+export type ColumnWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface CardUpdateInput {
+  description?: String;
+  votes?: VoteUpdateManyWithoutCardInput;
+  owner?: UserUpdateOneRequiredInput;
+  column?: ColumnUpdateOneRequiredWithoutCardsInput;
+}
+
+export interface UserUpdateInput {
+  name?: String;
+  email?: String;
+  password?: String;
 }
 
 export interface ColumnCreateWithoutCardsInput {
@@ -1096,38 +1083,42 @@ export interface CardCreateInput {
   column: ColumnCreateOneWithoutCardsInput;
 }
 
-export interface CardSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: CardWhereInput;
-  AND?: CardSubscriptionWhereInput[] | CardSubscriptionWhereInput;
-  OR?: CardSubscriptionWhereInput[] | CardSubscriptionWhereInput;
-  NOT?: CardSubscriptionWhereInput[] | CardSubscriptionWhereInput;
-}
-
-export interface BoardCreateInput {
+export interface BoardCreateWithoutColumnsInput {
   id?: ID_Input;
   name: String;
   password: String;
   owner: UserCreateOneInput;
-  columns?: ColumnCreateManyWithoutBoardInput;
   maxVotes?: Int;
 }
 
-export interface ColumnUpdateInput {
-  owner?: UserUpdateOneRequiredInput;
-  name?: String;
-  cards?: CardUpdateManyWithoutColumnInput;
-  board?: BoardUpdateOneRequiredWithoutColumnsInput;
+export interface ColumnCreateInput {
+  id?: ID_Input;
+  owner: UserCreateOneInput;
+  name: String;
+  cards?: CardCreateManyWithoutColumnInput;
+  board: BoardCreateOneWithoutColumnsInput;
 }
 
-export interface CardCreateWithoutVotesInput {
+export type UserWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export type CardWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface CardCreateWithoutColumnInput {
   id?: ID_Input;
   description: String;
+  votes?: VoteCreateManyWithoutCardInput;
   owner: UserCreateOneInput;
-  column: ColumnCreateOneWithoutCardsInput;
+}
+
+export interface UserCreateInput {
+  id?: ID_Input;
+  name: String;
+  email: String;
+  password: String;
 }
 
 export interface NodeNode {
@@ -1136,7 +1127,6 @@ export interface NodeNode {
 
 export interface VotePreviousValues {
   id: ID_Output;
-  upvote: Boolean;
   createdAt: DateTimeOutput;
 }
 
@@ -1144,7 +1134,6 @@ export interface VotePreviousValuesPromise
   extends Promise<VotePreviousValues>,
     Fragmentable {
   id: () => Promise<ID_Output>;
-  upvote: () => Promise<Boolean>;
   createdAt: () => Promise<DateTimeOutput>;
 }
 
@@ -1152,8 +1141,243 @@ export interface VotePreviousValuesSubscription
   extends Promise<AsyncIterator<VotePreviousValues>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
-  upvote: () => Promise<AsyncIterator<Boolean>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+}
+
+export interface ColumnConnection {
+  pageInfo: PageInfo;
+  edges: ColumnEdge[];
+}
+
+export interface ColumnConnectionPromise
+  extends Promise<ColumnConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<ColumnEdge>>() => T;
+  aggregate: <T = AggregateColumnPromise>() => T;
+}
+
+export interface ColumnConnectionSubscription
+  extends Promise<AsyncIterator<ColumnConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<ColumnEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateColumnSubscription>() => T;
+}
+
+export interface User {
+  id: ID_Output;
+  name: String;
+  email: String;
+  password: String;
+}
+
+export interface UserPromise extends Promise<User>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  name: () => Promise<String>;
+  email: () => Promise<String>;
+  password: () => Promise<String>;
+}
+
+export interface UserSubscription
+  extends Promise<AsyncIterator<User>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  name: () => Promise<AsyncIterator<String>>;
+  email: () => Promise<AsyncIterator<String>>;
+  password: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateCard {
+  count: Int;
+}
+
+export interface AggregateCardPromise
+  extends Promise<AggregateCard>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateCardSubscription
+  extends Promise<AsyncIterator<AggregateCard>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface BoardConnection {
+  pageInfo: PageInfo;
+  edges: BoardEdge[];
+}
+
+export interface BoardConnectionPromise
+  extends Promise<BoardConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<BoardEdge>>() => T;
+  aggregate: <T = AggregateBoardPromise>() => T;
+}
+
+export interface BoardConnectionSubscription
+  extends Promise<AsyncIterator<BoardConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<BoardEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateBoardSubscription>() => T;
+}
+
+export interface CardEdge {
+  node: Card;
+  cursor: String;
+}
+
+export interface CardEdgePromise extends Promise<CardEdge>, Fragmentable {
+  node: <T = CardPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface CardEdgeSubscription
+  extends Promise<AsyncIterator<CardEdge>>,
+    Fragmentable {
+  node: <T = CardSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface Card {
+  id: ID_Output;
+  description: String;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
+}
+
+export interface CardPromise extends Promise<Card>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  description: () => Promise<String>;
+  votes: <T = FragmentableArray<Vote>>(
+    args?: {
+      where?: VoteWhereInput;
+      orderBy?: VoteOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+  owner: <T = UserPromise>() => T;
+  column: <T = ColumnPromise>() => T;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+}
+
+export interface CardSubscription
+  extends Promise<AsyncIterator<Card>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  description: () => Promise<AsyncIterator<String>>;
+  votes: <T = Promise<AsyncIterator<VoteSubscription>>>(
+    args?: {
+      where?: VoteWhereInput;
+      orderBy?: VoteOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+  owner: <T = UserSubscription>() => T;
+  column: <T = ColumnSubscription>() => T;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+}
+
+export interface Vote {
+  id: ID_Output;
+  createdAt: DateTimeOutput;
+}
+
+export interface VotePromise extends Promise<Vote>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  owner: <T = UserPromise>() => T;
+  card: <T = CardPromise>() => T;
+  createdAt: () => Promise<DateTimeOutput>;
+}
+
+export interface VoteSubscription
+  extends Promise<AsyncIterator<Vote>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  owner: <T = UserSubscription>() => T;
+  card: <T = CardSubscription>() => T;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+}
+
+export interface UserSubscriptionPayload {
+  mutation: MutationType;
+  node: User;
+  updatedFields: String[];
+  previousValues: UserPreviousValues;
+}
+
+export interface UserSubscriptionPayloadPromise
+  extends Promise<UserSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = UserPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = UserPreviousValuesPromise>() => T;
+}
+
+export interface UserSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<UserSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = UserSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = UserPreviousValuesSubscription>() => T;
+}
+
+export interface Column {
+  id: ID_Output;
+  name: String;
+}
+
+export interface ColumnPromise extends Promise<Column>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  owner: <T = UserPromise>() => T;
+  name: () => Promise<String>;
+  cards: <T = FragmentableArray<Card>>(
+    args?: {
+      where?: CardWhereInput;
+      orderBy?: CardOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+  board: <T = BoardPromise>() => T;
+}
+
+export interface ColumnSubscription
+  extends Promise<AsyncIterator<Column>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  owner: <T = UserSubscription>() => T;
+  name: () => Promise<AsyncIterator<String>>;
+  cards: <T = Promise<AsyncIterator<CardSubscription>>>(
+    args?: {
+      where?: CardWhereInput;
+      orderBy?: CardOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+  board: <T = BoardSubscription>() => T;
 }
 
 export interface CardConnection {
@@ -1175,94 +1399,6 @@ export interface CardConnectionSubscription
   pageInfo: <T = PageInfoSubscription>() => T;
   edges: <T = Promise<AsyncIterator<CardEdgeSubscription>>>() => T;
   aggregate: <T = AggregateCardSubscription>() => T;
-}
-
-export interface Column {
-  id: ID_Output;
-  name: String;
-}
-
-export interface ColumnPromise extends Promise<Column>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  owner: <T = UserPromise>() => T;
-  name: () => Promise<String>;
-  cards: <T = FragmentableArray<Card>>(args?: {
-    where?: CardWhereInput;
-    orderBy?: CardOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
-  board: <T = BoardPromise>() => T;
-}
-
-export interface ColumnSubscription
-  extends Promise<AsyncIterator<Column>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  owner: <T = UserSubscription>() => T;
-  name: () => Promise<AsyncIterator<String>>;
-  cards: <T = Promise<AsyncIterator<CardSubscription>>>(args?: {
-    where?: CardWhereInput;
-    orderBy?: CardOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
-  board: <T = BoardSubscription>() => T;
-}
-
-export interface AggregateBoard {
-  count: Int;
-}
-
-export interface AggregateBoardPromise
-  extends Promise<AggregateBoard>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateBoardSubscription
-  extends Promise<AsyncIterator<AggregateBoard>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface BoardEdge {
-  node: Board;
-  cursor: String;
-}
-
-export interface BoardEdgePromise extends Promise<BoardEdge>, Fragmentable {
-  node: <T = BoardPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface BoardEdgeSubscription
-  extends Promise<AsyncIterator<BoardEdge>>,
-    Fragmentable {
-  node: <T = BoardSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface BatchPayload {
-  count: Long;
-}
-
-export interface BatchPayloadPromise
-  extends Promise<BatchPayload>,
-    Fragmentable {
-  count: () => Promise<Long>;
-}
-
-export interface BatchPayloadSubscription
-  extends Promise<AsyncIterator<BatchPayload>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Long>>;
 }
 
 export interface UserPreviousValues {
@@ -1290,125 +1426,20 @@ export interface UserPreviousValuesSubscription
   password: () => Promise<AsyncIterator<String>>;
 }
 
-export interface PageInfo {
-  hasNextPage: Boolean;
-  hasPreviousPage: Boolean;
-  startCursor?: String;
-  endCursor?: String;
-}
-
-export interface PageInfoPromise extends Promise<PageInfo>, Fragmentable {
-  hasNextPage: () => Promise<Boolean>;
-  hasPreviousPage: () => Promise<Boolean>;
-  startCursor: () => Promise<String>;
-  endCursor: () => Promise<String>;
-}
-
-export interface PageInfoSubscription
-  extends Promise<AsyncIterator<PageInfo>>,
-    Fragmentable {
-  hasNextPage: () => Promise<AsyncIterator<Boolean>>;
-  hasPreviousPage: () => Promise<AsyncIterator<Boolean>>;
-  startCursor: () => Promise<AsyncIterator<String>>;
-  endCursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface VoteEdge {
-  node: Vote;
-  cursor: String;
-}
-
-export interface VoteEdgePromise extends Promise<VoteEdge>, Fragmentable {
-  node: <T = VotePromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface VoteEdgeSubscription
-  extends Promise<AsyncIterator<VoteEdge>>,
-    Fragmentable {
-  node: <T = VoteSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface BoardConnection {
-  pageInfo: PageInfo;
-  edges: BoardEdge[];
-}
-
-export interface BoardConnectionPromise
-  extends Promise<BoardConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<BoardEdge>>() => T;
-  aggregate: <T = AggregateBoardPromise>() => T;
-}
-
-export interface BoardConnectionSubscription
-  extends Promise<AsyncIterator<BoardConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<BoardEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateBoardSubscription>() => T;
-}
-
-export interface AggregateUser {
+export interface AggregateVote {
   count: Int;
 }
 
-export interface AggregateUserPromise
-  extends Promise<AggregateUser>,
+export interface AggregateVotePromise
+  extends Promise<AggregateVote>,
     Fragmentable {
   count: () => Promise<Int>;
 }
 
-export interface AggregateUserSubscription
-  extends Promise<AsyncIterator<AggregateUser>>,
+export interface AggregateVoteSubscription
+  extends Promise<AsyncIterator<AggregateVote>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface User {
-  id: ID_Output;
-  name: String;
-  email: String;
-  password: String;
-}
-
-export interface UserPromise extends Promise<User>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  name: () => Promise<String>;
-  email: () => Promise<String>;
-  password: () => Promise<String>;
-}
-
-export interface UserSubscription
-  extends Promise<AsyncIterator<User>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  name: () => Promise<AsyncIterator<String>>;
-  email: () => Promise<AsyncIterator<String>>;
-  password: () => Promise<AsyncIterator<String>>;
-}
-
-export interface UserConnection {
-  pageInfo: PageInfo;
-  edges: UserEdge[];
-}
-
-export interface UserConnectionPromise
-  extends Promise<UserConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<UserEdge>>() => T;
-  aggregate: <T = AggregateUserPromise>() => T;
-}
-
-export interface UserConnectionSubscription
-  extends Promise<AsyncIterator<UserConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<UserEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateUserSubscription>() => T;
 }
 
 export interface Board {
@@ -1423,15 +1454,17 @@ export interface BoardPromise extends Promise<Board>, Fragmentable {
   name: () => Promise<String>;
   password: () => Promise<String>;
   owner: <T = UserPromise>() => T;
-  columns: <T = FragmentableArray<Column>>(args?: {
-    where?: ColumnWhereInput;
-    orderBy?: ColumnOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
+  columns: <T = FragmentableArray<Column>>(
+    args?: {
+      where?: ColumnWhereInput;
+      orderBy?: ColumnOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
   maxVotes: () => Promise<Int>;
 }
 
@@ -1442,32 +1475,39 @@ export interface BoardSubscription
   name: () => Promise<AsyncIterator<String>>;
   password: () => Promise<AsyncIterator<String>>;
   owner: <T = UserSubscription>() => T;
-  columns: <T = Promise<AsyncIterator<ColumnSubscription>>>(args?: {
-    where?: ColumnWhereInput;
-    orderBy?: ColumnOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
+  columns: <T = Promise<AsyncIterator<ColumnSubscription>>>(
+    args?: {
+      where?: ColumnWhereInput;
+      orderBy?: ColumnOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
   maxVotes: () => Promise<AsyncIterator<Int>>;
 }
 
-export interface AggregateColumn {
-  count: Int;
+export interface VoteConnection {
+  pageInfo: PageInfo;
+  edges: VoteEdge[];
 }
 
-export interface AggregateColumnPromise
-  extends Promise<AggregateColumn>,
+export interface VoteConnectionPromise
+  extends Promise<VoteConnection>,
     Fragmentable {
-  count: () => Promise<Int>;
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<VoteEdge>>() => T;
+  aggregate: <T = AggregateVotePromise>() => T;
 }
 
-export interface AggregateColumnSubscription
-  extends Promise<AsyncIterator<AggregateColumn>>,
+export interface VoteConnectionSubscription
+  extends Promise<AsyncIterator<VoteConnection>>,
     Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<VoteEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateVoteSubscription>() => T;
 }
 
 export interface BoardSubscriptionPayload {
@@ -1495,25 +1535,21 @@ export interface BoardSubscriptionPayloadSubscription
   previousValues: <T = BoardPreviousValuesSubscription>() => T;
 }
 
-export interface ColumnConnection {
-  pageInfo: PageInfo;
-  edges: ColumnEdge[];
+export interface UserEdge {
+  node: User;
+  cursor: String;
 }
 
-export interface ColumnConnectionPromise
-  extends Promise<ColumnConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<ColumnEdge>>() => T;
-  aggregate: <T = AggregateColumnPromise>() => T;
+export interface UserEdgePromise extends Promise<UserEdge>, Fragmentable {
+  node: <T = UserPromise>() => T;
+  cursor: () => Promise<String>;
 }
 
-export interface ColumnConnectionSubscription
-  extends Promise<AsyncIterator<ColumnConnection>>,
+export interface UserEdgeSubscription
+  extends Promise<AsyncIterator<UserEdge>>,
     Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<ColumnEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateColumnSubscription>() => T;
+  node: <T = UserSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
 }
 
 export interface BoardPreviousValues {
@@ -1541,61 +1577,60 @@ export interface BoardPreviousValuesSubscription
   maxVotes: () => Promise<AsyncIterator<Int>>;
 }
 
-export interface CardEdge {
-  node: Card;
-  cursor: String;
+export interface PageInfo {
+  hasNextPage: Boolean;
+  hasPreviousPage: Boolean;
+  startCursor?: String;
+  endCursor?: String;
 }
 
-export interface CardEdgePromise extends Promise<CardEdge>, Fragmentable {
-  node: <T = CardPromise>() => T;
-  cursor: () => Promise<String>;
+export interface PageInfoPromise extends Promise<PageInfo>, Fragmentable {
+  hasNextPage: () => Promise<Boolean>;
+  hasPreviousPage: () => Promise<Boolean>;
+  startCursor: () => Promise<String>;
+  endCursor: () => Promise<String>;
 }
 
-export interface CardEdgeSubscription
-  extends Promise<AsyncIterator<CardEdge>>,
+export interface PageInfoSubscription
+  extends Promise<AsyncIterator<PageInfo>>,
     Fragmentable {
-  node: <T = CardSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
+  hasNextPage: () => Promise<AsyncIterator<Boolean>>;
+  hasPreviousPage: () => Promise<AsyncIterator<Boolean>>;
+  startCursor: () => Promise<AsyncIterator<String>>;
+  endCursor: () => Promise<AsyncIterator<String>>;
 }
 
-export interface Vote {
-  id: ID_Output;
-  upvote: Boolean;
-  createdAt: DateTimeOutput;
-}
-
-export interface VotePromise extends Promise<Vote>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  owner: <T = UserPromise>() => T;
-  upvote: () => Promise<Boolean>;
-  card: <T = CardPromise>() => T;
-  createdAt: () => Promise<DateTimeOutput>;
-}
-
-export interface VoteSubscription
-  extends Promise<AsyncIterator<Vote>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  owner: <T = UserSubscription>() => T;
-  upvote: () => Promise<AsyncIterator<Boolean>>;
-  card: <T = CardSubscription>() => T;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-}
-
-export interface AggregateVote {
+export interface AggregateBoard {
   count: Int;
 }
 
-export interface AggregateVotePromise
-  extends Promise<AggregateVote>,
+export interface AggregateBoardPromise
+  extends Promise<AggregateBoard>,
     Fragmentable {
   count: () => Promise<Int>;
 }
 
-export interface AggregateVoteSubscription
-  extends Promise<AsyncIterator<AggregateVote>>,
+export interface AggregateBoardSubscription
+  extends Promise<AsyncIterator<AggregateBoard>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface ColumnEdge {
+  node: Column;
+  cursor: String;
+}
+
+export interface ColumnEdgePromise extends Promise<ColumnEdge>, Fragmentable {
+  node: <T = ColumnPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface ColumnEdgeSubscription
+  extends Promise<AsyncIterator<ColumnEdge>>,
+    Fragmentable {
+  node: <T = ColumnSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
 }
 
 export interface CardSubscriptionPayload {
@@ -1623,38 +1658,45 @@ export interface CardSubscriptionPayloadSubscription
   previousValues: <T = CardPreviousValuesSubscription>() => T;
 }
 
-export interface UserEdge {
-  node: User;
-  cursor: String;
+export interface VoteSubscriptionPayload {
+  mutation: MutationType;
+  node: Vote;
+  updatedFields: String[];
+  previousValues: VotePreviousValues;
 }
 
-export interface UserEdgePromise extends Promise<UserEdge>, Fragmentable {
-  node: <T = UserPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface UserEdgeSubscription
-  extends Promise<AsyncIterator<UserEdge>>,
+export interface VoteSubscriptionPayloadPromise
+  extends Promise<VoteSubscriptionPayload>,
     Fragmentable {
-  node: <T = UserSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
+  mutation: () => Promise<MutationType>;
+  node: <T = VotePromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = VotePreviousValuesPromise>() => T;
 }
 
-export interface ColumnEdge {
-  node: Column;
-  cursor: String;
-}
-
-export interface ColumnEdgePromise extends Promise<ColumnEdge>, Fragmentable {
-  node: <T = ColumnPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface ColumnEdgeSubscription
-  extends Promise<AsyncIterator<ColumnEdge>>,
+export interface VoteSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<VoteSubscriptionPayload>>,
     Fragmentable {
-  node: <T = ColumnSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = VoteSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = VotePreviousValuesSubscription>() => T;
+}
+
+export interface AggregateUser {
+  count: Int;
+}
+
+export interface AggregateUserPromise
+  extends Promise<AggregateUser>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateUserSubscription
+  extends Promise<AsyncIterator<AggregateUser>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
 }
 
 export interface ColumnPreviousValues {
@@ -1701,49 +1743,21 @@ export interface ColumnSubscriptionPayloadSubscription
   previousValues: <T = ColumnPreviousValuesSubscription>() => T;
 }
 
-export interface Card {
-  id: ID_Output;
-  description: String;
-  createdAt: DateTimeOutput;
-  updatedAt: DateTimeOutput;
+export interface BoardEdge {
+  node: Board;
+  cursor: String;
 }
 
-export interface CardPromise extends Promise<Card>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  description: () => Promise<String>;
-  votes: <T = FragmentableArray<Vote>>(args?: {
-    where?: VoteWhereInput;
-    orderBy?: VoteOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
-  owner: <T = UserPromise>() => T;
-  column: <T = ColumnPromise>() => T;
-  createdAt: () => Promise<DateTimeOutput>;
-  updatedAt: () => Promise<DateTimeOutput>;
+export interface BoardEdgePromise extends Promise<BoardEdge>, Fragmentable {
+  node: <T = BoardPromise>() => T;
+  cursor: () => Promise<String>;
 }
 
-export interface CardSubscription
-  extends Promise<AsyncIterator<Card>>,
+export interface BoardEdgeSubscription
+  extends Promise<AsyncIterator<BoardEdge>>,
     Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  description: () => Promise<AsyncIterator<String>>;
-  votes: <T = Promise<AsyncIterator<VoteSubscription>>>(args?: {
-    where?: VoteWhereInput;
-    orderBy?: VoteOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
-  owner: <T = UserSubscription>() => T;
-  column: <T = ColumnSubscription>() => T;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  node: <T = BoardSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
 }
 
 export interface CardPreviousValues {
@@ -1771,109 +1785,77 @@ export interface CardPreviousValuesSubscription
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
-export interface AggregateCard {
+export interface UserConnection {
+  pageInfo: PageInfo;
+  edges: UserEdge[];
+}
+
+export interface UserConnectionPromise
+  extends Promise<UserConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<UserEdge>>() => T;
+  aggregate: <T = AggregateUserPromise>() => T;
+}
+
+export interface UserConnectionSubscription
+  extends Promise<AsyncIterator<UserConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<UserEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateUserSubscription>() => T;
+}
+
+export interface VoteEdge {
+  node: Vote;
+  cursor: String;
+}
+
+export interface VoteEdgePromise extends Promise<VoteEdge>, Fragmentable {
+  node: <T = VotePromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface VoteEdgeSubscription
+  extends Promise<AsyncIterator<VoteEdge>>,
+    Fragmentable {
+  node: <T = VoteSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface BatchPayload {
+  count: Long;
+}
+
+export interface BatchPayloadPromise
+  extends Promise<BatchPayload>,
+    Fragmentable {
+  count: () => Promise<Long>;
+}
+
+export interface BatchPayloadSubscription
+  extends Promise<AsyncIterator<BatchPayload>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Long>>;
+}
+
+export interface AggregateColumn {
   count: Int;
 }
 
-export interface AggregateCardPromise
-  extends Promise<AggregateCard>,
+export interface AggregateColumnPromise
+  extends Promise<AggregateColumn>,
     Fragmentable {
   count: () => Promise<Int>;
 }
 
-export interface AggregateCardSubscription
-  extends Promise<AsyncIterator<AggregateCard>>,
+export interface AggregateColumnSubscription
+  extends Promise<AsyncIterator<AggregateColumn>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Int>>;
 }
 
-export interface UserSubscriptionPayload {
-  mutation: MutationType;
-  node: User;
-  updatedFields: String[];
-  previousValues: UserPreviousValues;
-}
-
-export interface UserSubscriptionPayloadPromise
-  extends Promise<UserSubscriptionPayload>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = UserPromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = UserPreviousValuesPromise>() => T;
-}
-
-export interface UserSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<UserSubscriptionPayload>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = UserSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = UserPreviousValuesSubscription>() => T;
-}
-
-export interface VoteConnection {
-  pageInfo: PageInfo;
-  edges: VoteEdge[];
-}
-
-export interface VoteConnectionPromise
-  extends Promise<VoteConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<VoteEdge>>() => T;
-  aggregate: <T = AggregateVotePromise>() => T;
-}
-
-export interface VoteConnectionSubscription
-  extends Promise<AsyncIterator<VoteConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<VoteEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateVoteSubscription>() => T;
-}
-
-export interface VoteSubscriptionPayload {
-  mutation: MutationType;
-  node: Vote;
-  updatedFields: String[];
-  previousValues: VotePreviousValues;
-}
-
-export interface VoteSubscriptionPayloadPromise
-  extends Promise<VoteSubscriptionPayload>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = VotePromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = VotePreviousValuesPromise>() => T;
-}
-
-export interface VoteSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<VoteSubscriptionPayload>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = VoteSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = VotePreviousValuesSubscription>() => T;
-}
-
-/*
-DateTime scalar input type, allowing Date
-*/
-export type DateTimeInput = Date | string;
-
-/*
-DateTime scalar output type, which is always a string
-*/
-export type DateTimeOutput = string;
-
 export type Long = string;
-
-/*
-The `Boolean` scalar type represents `true` or `false`.
-*/
-export type Boolean = boolean;
 
 /*
 The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1. 
@@ -1890,6 +1872,21 @@ export type ID_Output = string;
 The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
 */
 export type String = string;
+
+/*
+DateTime scalar input type, allowing Date
+*/
+export type DateTimeInput = Date | string;
+
+/*
+DateTime scalar output type, which is always a string
+*/
+export type DateTimeOutput = string;
+
+/*
+The `Boolean` scalar type represents `true` or `false`.
+*/
+export type Boolean = boolean;
 
 /**
  * Model Metadata

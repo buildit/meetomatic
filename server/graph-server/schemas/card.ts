@@ -61,3 +61,21 @@ export class UpdateCardInput {
 
 @ObjectType()
 export class UpdateCardPayload extends CardPayload {}
+
+@InputType()
+export class UpvoteCardInput {
+  @Field()
+  cardId: string;
+}
+
+@ObjectType()
+export class UpvoteCardPayload extends CardPayload {
+  @Field()
+  vote?: Vote;
+}
+
+@ObjectType()
+export class DownvoteCardPayload extends CardPayload {
+  @Field()
+  voteId?: string;
+}

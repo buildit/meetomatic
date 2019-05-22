@@ -730,7 +730,6 @@ type Mutation {
   deleteManyUsers(where: UserWhereInput): BatchPayload!
   createVote(data: VoteCreateInput!): Vote!
   updateVote(data: VoteUpdateInput!, where: VoteWhereUniqueInput!): Vote
-  updateManyVotes(data: VoteUpdateManyMutationInput!, where: VoteWhereInput): BatchPayload!
   upsertVote(where: VoteWhereUniqueInput!, create: VoteCreateInput!, update: VoteUpdateInput!): Vote!
   deleteVote(where: VoteWhereUniqueInput!): Vote
   deleteManyVotes(where: VoteWhereInput): BatchPayload!
@@ -949,7 +948,6 @@ input UserWhereUniqueInput {
 type Vote {
   id: ID!
   owner: User!
-  upvote: Boolean!
   card: Card!
   createdAt: DateTime!
 }
@@ -963,7 +961,6 @@ type VoteConnection {
 input VoteCreateInput {
   id: ID
   owner: UserCreateOneInput!
-  upvote: Boolean!
   card: CardCreateOneWithoutVotesInput!
 }
 
@@ -975,7 +972,6 @@ input VoteCreateManyWithoutCardInput {
 input VoteCreateWithoutCardInput {
   id: ID
   owner: UserCreateOneInput!
-  upvote: Boolean!
 }
 
 type VoteEdge {
@@ -986,8 +982,6 @@ type VoteEdge {
 enum VoteOrderByInput {
   id_ASC
   id_DESC
-  upvote_ASC
-  upvote_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -996,7 +990,6 @@ enum VoteOrderByInput {
 
 type VotePreviousValues {
   id: ID!
-  upvote: Boolean!
   createdAt: DateTime!
 }
 
@@ -1015,8 +1008,6 @@ input VoteScalarWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
-  upvote: Boolean
-  upvote_not: Boolean
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -1050,16 +1041,7 @@ input VoteSubscriptionWhereInput {
 
 input VoteUpdateInput {
   owner: UserUpdateOneRequiredInput
-  upvote: Boolean
   card: CardUpdateOneRequiredWithoutVotesInput
-}
-
-input VoteUpdateManyDataInput {
-  upvote: Boolean
-}
-
-input VoteUpdateManyMutationInput {
-  upvote: Boolean
 }
 
 input VoteUpdateManyWithoutCardInput {
@@ -1071,17 +1053,10 @@ input VoteUpdateManyWithoutCardInput {
   update: [VoteUpdateWithWhereUniqueWithoutCardInput!]
   upsert: [VoteUpsertWithWhereUniqueWithoutCardInput!]
   deleteMany: [VoteScalarWhereInput!]
-  updateMany: [VoteUpdateManyWithWhereNestedInput!]
-}
-
-input VoteUpdateManyWithWhereNestedInput {
-  where: VoteScalarWhereInput!
-  data: VoteUpdateManyDataInput!
 }
 
 input VoteUpdateWithoutCardDataInput {
   owner: UserUpdateOneRequiredInput
-  upvote: Boolean
 }
 
 input VoteUpdateWithWhereUniqueWithoutCardInput {
@@ -1111,8 +1086,6 @@ input VoteWhereInput {
   id_ends_with: ID
   id_not_ends_with: ID
   owner: UserWhereInput
-  upvote: Boolean
-  upvote_not: Boolean
   card: CardWhereInput
   createdAt: DateTime
   createdAt_not: DateTime

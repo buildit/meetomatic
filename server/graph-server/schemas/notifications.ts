@@ -1,13 +1,17 @@
 import { ObjectType, Field, createUnionType } from "type-graphql";
-import { CreateCardPayload, UpdateCardPayload } from "./card";
-import { CreateVotePayload, DeleteVotePayload } from "./vote";
+import {
+  CreateCardPayload,
+  UpdateCardPayload,
+  UpvoteCardPayload,
+  DownvoteCardPayload
+} from "./card";
 
 export enum CardUpdates {
   Created = "CardCreated",
   Moved = "CardMoved",
   Renamed = "CardRenamed",
   Upvoted = "CardUpvoted",
-  VoteDeleted = "CardVoteDeleted"
+  Downvoted = "CardDownvoted"
 }
 @ObjectType()
 export class CardCreatedUpdate extends CreateCardPayload {
@@ -25,23 +29,31 @@ export class CardRenamedUpdate extends UpdateCardPayload {
 }
 
 @ObjectType()
-export class CardUpvotedUpdate extends CreateVotePayload {
+export class CardUpvotedUpdate extends UpvoteCardPayload {
   name: CardUpdates = CardUpdates.Upvoted;
 }
 
 @ObjectType()
-export class CardVoteDeletedUpdate extends DeleteVotePayload {
-  name: CardUpdates = CardUpdates.VoteDeleted;
+export class CardDownvotedUpdate extends DownvoteCardPayload {
+  name: CardUpdates = CardUpdates.Downvoted;
 }
 
-const BoardUpdateUnion = createUnionType({
+const BoardUpdateUnion = createUnionType<
+  [
+    typeof CardCreatedUpdate,
+    typeof CardMovedUpdate,
+    typeof CardUpvotedUpdate,
+    typeof CardRenamedUpdate,
+    typeof CardDownvotedUpdate
+  ]
+>({
   name: "BoardUpdate", // the name of the GraphQL union
   types: [
     CardCreatedUpdate,
     CardMovedUpdate,
     CardRenamedUpdate,
     CardUpvotedUpdate,
-    CardVoteDeletedUpdate
+    CardDownvotedUpdate
   ], // array of object types classes,
   resolveType: (
     value:
@@ -49,7 +61,7 @@ const BoardUpdateUnion = createUnionType({
       | CardMovedUpdate
       | CardRenamedUpdate
       | CardUpvotedUpdate
-      | CardVoteDeletedUpdate
+      | CardDownvotedUpdate
   ) => {
     switch (value.name) {
       case CardUpdates.Created:
@@ -60,8 +72,8 @@ const BoardUpdateUnion = createUnionType({
         return CardRenamedUpdate;
       case CardUpdates.Upvoted:
         return CardUpvotedUpdate;
-      case CardUpdates.VoteDeleted:
-        return CardVoteDeletedUpdate;
+      case CardUpdates.Downvoted:
+        return CardDownvotedUpdate;
     }
   }
 });

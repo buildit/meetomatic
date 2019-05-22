@@ -1,4 +1,4 @@
-import { Field, InputType, ObjectType } from "type-graphql";
+import { Field, ObjectType } from "type-graphql";
 import User from "./user";
 import Card from "./card";
 
@@ -8,36 +8,8 @@ export default class Vote {
   id: string;
 
   @Field()
-  upvote: boolean;
-
-  @Field()
   owner?: User;
 
   @Field(() => Card)
   card?: Card;
-}
-
-@InputType()
-export class CreateVoteInput {
-  @Field()
-  upvote: boolean;
-
-  @Field()
-  cardId: string;
-}
-
-@ObjectType()
-class VotePayload {
-  @Field()
-  vote: Vote;
-}
-
-@ObjectType()
-export class CreateVotePayload extends VotePayload {}
-
-@ObjectType()
-export class DeleteVotePayload {
-  @Field()
-  id: string;
-  cardId: string;
 }
