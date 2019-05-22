@@ -1,21 +1,23 @@
 import * as React from "react";
 import BoardWidget from "../components/Board/Board";
 import { Query, withApollo } from "react-apollo";
-import gql from "graphql-tag";
+
 import {
   Board,
   BoardVariables,
   Board_board_columns_cards,
   Board_board_columns
 } from "../client/types/Board";
+
 import { CreateCard, CreateCardVariables } from "./types/CreateCard";
+
 import {
   MoveCard,
   MoveCardVariables,
   MoveCard_updateCard
 } from "./types/MoveCard";
 import { DataProxy } from "apollo-cache";
-import ApolloClient from "apollo-client";
+
 import { BoardUpdated, BoardUpdatedVariables } from "./types/BoardUpdated";
 import {
   RenameCard,
@@ -25,109 +27,19 @@ import {
 import { Card } from "./types/Card";
 import Modal from "react-modal";
 import EditCardForm from "../components/EditCardForm/EditCardForm";
-import { GET_BOARD } from "../client/queries";
+import ApolloClient from "apollo-client";
+import { CREATE_CARD } from "../client/queries/card";
+import { BOARD_UPDATED_SUBSCRIPTION, GET_BOARD } from "../client/queries/board";
+
+import {  
+  MOVE_CARD,
+  RENAME_CARD,
+  CARD_UPDATE_FRAGMENT,
+  CARD_FRAGMENT
+} from "../client/fragments/cardFragments";
 
 class BoardQuery extends Query<Board, BoardVariables> {}
 
-const CARD_FRAGMENT = gql`
-  fragment Card on Card {
-    id
-    description
-    column {
-      id
-      name
-    }
-    owner {
-      name
-      id
-      email
-    }
-    votes {
-      id
-      owner {
-        id
-      }
-    }
-  }
-`;
-const CARD_UPDATE_FRAGMENT = gql`
-  fragment CardUpdate on Card {
-    id
-    column {
-      id
-      name
-    }
-    owner {
-      id
-    }
-  }
-`;
-
-export const CREATE_CARD = gql`
-  mutation CreateCard($description: String!, $columnId: String!) {
-    createCard(input: { description: $description, columnId: $columnId }) {
-      card {
-        ...Card
-      }
-    }
-  }
-  ${CARD_FRAGMENT}
-`;
-
-const MOVE_CARD = gql`
-  mutation MoveCard($id: String!, $columnId: String!) {
-    updateCard(id: $id, input: { setColumn: { columnId: $columnId } }) {
-      card {
-        ...CardUpdate
-      }
-    }
-  }
-  ${CARD_UPDATE_FRAGMENT}
-`;
-
-const RENAME_CARD = gql`
-  mutation RenameCard($id: String!, $description: String!) {
-    updateCard(
-      id: $id
-      input: { setDescription: { description: $description } }
-    ) {
-      card {
-        description
-        ...CardUpdate
-      }
-    }
-  }
-  ${CARD_UPDATE_FRAGMENT}
-`;
-
-export const BOARD_UPDATED_SUBSCRIPTION = gql`
-  subscription BoardUpdated($boardId: String!) {
-    boardUpdated(boardId: $boardId) {
-      boardId
-      updates {
-        __typename
-        ... on CardCreatedUpdate {
-          card {
-            ...Card
-          }
-        }
-        __typename
-        ... on CardMovedUpdate {
-          card {
-            ...Card
-          }
-        }
-        __typename
-        ... on CardRenamedUpdate {
-          card {
-            ...Card
-          }
-        }
-      }
-    }
-  }
-  ${CARD_FRAGMENT}
-`;
 
 export interface Props {
   id: string;
