@@ -44,6 +44,7 @@ class MyApp extends App<MyAppProps> {
     });
     const user = getCurrentUser.data.currentUser;
 
+    ctx.user = user;
     if (!user) {
       if (!unauthpages.includes(ctx.pathname)) {
         redirect(ctx, "/login");

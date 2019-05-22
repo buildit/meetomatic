@@ -86,18 +86,6 @@ input CreateColumnInput {
   name: String!
 }
 
-input CreateVoteInput {
-  cardId: String!
-}
-
-type CreateVotePayload {
-  vote: Vote!
-}
-
-type DeleteVotePayload {
-  id: String!
-}
-
 type DownvoteCardPayload {
   card: Card!
   voteId: String!
@@ -170,8 +158,4 @@ type Vote {
   id: String!
   owner: User!
   card: Card!
-}
-
-type VotePayload {
-  vote: Vote!
 }
