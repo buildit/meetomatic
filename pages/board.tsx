@@ -73,7 +73,7 @@ class BoardPage extends React.Component<Props, State> {
 
   componentDidMount() {
     
-    this._boardApi  = new BoardApi();
+    this._boardApi  = new BoardApi(this.props.client);
 
     if (this.props.subscribeToUpdates) {
       this.subscription = this.props.client

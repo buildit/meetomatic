@@ -14,6 +14,10 @@ export default class  BoardApi {
     private client: ApolloClient<any>;
     private user: UserState;
     private boardId: string;
+
+    constructor(client){
+      this.client = client;
+    }
   
     private _getCard(cardId: string): Card {
       return this.client.readFragment<Card>({
