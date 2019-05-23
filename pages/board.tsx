@@ -238,7 +238,7 @@ class BoardPage extends React.Component<Props, State> {
   };
 
   _handleRenameCard = (id: string, description: string) => {
-    const card = this._boardApi._getCard(id)
+    const card = this._boardApi._getCard(id);
     const optimisticResponse = this._createCardUpdateRespone(card);
     this.props.client.mutate<RenameCard, RenameCardVariables>({
       mutation: RENAME_CARD,
@@ -260,6 +260,10 @@ class BoardPage extends React.Component<Props, State> {
 
   _handleClickCard = async cardId => {
     this.setState({ cardId });
+  };
+
+  _handleClickDeleted = async cardId => {
+
   };
 
   _renderCardModal() {
@@ -303,6 +307,7 @@ class BoardPage extends React.Component<Props, State> {
                   onAddNewCard={this._handleCreateCard}
                   onMoveCard={this._handleMoveCard}
                   onClickCard={this._handleClickCard}
+                  onDeleteCard={this._handleClickDeleted}
                 />
               </div>
             );
