@@ -34,11 +34,7 @@ export default class  BoardApi {
         variables: { id: this.boardId }
       }).board;
 
-      console.log(value);
-
       return value;
-
-
     }
   
     private _writeBoard(cache: DataProxy, board: Board) {

@@ -2,6 +2,7 @@ import * as React from "react";
 import BoardWidget from "../components/Board/Board";
 import { Query, withApollo } from "react-apollo";
 import Modal from "react-modal";
+
 import {
   Board,
   BoardVariables,
@@ -158,11 +159,9 @@ class BoardPage extends React.Component<Props, State> {
       return;
     }
     column.cards.push(data.createCard.card);
-    cache.writeQuery({
-      query: GET_BOARD,
-      variables: { id: this.props.id },
-      data: { board }
-    });
+
+    this._boardApi._writeBoard(cache, board);
+
     this.setState({ newCardTitle: "" });
   };
 
@@ -174,10 +173,7 @@ class BoardPage extends React.Component<Props, State> {
   _handleMovedCard = (cache: DataProxy, { data }: { data: MoveCard }) => {
     const updateCard = data.updateCard;
     // Read the data from our cache for this query.
-    const { board } = cache.readQuery<Board, BoardVariables>({
-      query: GET_BOARD,
-      variables: { id: this.props.id }
-    });
+    const board = this._boardApi._readBoard(cache);
 
     let cardSourceIndex = -1;
     let sourceColumn: Board_columns;
@@ -201,11 +197,8 @@ class BoardPage extends React.Component<Props, State> {
         c => c.id === updateCard.card.column.id
       );
       destColumn.cards.push(card);
-      cache.writeQuery<Board, BoardVariables>({
-        query: GET_BOARD,
-        variables: { id: this.props.id },
-        data: { board }
-      });
+
+      this._boardApi._writeBoard(cache, board);
     }
   };
 
