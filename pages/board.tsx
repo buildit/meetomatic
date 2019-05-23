@@ -5,8 +5,8 @@ import Modal from "react-modal";
 import {
   Board,
   BoardVariables,
-  Board_board_columns_cards,
-  Board_board_columns
+  Board_columns_cards,
+  Board_columns
 } from "../client/types/Board";
 
 import { CreateCard, CreateCardVariables } from "./types/CreateCard";
@@ -72,8 +72,7 @@ class BoardPage extends React.Component<Props, State> {
   };
 
   componentDidMount() {
-    
-    this._boardApi  = new BoardApi(this.props.client);
+    this._boardApi  = new BoardApi(this.props.client, this.props.id);
 
     if (this.props.subscribeToUpdates) {
       this.subscription = this.props.client
@@ -149,10 +148,8 @@ class BoardPage extends React.Component<Props, State> {
    * Note this can also be called as the result of a subscription notification
    */
   _handleCreatedCard = (cache: DataProxy, { data }: { data: CreateCard }) => {
-    const { board } = cache.readQuery<Board>({
-      query: GET_BOARD,
-      variables: { id: this.props.id }
-    });
+    const board =  this._boardApi._readBoard(cache);
+
     const column = board.columns.find(
       c => c.id === data.createCard.card.column.id
     );
@@ -183,7 +180,7 @@ class BoardPage extends React.Component<Props, State> {
     });
 
     let cardSourceIndex = -1;
-    let sourceColumn: Board_board_columns;
+    let sourceColumn: Board_columns;
 
     // Find the column that the card currently belongs to.
     for (const column of board.columns) {
@@ -197,7 +194,7 @@ class BoardPage extends React.Component<Props, State> {
 
     // If we found the card and the source column != dest column, move the card
     if (sourceColumn && cardSourceIndex !== -1) {
-      let card: Board_board_columns_cards;
+      let card: Board_columns_cards;
       card = sourceColumn.cards[cardSourceIndex];
       sourceColumn.cards.splice(cardSourceIndex, 1);
       const destColumn = board.columns.find(

@@ -15,8 +15,9 @@ export default class  BoardApi {
     private user: UserState;
     private boardId: string;
 
-    constructor(client){
+    constructor(client, id){
       this.client = client;
+      this.boardId = id;
     }
   
     private _getCard(cardId: string): Card {
@@ -26,14 +27,21 @@ export default class  BoardApi {
       });
     }
   
-    private _readBoard(cache: DataProxy): Board_board {
-      return cache.readQuery<Board, BoardVariables>({
+    private _readBoard(cache: DataProxy): Board {
+      console.log(this.boardId);
+      const value =  cache.readQuery<Board>({
         query: GET_BOARD,
         variables: { id: this.boardId }
       }).board;
+
+      console.log(value);
+
+      return value;
+
+
     }
   
-    private _writeBoard(cache: DataProxy, board: Board_board) {
+    private _writeBoard(cache: DataProxy, board: Board) {
       cache.writeQuery<Board, BoardVariables>({
         query: GET_BOARD,
         variables: { id: this.boardId },
@@ -41,7 +49,7 @@ export default class  BoardApi {
       });
     }
   
-    private _findCard(cardId: string, board: Board_board) {
+    private _findCard(cardId: string, board: Board) {
       for (const column of board.columns) {
         const card = column.cards.find(c => c.id === cardId);
         if (card) {

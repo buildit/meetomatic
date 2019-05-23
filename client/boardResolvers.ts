@@ -1,4 +1,4 @@
-import { Board_board } from "./types/Board";
+import { Board } from "./types/Board";
 import { DataProxy } from "apollo-cache";
 import { GET_USER } from "./queries";
 import { CurrentUser } from "./types/CurrentUser";
@@ -6,7 +6,7 @@ import { CurrentUser } from "./types/CurrentUser";
 export default {
   Board: {
     async remainingVotes(
-      board: Board_board,
+      board: Board,
       _args: any,
       { cache }: { cache: DataProxy }
     ) {
