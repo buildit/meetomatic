@@ -10,7 +10,7 @@ import {
 } from "../fragments/cardFragments";
 import { GET_BOARD } from "../queries/board";
 
-export default class BoardApi {
+export default class  BoardApi {
     private client: ApolloClient<any>;
     private user: UserState;
     private boardId: string;

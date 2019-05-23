@@ -1,7 +1,7 @@
 import * as React from "react";
 import BoardWidget from "../components/Board/Board";
 import { Query, withApollo } from "react-apollo";
-
+import Modal from "react-modal";
 import {
   Board,
   BoardVariables,
@@ -25,7 +25,6 @@ import {
   RenameCard_updateCard
 } from "./types/RenameCard";
 import { Card } from "./types/Card";
-import Modal from "react-modal";
 import EditCardForm from "../components/EditCardForm/EditCardForm";
 import ApolloClient from "apollo-client";
 import { CREATE_CARD } from "../client/queries/card";
@@ -34,9 +33,10 @@ import { BOARD_UPDATED_SUBSCRIPTION, GET_BOARD } from "../client/queries/board";
 import {  
   MOVE_CARD,
   RENAME_CARD,
-  CARD_UPDATE_FRAGMENT,
   CARD_FRAGMENT
 } from "../client/fragments/cardFragments";
+
+import BoardApi from "../client/api/boardApi";
 
 class BoardQuery extends Query<Board, BoardVariables> {}
 
@@ -56,10 +56,12 @@ interface State {
 
 class BoardPage extends React.Component<Props, State> {
   private subscription;
+  private _boardApi;
 
   static defaultProps = {
     subscribeToUpdates: true
   };
+
   static getInitialProps(ctx) {
     return ctx.query;
   }
@@ -70,6 +72,9 @@ class BoardPage extends React.Component<Props, State> {
   };
 
   componentDidMount() {
+    
+    this._boardApi  = new BoardApi();
+
     if (this.props.subscribeToUpdates) {
       this.subscription = this.props.client
         .subscribe<{ data: BoardUpdated }, BoardUpdatedVariables>({
@@ -132,13 +137,6 @@ class BoardPage extends React.Component<Props, State> {
         }
       }
     };
-  }
-
-  _getCard(cardId: string): Card {
-    return this.props.client.readFragment<Card>({
-      id: `Card:${cardId}`,
-      fragment: CARD_FRAGMENT
-    });
   }
 
   _handleNewCardTitleChange = (value: string) =>
@@ -232,7 +230,7 @@ class BoardPage extends React.Component<Props, State> {
    * User wants to move a card
    */
   _handleMoveCard = (id: string, columnId: string) => {
-    const card = this._getCard(id);
+    const card = this._boardApi._getCard(id)
     const optimisticResponse = this._createCardUpdateRespone(card);
     optimisticResponse.card.column.id = columnId;
 
@@ -250,7 +248,7 @@ class BoardPage extends React.Component<Props, State> {
   };
 
   _handleRenameCard = (id: string, description: string) => {
-    const card = this._getCard(id);
+    const card = this._boardApi._getCard(id)
     const optimisticResponse = this._createCardUpdateRespone(card);
     this.props.client.mutate<RenameCard, RenameCardVariables>({
       mutation: RENAME_CARD,
@@ -276,7 +274,7 @@ class BoardPage extends React.Component<Props, State> {
 
   _renderCardModal() {
     if (this.state.cardId) {
-      const card = this._getCard(this.state.cardId);
+      const card = this._boardApi._getCard(this.state.cardId)
       return (
         <Modal
           className="card-modal"
