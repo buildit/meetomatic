@@ -28,8 +28,11 @@ import Modal from "react-modal";
 import EditCardForm from "../components/EditCardForm/EditCardForm";
 import { GET_BOARD, UPVOTE_CARD, DOWNVOTE_CARD } from "../client/queries";
 import { UpvoteCard, UpvoteCardVariables } from "../client/types/UpvoteCard";
-import { UserState } from "types";
-import { DownvoteCard, DownvoteCardVariables } from "client/types/DownvoteCard";
+import { UserState } from "../types";
+import {
+  DownvoteCard,
+  DownvoteCardVariables
+} from "../client/types/DownvoteCard";
 
 class BoardQuery extends Query<Board, BoardVariables> {}
 

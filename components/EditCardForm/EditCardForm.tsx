@@ -1,5 +1,5 @@
 import * as React from "react";
-import { CardState } from "types";
+import { CardState } from "../../types";
 import InlineEdit from "react-edit-inline2";
 
 interface CardProps extends CardState {

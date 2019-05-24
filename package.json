@@ -1,7 +1,7 @@
 {
   "scripts": {
     "dev": "nodemon",
-    "build": "next build && tsc --project tsconfig.server.json",
+    "build": "next build && tsc --project tsconfig.json",
     "start": "cross-env NODE_ENV=production node dist/index.js",
     "test": "jest",
     "test:watch": "jest --watch",

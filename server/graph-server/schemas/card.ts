@@ -6,10 +6,10 @@ import Vote from "./vote";
 @ObjectType()
 export default class Card {
   @Field()
-  id: string;
+  id!: string;
 
   @Field()
-  description: string;
+  description!: string;
 
   @Field()
   column?: Column;
@@ -24,16 +24,16 @@ export default class Card {
 @InputType()
 export class CreateCardInput {
   @Field()
-  description: string;
+  description!: string;
 
   @Field()
-  columnId: string;
+  columnId!: string;
 }
 
 @ObjectType()
 class CardPayload {
   @Field()
-  card: Card;
+  card!: Card;
 }
 
 @ObjectType()
@@ -42,19 +42,20 @@ export class CreateCardPayload extends CardPayload {}
 @InputType()
 export class SetCardColumnInput {
   @Field()
-  columnId: string;
+  columnId!: string;
 }
 
 @InputType()
 export class SetCardDescriptionInput {
   @Field()
-  description: string;
+  description!: string;
 }
 
 @InputType()
 export class UpdateCardInput {
   @Field({ nullable: true })
   setColumn?: SetCardColumnInput;
+
   @Field({ nullable: true })
   setDescription?: SetCardDescriptionInput;
 }
@@ -65,7 +66,7 @@ export class UpdateCardPayload extends CardPayload {}
 @InputType()
 export class UpvoteCardInput {
   @Field()
-  cardId: string;
+  cardId!: string;
 }
 
 @ObjectType()

@@ -5,4 +5,4 @@ generate:
   - generator: typescript-client
     output: ./generated/prisma-client/
 seed:
-  run: npx ts-node --project ../../tsconfig.server.json ./data/seed.ts
+  run: npx ts-node --project ../../tsconfig.json ./data/seed.ts

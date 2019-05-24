@@ -1,10 +1,9 @@
 import * as React from "react";
 import { Draggable } from "react-beautiful-dnd";
-import { CardState } from "types";
+import { CardState } from "../../types";
 
 interface CardProps extends CardState {
   index: number;
-  votes?: number;
   onClick(id: string);
 }
 export default class Card extends React.Component<CardProps, {}> {
@@ -30,7 +29,8 @@ export default class Card extends React.Component<CardProps, {}> {
             <div className="grav-c-card">
               <p className="grav-c-card__body">{this.props.description}</p>
               <p className="mom-c-votes">
-                {this.props.votes} {this.props.votes > 1 ? "votes" : "vote"}
+                {this.props.votes.length}{" "}
+                {this.props.votes.length > 1 ? "votes" : "vote"}
               </p>
             </div>
             {provided.placeholder}
