@@ -62,9 +62,24 @@ const RENAME_CARD = gql`
   ${CARD_UPDATE_FRAGMENT}
 `;
 
+const ARCHIVE_CARD = gql`
+  mutation updateCard($id: String!, $time: String!) {
+    updateCard(
+      id: $id
+      input: { setArchivedOn: {   archivedOn: $time } }
+    ) {
+      card {
+       id
+      }
+    }
+  }
+  ${CARD_UPDATE_FRAGMENT}
+`;
+
 export {
     MOVE_CARD,
     RENAME_CARD,
     CARD_UPDATE_FRAGMENT,
-    CARD_FRAGMENT
+    CARD_FRAGMENT,
+    ARCHIVE_CARD
 }

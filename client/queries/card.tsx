@@ -13,3 +13,29 @@ export const CREATE_CARD = gql`
   }
   ${CARD_FRAGMENT}
 `;
+
+export const UPDATE_CARD_STATUS = gql`
+  mutation CreateCard($status: String!) {
+    updateCard(input: { status: $status }) {
+      card {
+        ...Card
+      }
+    }
+  }
+  ${CARD_FRAGMENT}
+`;
+
+
+export const DELETE_CARD = gql`
+  mutation updateCard($cardId: String!, $date: String!) {
+    updateCard(input: { archivedOn: $date }, id: $cardId) {
+      card {
+        ...Card
+      }
+    }
+  }
+  ${CARD_FRAGMENT}
+`;
+
+
+

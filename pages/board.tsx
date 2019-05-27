@@ -11,6 +11,7 @@ import {
 } from "../client/types/Board";
 
 import { CreateCard, CreateCardVariables } from "./types/CreateCard";
+import { DeleteCard, DeleteCardVariables } from "./types/DeleteCard";
 
 import {
   MoveCard,
@@ -20,21 +21,27 @@ import {
 import { DataProxy } from "apollo-cache";
 
 import { BoardUpdated, BoardUpdatedVariables } from "./types/BoardUpdated";
+
 import {
   RenameCard,
   RenameCardVariables,
   RenameCard_updateCard
 } from "./types/RenameCard";
+
+
 import { Card } from "./types/Card";
 import EditCardForm from "../components/EditCardForm/EditCardForm";
 import ApolloClient from "apollo-client";
-import { CREATE_CARD } from "../client/queries/card";
+
+import { CREATE_CARD, DELETE_CARD } from "../client/queries/card";
+
+
 import { BOARD_UPDATED_SUBSCRIPTION, GET_BOARD } from "../client/queries/board";
 
 import {  
   MOVE_CARD,
   RENAME_CARD,
-  CARD_FRAGMENT
+  ARCHIVE_CARD
 } from "../client/fragments/cardFragments";
 
 import BoardApi from "../client/api/boardApi";
@@ -263,7 +270,26 @@ class BoardPage extends React.Component<Props, State> {
   };
 
   _handleClickDeleted = async cardId => {
+    console.log(cardId);
+    const card = this._boardApi._getCard(cardId);
+    const optimisticResponse = this._createCardUpdateRespone(card);
 
+    console.log(cardId);
+    this.props.client.mutate<DeleteCard, DeleteCardVariables>({
+      mutation: DELETE_CARD,
+      variables: {
+       id,
+       Date
+      },
+      optimisticResponse: {
+        updateCard: {
+          __typename: optimisticResponse.__typename,
+          card: {
+            ...optimisticResponse.card,
+          }
+        }
+      }
+    });
   };
 
   _renderCardModal() {

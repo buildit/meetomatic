@@ -52,11 +52,19 @@ export class SetCardDescriptionInput {
 }
 
 @InputType()
+export class SetCardArchivedInput {
+  @Field()
+  archivedOn: string;
+}
+
+@InputType()
 export class UpdateCardInput {
   @Field({ nullable: true })
   setColumn?: SetCardColumnInput;
   @Field({ nullable: true })
   setDescription?: SetCardDescriptionInput;
+  @Field({ nullable: true })
+  setArchivedOn?: SetCardArchivedInput;
 }
 
 @ObjectType()

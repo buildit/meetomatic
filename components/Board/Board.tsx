@@ -12,6 +12,7 @@ interface BoardProps extends BoardState, Partial<BoardDefaultProps> {
   onNewCardTitleChange(value: string): void;
   onMoveCard(cardId: string, destColumnId: string): void;
   onClickCard(cardId: string): void;
+  onDeleteCard(cardId: string): void;
 }
 
 export default class Board extends React.Component<BoardProps, {}> {
@@ -42,6 +43,7 @@ export default class Board extends React.Component<BoardProps, {}> {
                       onAddNewCard={this._handleAddNewCard}
                       onNewCardTitleChange={this.props.onNewCardTitleChange}
                       onClickCard={this.props.onClickCard}
+                      onDeleteCard={this.props.onDeleteCard}
                     />
                     {provided.placeholder}
                   </div>
