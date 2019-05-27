@@ -28,7 +28,10 @@ export const UPDATE_CARD_STATUS = gql`
 
 export const DELETE_CARD = gql`
   mutation updateCard($id: String!, $date: String!) {
-    updateCard(input: { archivedOn: $date }, id: $id) {
+    updateCard(input: { setArchivedOn : {archivedOn: $date }
+      }, 
+      id: $id
+    ) {
       card {
         ...Card
       }

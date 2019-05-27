@@ -280,7 +280,7 @@ class BoardPage extends React.Component<Props, State> {
       mutation: DELETE_CARD,
       variables: {
        id: cardId,
-       date: new Date("2015-03-25T12:00:00Z").toString()
+       date: "2015-03-25T12:00:00Z"
       },
       optimisticResponse: {
         updateCard: {
