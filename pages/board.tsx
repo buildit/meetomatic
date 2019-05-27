@@ -45,6 +45,7 @@ import {
 } from "../client/fragments/cardFragments";
 
 import BoardApi from "../client/api/boardApi";
+import { string } from "prop-types";
 
 class BoardQuery extends Query<Board, BoardVariables> {}
 
@@ -278,8 +279,8 @@ class BoardPage extends React.Component<Props, State> {
     this.props.client.mutate<DeleteCard, DeleteCardVariables>({
       mutation: DELETE_CARD,
       variables: {
-       id,
-       Date
+       id: cardId,
+       date: new Date("2015-03-25T12:00:00Z").toString()
       },
       optimisticResponse: {
         updateCard: {
