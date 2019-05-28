@@ -284,13 +284,24 @@ class BoardPage extends React.Component<Props, State> {
 
     const board =  this._boardApi._readBoard(cache);
 
-    const column = board.columns.find(
+    const index = board.columns.findIndex(
       c => c.id === data['updateCard'].card.column.id
     );
     
-    const cardToDelete =  column.cards.indexOf(data['updateCard'].card)
+    console.log("BEFORE");
+    console.log(board.columns[index].cards)
 
-    column.cards.splice(cardToDelete);
+  
+    const cardToDelete =  board.columns[index].cards.findIndex(x => data['updateCard'].card.id === x.id);
+
+    console.log(cardToDelete);
+
+    if (cardToDelete > -1) {
+      board.columns[index].cards.splice(cardToDelete, 1);
+    }
+
+    console.log("AFTER");
+    console.log(board.columns[index].cards)
 
     this._boardApi._writeBoard(cache, board);
   };
