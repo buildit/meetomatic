@@ -28,7 +28,6 @@ export default class  BoardApi {
     }
   
     private _readBoard(cache: DataProxy): Board {
-      console.log(this.boardId);
       const value =  cache.readQuery<Board>({
         query: GET_BOARD,
         variables: { id: this.boardId }
@@ -38,10 +37,11 @@ export default class  BoardApi {
     }
   
     private _writeBoard(cache: DataProxy, board: Board) {
+      console.log(board);
       cache.writeQuery<Board, BoardVariables>({
         query: GET_BOARD,
         variables: { id: this.boardId },
-        data: { board }
+        data: {board} 
       });
     }
   

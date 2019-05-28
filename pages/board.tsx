@@ -40,12 +40,10 @@ import { BOARD_UPDATED_SUBSCRIPTION, GET_BOARD } from "../client/queries/board";
 
 import {  
   MOVE_CARD,
-  RENAME_CARD,
-  ARCHIVE_CARD
+  RENAME_CARD
 } from "../client/fragments/cardFragments";
 
 import BoardApi from "../client/api/boardApi";
-import { string } from "prop-types";
 
 class BoardQuery extends Query<Board, BoardVariables> {}
 
@@ -95,6 +93,7 @@ class BoardPage extends React.Component<Props, State> {
           // If we a get a board notificaiton, turn it in to a Payload
           // and use the existing logic for updating the store
           data.boardUpdated.updates.forEach(update => {
+            console.log(update);
             if (update.__typename === "CardCreatedUpdate") {
               this._handleCreatedCard(this.props.client, {
                 data: {
@@ -271,26 +270,29 @@ class BoardPage extends React.Component<Props, State> {
   };
 
   _handleClickDeleted = async cardId => {
-    console.log(cardId);
-    const card = this._boardApi._getCard(cardId);
-    const optimisticResponse = this._createCardUpdateRespone(card);
-
-    console.log(cardId);
     this.props.client.mutate<DeleteCard, DeleteCardVariables>({
       mutation: DELETE_CARD,
       variables: {
        id: cardId,
        date: "2015-03-25T12:00:00Z"
       },
-      optimisticResponse: {
-        updateCard: {
-          __typename: optimisticResponse.__typename,
-          card: {
-            ...optimisticResponse.card,
-          }
-        }
-      }
+      update: this._handleDeletedCard
     });
+  };
+
+  _handleDeletedCard = (cache: DataProxy, { data }: { data: DeleteCard }) => {
+
+    const board =  this._boardApi._readBoard(cache);
+
+    const column = board.columns.find(
+      c => c.id === data['updateCard'].card.column.id
+    );
+    
+    const cardToDelete =  column.cards.indexOf(data['updateCard'].card)
+
+    column.cards.splice(cardToDelete);
+
+    this._boardApi._writeBoard(cache, board);
   };
 
   _renderCardModal() {

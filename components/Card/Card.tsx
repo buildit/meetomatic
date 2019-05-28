@@ -5,6 +5,7 @@ import { CardState } from "types";
 interface CardProps extends CardState {
   index: number;
   votes?: number;
+  ArchivedOn?: string;
   onClick(id: string);
   onDelete(id: string);
 }
@@ -33,6 +34,7 @@ export default class Card extends React.Component<CardProps, {}> {
             <button onClick={this._handleDelete}>Delete</button>
             <div className="grav-c-card">
               <p className="grav-c-card__body">{this.props.description}</p>
+              <p className="grav-c-card__body">{this.props.ArchivedOn}</p>
               <p className="mom-c-votes">
                 {this.props.votes} {this.props.votes > 1 ? "votes" : "vote"}
               </p>
