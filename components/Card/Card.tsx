@@ -1,22 +1,38 @@
 import * as React from "react";
 import { Draggable } from "react-beautiful-dnd";
 import { CardState } from "types";
-import { Mutation } from 'react-apollo';
+import VoteButton from "../../components/VoteButton/VoteButton";
 
 interface CardProps extends CardState {
   index: number;
   votes?: number;
   onClick(id: string);
+  handleVoteClick()
 }
-export default class Card extends React.Component<CardProps, {}> {
+
+interface State {
+  hasVoted: boolean;
+}
+
+export default class Card extends React.Component<CardProps, State> {
   constructor(props: CardProps) {
     super(props);
+    
+    this.state = {
+      hasVoted: false
+    }
   }
   static defaultProps = {
     votes: 0
   };
 
   _handleClick = () => this.props.onClick(this.props.id);
+  
+  _handleVoteClick = () => {
+    this.setState({
+      hasVoted: !this.state.hasVoted
+    })
+  }
 
   render() {
     return (
@@ -32,8 +48,7 @@ export default class Card extends React.Component<CardProps, {}> {
               <p className="mom-c-votes">
                 {this.props.votes} {this.props.votes > 1 ? "votes" : "vote"}
               </p>
-              
-              <button>👍 Vote</button>
+              <VoteButton handleVoteClick={this._handleVoteClick} hasVoted={this.state.hasVoted}/>
             </div>
             {provided.placeholder}
           </div>
