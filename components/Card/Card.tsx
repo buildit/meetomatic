@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Draggable } from "react-beautiful-dnd";
 import { CardState } from "types";
+import { Mutation } from 'react-apollo';
 
 interface CardProps extends CardState {
   index: number;
@@ -22,16 +23,17 @@ export default class Card extends React.Component<CardProps, {}> {
       <Draggable draggableId={this.props.id} index={this.props.index}>
         {provided => (
           <div
-            onClick={this._handleClick}
             ref={provided.innerRef}
             {...provided.draggableProps}
             {...provided.dragHandleProps}
           >
             <div className="grav-c-card">
-              <p className="grav-c-card__body">{this.props.description}</p>
+              <p className="grav-c-card__body" onClick={this._handleClick}>{this.props.description} <span className="grav-c-card__reveal-icon">✏️</span></p>
               <p className="mom-c-votes">
                 {this.props.votes} {this.props.votes > 1 ? "votes" : "vote"}
               </p>
+              
+              <button>👍 Vote</button>
             </div>
             {provided.placeholder}
           </div>

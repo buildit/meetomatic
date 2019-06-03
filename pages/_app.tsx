@@ -1,4 +1,4 @@
-import "../styles.scss";
+import "../styles/styles.scss";
 import App, { Container, DefaultAppIProps } from "next/app";
 import React from "react";
 import { ApolloProvider, getDataFromTree } from "react-apollo";
@@ -8,6 +8,7 @@ import cookie from "cookie";
 import initApolloClient from "../lib/initApollo";
 import Head from "next/head";
 import { CurrentUser } from "./types/CurrentUser";
+import Header from "../components/Header/Header";
 
 function parseCookies(req, options = {}) {
   return cookie.parse(
@@ -107,13 +108,14 @@ class MyApp extends App<MyAppProps> {
 
   render() {
     const { Component, pageProps } = this.props;
-    return (
+    return [
+      <Header />,
       <ApolloProvider client={this.apolloClient}>
         <Container>
           <Component {...pageProps} />
         </Container>
       </ApolloProvider>
-    );
+    ];
   }
 }
 

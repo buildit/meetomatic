@@ -25,6 +25,7 @@ import {
 import { Card } from "./types/Card";
 import Modal from "react-modal";
 import EditCardForm from "../components/EditCardForm/EditCardForm";
+import BoardStatusBar from "../components/BoardStatusBar/BoardStatusBar";
 
 class BoardQuery extends Query<Board, BoardVariables> {}
 export const GET_BOARD = gql`
@@ -156,6 +157,7 @@ export interface Props {
   id: string;
   client: ApolloClient<any>;
   subscribeToUpdates: boolean;
+  BoardName: string;
 }
 
 interface State {
@@ -411,7 +413,7 @@ class BoardPage extends React.Component<Props, State> {
             }
             return (
               <div>
-                <div className="board-title">{data.board.name}</div>
+                <BoardStatusBar boardName={data.board.name} />
                 <BoardWidget
                   id={data.board.id}
                   name={data.board.name}
