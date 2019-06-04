@@ -6,6 +6,7 @@ import { ColumnState } from "../../types";
 interface BoardDefaultProps {
   showAdd: Boolean;
 }
+
 interface BoardColumnProps extends ColumnState, Partial<BoardDefaultProps> {
   newCardTitle: string;
   onAddNewCard(columnId: string): void;

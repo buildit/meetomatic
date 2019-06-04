@@ -26,6 +26,7 @@ import {
 import { Card } from "./types/Card";
 import Modal from "react-modal";
 import EditCardForm from "../components/EditCardForm/EditCardForm";
+import BoardStatusBar from "../components/BoardStatusBar/BoardStatusBar";
 import { GET_BOARD, UPVOTE_CARD, DOWNVOTE_CARD } from "../client/queries";
 import { UpvoteCard, UpvoteCardVariables } from "../client/types/UpvoteCard";
 import { UserState } from "../types";
@@ -33,6 +34,7 @@ import {
   DownvoteCard,
   DownvoteCardVariables
 } from "../client/types/DownvoteCard";
+
 
 class BoardQuery extends Query<Board, BoardVariables> {}
 
@@ -170,6 +172,7 @@ export interface Props {
   id: string;
   client: ApolloClient<any>;
   subscribeToUpdates: boolean;
+  BoardName: string;
   user: UserState;
 }
 
@@ -538,7 +541,7 @@ class BoardPage extends React.Component<Props, State> {
 
             return (
               <div>
-                <div className="board-title">{data.board.name}</div>
+                <BoardStatusBar boardName={data.board.name} />
                 <BoardWidget
                   id={data.board.id}
                   name={data.board.name}
