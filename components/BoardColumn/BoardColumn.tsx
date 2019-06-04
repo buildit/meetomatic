@@ -6,6 +6,7 @@ import { ColumnState } from "../../types";
 interface BoardDefaultProps {
   showAdd: Boolean;
 }
+
 interface BoardColumnProps extends ColumnState, Partial<BoardDefaultProps> {
   newCardTitle: string;
   onAddNewCard(columnId: string): void;
@@ -33,7 +34,7 @@ export default class BoardColumn extends React.Component<BoardColumnProps, {}> {
                 key={card.id}
                 index={index}
                 description={card.description}
-                votes={0}
+                votes={card.votes}
                 onClick={this.props.onClickCard}
               />
             );

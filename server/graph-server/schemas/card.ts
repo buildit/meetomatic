@@ -1,35 +1,39 @@
 import { ObjectType, Field, InputType } from "type-graphql";
 import User from "./user";
 import Column from "./column";
+import Vote from "./vote";
 
 @ObjectType()
 export default class Card {
   @Field()
-  id: string;
+  id!: string;
 
   @Field()
-  description: string;
+  description!: string;
 
   @Field()
   column?: Column;
 
   @Field()
   owner?: User;
+
+  @Field(() => [Vote], { nullable: true })
+  votes?: Vote[];
 }
 
 @InputType()
 export class CreateCardInput {
   @Field()
-  description: string;
+  description!: string;
 
   @Field()
-  columnId: string;
+  columnId!: string;
 }
 
 @ObjectType()
 class CardPayload {
   @Field()
-  card: Card;
+  card!: Card;
 }
 
 @ObjectType()
@@ -38,22 +42,41 @@ export class CreateCardPayload extends CardPayload {}
 @InputType()
 export class SetCardColumnInput {
   @Field()
-  columnId: string;
+  columnId!: string;
 }
 
 @InputType()
 export class SetCardDescriptionInput {
   @Field()
-  description: string;
+  description!: string;
 }
 
 @InputType()
 export class UpdateCardInput {
   @Field({ nullable: true })
   setColumn?: SetCardColumnInput;
+
   @Field({ nullable: true })
   setDescription?: SetCardDescriptionInput;
 }
 
 @ObjectType()
 export class UpdateCardPayload extends CardPayload {}
+
+@InputType()
+export class UpvoteCardInput {
+  @Field()
+  cardId!: string;
+}
+
+@ObjectType()
+export class UpvoteCardPayload extends CardPayload {
+  @Field()
+  vote?: Vote;
+}
+
+@ObjectType()
+export class DownvoteCardPayload extends CardPayload {
+  @Field()
+  voteId?: string;
+}

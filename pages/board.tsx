@@ -6,8 +6,9 @@ import {
   Board,
   BoardVariables,
   Board_board_columns_cards,
-  Board_board_columns
-} from "./types/Board";
+  Board_board_columns,
+  Board_board
+} from "../client/types/Board";
 import { CreateCard, CreateCardVariables } from "./types/CreateCard";
 import {
   MoveCard,
@@ -25,37 +26,17 @@ import {
 import { Card } from "./types/Card";
 import Modal from "react-modal";
 import EditCardForm from "../components/EditCardForm/EditCardForm";
+import BoardStatusBar from "../components/BoardStatusBar/BoardStatusBar";
+import { GET_BOARD, UPVOTE_CARD, DOWNVOTE_CARD } from "../client/queries";
+import { UpvoteCard, UpvoteCardVariables } from "../client/types/UpvoteCard";
+import { UserState } from "../types";
+import {
+  DownvoteCard,
+  DownvoteCardVariables
+} from "../client/types/DownvoteCard";
+
 
 class BoardQuery extends Query<Board, BoardVariables> {}
-export const GET_BOARD = gql`
-  query Board($id: String!) {
-    board(id: $id) {
-      id
-      name
-      owner {
-        id
-        name
-        email
-      }
-      columns {
-        id
-        name
-        cards {
-          id
-          description
-          column {
-            id
-          }
-          owner {
-            id
-            name
-            email
-          }
-        }
-      }
-    }
-  }
-`;
 
 const CARD_FRAGMENT = gql`
   fragment Card on Card {
@@ -69,6 +50,12 @@ const CARD_FRAGMENT = gql`
       name
       id
       email
+    }
+    votes {
+      id
+      owner {
+        id
+      }
     }
   }
 `;
@@ -145,6 +132,36 @@ export const BOARD_UPDATED_SUBSCRIPTION = gql`
             ...Card
           }
         }
+        __typename
+        ... on CardDownvotedUpdate {
+          card {
+            id
+          }
+          voteId
+        }
+
+        __typename
+        ... on CardUpvotedUpdate {
+          card {
+            id
+          }
+          vote {
+            id
+            owner {
+              id
+              name
+              email
+            }
+          }
+        }
+
+        __typename
+        ... on CardDownvotedUpdate {
+          card {
+            id
+          }
+          voteId
+        }
       }
     }
   }
@@ -155,6 +172,8 @@ export interface Props {
   id: string;
   client: ApolloClient<any>;
   subscribeToUpdates: boolean;
+  BoardName: string;
+  user: UserState;
 }
 
 interface State {
@@ -171,7 +190,7 @@ class BoardPage extends React.Component<Props, State> {
     subscribeToUpdates: true
   };
   static getInitialProps(ctx) {
-    return ctx.query;
+    return { ...ctx.query, user: ctx.user };
   }
 
   state = {
@@ -210,6 +229,26 @@ class BoardPage extends React.Component<Props, State> {
                   }
                 }
               });
+            } else if (update.__typename === "CardUpvotedUpdate") {
+              this._handleCardUpvoted(this.props.client, {
+                data: {
+                  upvoteCard: {
+                    __typename: "UpvoteCardPayload",
+                    card: update.card,
+                    vote: update.vote
+                  }
+                }
+              });
+            } else if (update.__typename === "CardDownvotedUpdate") {
+              this._handleCardDownvoted(this.props.client, {
+                data: {
+                  downvoteCard: {
+                    __typename: "DownvoteCardPayload",
+                    card: update.card,
+                    voteId: update.voteId
+                  }
+                }
+              });
             }
           });
         });
@@ -222,7 +261,7 @@ class BoardPage extends React.Component<Props, State> {
     }
   }
 
-  _createCardUpdateRespone(
+  private _createCardUpdateRespone(
     card: Card
   ): RenameCard_updateCard | MoveCard_updateCard {
     return {
@@ -244,10 +283,35 @@ class BoardPage extends React.Component<Props, State> {
     };
   }
 
-  _getCard(cardId: string): Card {
+  private _findCard(cardId: string, board: Board_board) {
+    for (const column of board.columns) {
+      const card = column.cards.find(c => c.id === cardId);
+      if (card) {
+        return card;
+      }
+    }
+    return null;
+  }
+
+  private _getCard(cardId: string): Card {
     return this.props.client.readFragment<Card>({
       id: `Card:${cardId}`,
       fragment: CARD_FRAGMENT
+    });
+  }
+
+  private _readBoard(cache: DataProxy): Board_board {
+    return cache.readQuery<Board, BoardVariables>({
+      query: GET_BOARD,
+      variables: { id: this.props.id }
+    }).board;
+  }
+
+  private _writeBoard(cache: DataProxy, board: Board_board) {
+    cache.writeQuery<Board, BoardVariables>({
+      query: GET_BOARD,
+      variables: { id: this.props.id },
+      data: { board }
     });
   }
 
@@ -261,10 +325,7 @@ class BoardPage extends React.Component<Props, State> {
    * Note this can also be called as the result of a subscription notification
    */
   _handleCreatedCard = (cache: DataProxy, { data }: { data: CreateCard }) => {
-    const { board } = cache.readQuery<Board>({
-      query: GET_BOARD,
-      variables: { id: this.props.id }
-    });
+    const board = this._readBoard(cache);
     const column = board.columns.find(
       c => c.id === data.createCard.card.column.id
     );
@@ -273,11 +334,7 @@ class BoardPage extends React.Component<Props, State> {
       return;
     }
     column.cards.push(data.createCard.card);
-    cache.writeQuery({
-      query: GET_BOARD,
-      variables: { id: this.props.id },
-      data: { board }
-    });
+    this._writeBoard(cache, board);
     this.setState({ newCardTitle: "" });
   };
 
@@ -289,10 +346,7 @@ class BoardPage extends React.Component<Props, State> {
   _handleMovedCard = (cache: DataProxy, { data }: { data: MoveCard }) => {
     const updateCard = data.updateCard;
     // Read the data from our cache for this query.
-    const { board } = cache.readQuery<Board, BoardVariables>({
-      query: GET_BOARD,
-      variables: { id: this.props.id }
-    });
+    const board = this._readBoard(cache);
 
     let cardSourceIndex = -1;
     let sourceColumn: Board_board_columns;
@@ -316,11 +370,27 @@ class BoardPage extends React.Component<Props, State> {
         c => c.id === updateCard.card.column.id
       );
       destColumn.cards.push(card);
-      cache.writeQuery<Board, BoardVariables>({
-        query: GET_BOARD,
-        variables: { id: this.props.id },
-        data: { board }
-      });
+      this._writeBoard(cache, board);
+    }
+  };
+
+  _handleCardDownvoted = (
+    cache: DataProxy,
+    { data }: { data: DownvoteCard }
+  ) => {
+    const board = this._readBoard(cache);
+    const card = this._findCard(data.downvoteCard.card.id, board);
+    card.votes = card.votes.filter(v => v.id !== data.downvoteCard.voteId);
+    this._writeBoard(cache, board);
+  };
+
+  _handleCardUpvoted = (cache: DataProxy, { data }: { data: UpvoteCard }) => {
+    const board = this._readBoard(cache);
+    const card = this._findCard(data.upvoteCard.card.id, board);
+    const vote = card.votes.find(v => v.id === data.upvoteCard.vote.id);
+    if (!vote) {
+      card.votes.push(data.upvoteCard.vote);
+      this._writeBoard(cache, board);
     }
   };
 
@@ -380,7 +450,64 @@ class BoardPage extends React.Component<Props, State> {
     });
   };
 
-  _handleClickCard = cardId => {
+  _handleUpvoteCard = cardId => {
+    this.props.client
+      .mutate<UpvoteCard, UpvoteCardVariables>({
+        mutation: UPVOTE_CARD,
+        variables: {
+          cardId
+        },
+        optimisticResponse: {
+          upvoteCard: {
+            card: {
+              id: cardId,
+              __typename: "Card"
+            },
+            vote: {
+              id: (Math.random() * -1000000).toString(),
+              owner: this.props.user,
+              __typename: "Vote"
+            },
+            __typename: "UpvoteCardPayload"
+          }
+        },
+
+        update: this._handleCardUpvoted
+      })
+      .catch(err => alert(err.message));
+  };
+
+  _handleDownvotedCard = cardId => {
+    const card = this._getCard(cardId);
+    const vote = card.votes.find(v => v.owner.id == this.props.user.id);
+    if (!vote) {
+      // TODO: show an error
+      return;
+    }
+    this.props.client
+      .mutate<DownvoteCard, DownvoteCardVariables>({
+        mutation: DOWNVOTE_CARD,
+        variables: {
+          cardId
+        },
+        optimisticResponse: {
+          downvoteCard: {
+            card: {
+              id: cardId,
+              __typename: "Card"
+            },
+            voteId: vote.id,
+            __typename: "DownvoteCardPayload"
+          }
+        },
+        update: this._handleCardDownvoted
+      })
+      .catch(err => alert(err.message));
+  };
+
+  _handleClickCard = async cardId => {
+    // this._handleDownvotedCard(cardId);
+    // this._handleUpvoteCard(cardId);
     this.setState({ cardId });
   };
 
@@ -408,9 +535,13 @@ class BoardPage extends React.Component<Props, State> {
             if (loading) {
               return <div className="loading">Loading...</div>;
             }
+            if (!data || !data.board) {
+              return null;
+            }
+
             return (
               <div>
-                <div className="board-title">{data.board.name}</div>
+                <BoardStatusBar boardName={data.board.name} />
                 <BoardWidget
                   id={data.board.id}
                   name={data.board.name}

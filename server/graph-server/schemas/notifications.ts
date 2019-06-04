@@ -1,10 +1,17 @@
 import { ObjectType, Field, createUnionType } from "type-graphql";
-import { CreateCardPayload, UpdateCardPayload } from "./card";
+import {
+  CreateCardPayload,
+  UpdateCardPayload,
+  UpvoteCardPayload,
+  DownvoteCardPayload
+} from "./card";
 
 export enum CardUpdates {
   Created = "CardCreated",
   Moved = "CardMoved",
-  Renamed = "CardRenamed"
+  Renamed = "CardRenamed",
+  Upvoted = "CardUpvoted",
+  Downvoted = "CardDownvoted"
 }
 @ObjectType()
 export class CardCreatedUpdate extends CreateCardPayload {
@@ -21,18 +28,52 @@ export class CardRenamedUpdate extends UpdateCardPayload {
   name: CardUpdates = CardUpdates.Renamed;
 }
 
-const BoardUpdateUnion = createUnionType({
+@ObjectType()
+export class CardUpvotedUpdate extends UpvoteCardPayload {
+  name: CardUpdates = CardUpdates.Upvoted;
+}
+
+@ObjectType()
+export class CardDownvotedUpdate extends DownvoteCardPayload {
+  name: CardUpdates = CardUpdates.Downvoted;
+}
+
+const BoardUpdateUnion = createUnionType<
+  [
+    typeof CardCreatedUpdate,
+    typeof CardMovedUpdate,
+    typeof CardUpvotedUpdate,
+    typeof CardRenamedUpdate,
+    typeof CardDownvotedUpdate
+  ]
+>({
   name: "BoardUpdate", // the name of the GraphQL union
-  types: [CardCreatedUpdate, CardMovedUpdate, CardRenamedUpdate], // array of object types classes,
+  types: [
+    CardCreatedUpdate,
+    CardMovedUpdate,
+    CardRenamedUpdate,
+    CardUpvotedUpdate,
+    CardDownvotedUpdate
+  ], // array of object types classes,
   resolveType: (
-    value: CardCreatedUpdate | CardMovedUpdate | CardRenamedUpdate
+    value:
+      | CardCreatedUpdate
+      | CardMovedUpdate
+      | CardRenamedUpdate
+      | CardUpvotedUpdate
+      | CardDownvotedUpdate
   ) => {
-    if (value.name === CardUpdates.Created) {
-      return CardCreatedUpdate;
-    } else if (value.name === CardUpdates.Moved) {
-      return CardMovedUpdate;
-    } else if (value.name === CardUpdates.Renamed) {
-      return CardRenamedUpdate;
+    switch (value.name) {
+      case CardUpdates.Created:
+        return CardCreatedUpdate;
+      case CardUpdates.Moved:
+        return CardMovedUpdate;
+      case CardUpdates.Renamed:
+        return CardRenamedUpdate;
+      case CardUpdates.Upvoted:
+        return CardUpvotedUpdate;
+      case CardUpdates.Downvoted:
+        return CardDownvotedUpdate;
     }
   }
 });
@@ -40,7 +81,7 @@ const BoardUpdateUnion = createUnionType({
 @ObjectType()
 export class BoardNotification {
   @Field()
-  boardId: string;
+  boardId!: string;
   @Field(() => [BoardUpdateUnion])
-  updates: typeof BoardUpdateUnion[];
+  updates!: typeof BoardUpdateUnion[];
 }

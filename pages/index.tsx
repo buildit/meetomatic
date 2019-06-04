@@ -3,7 +3,7 @@ import Link from "next/link";
 import gql from "graphql-tag";
 import { Query } from "react-apollo";
 import { UserBoardList } from "./types/UserBoardList";
-import { BoardState } from "types";
+import { BoardState } from "../types";
 
 export interface Props {}
 

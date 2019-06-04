@@ -3,41 +3,41 @@ import { Field, ObjectType, InputType } from "type-graphql";
 @ObjectType()
 export default class User {
   @Field()
-  id: string;
+  id!: string;
 
   @Field()
-  email: string;
+  email!: string;
 
   @Field()
-  name: string;
+  name!: string;
 }
 
 @ObjectType()
 export class AuthPayload {
   @Field()
-  token: string;
+  token!: string;
 
   @Field({ nullable: false })
-  user: User;
+  user!: User;
 }
 
 @InputType()
 export class SignUpInput {
   @Field()
-  email: string;
+  email!: string;
 
   @Field()
-  password: string;
+  password!: string;
 
   @Field()
-  name: string;
+  name!: string;
 }
 
 @InputType()
 export class LoginInput {
   @Field()
-  email: string;
+  email!: string;
 
   @Field()
-  password: string;
+  password!: string;
 }

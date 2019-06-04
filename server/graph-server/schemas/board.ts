@@ -5,10 +5,13 @@ import User from "./user";
 @ObjectType()
 export default class Board {
   @Field()
-  id: string;
+  id!: string;
 
   @Field()
-  name: string;
+  name!: string;
+
+  @Field()
+  maxVotes!: number;
 
   @Field(() => [Column], { nullable: true })
   columns?: Column[];
@@ -20,10 +23,10 @@ export default class Board {
 @InputType()
 export class CreateBoardInput {
   @Field()
-  name: string;
+  name!: string;
 
   @Field()
-  password: string;
+  password!: string;
 
   @Field(() => [CreateColumnInput])
   columns?: CreateColumnInput[];
@@ -32,5 +35,5 @@ export class CreateBoardInput {
 @ObjectType()
 export class CreateBoardPayload {
   @Field()
-  board: Board;
+  board!: Board;
 }

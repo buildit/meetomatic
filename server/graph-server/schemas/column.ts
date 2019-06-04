@@ -4,10 +4,10 @@ import Card from "./card";
 @ObjectType()
 export default class Column {
   @Field()
-  id: string;
+  id!: string;
 
   @Field()
-  name: string;
+  name!: string;
 
   @Field(() => [Card], { nullable: true })
   cards?: Card[];
@@ -16,5 +16,5 @@ export default class Column {
 @InputType()
 export class CreateColumnInput {
   @Field()
-  name: string;
+  name!: string;
 }

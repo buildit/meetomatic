@@ -6,6 +6,7 @@ import { onError } from "apollo-link-error";
 import { ApolloLink, Observable, split } from "apollo-link";
 import { getMainDefinition } from "apollo-utilities";
 import { SubscriptionClient } from "subscriptions-transport-ws";
+import BoardResolvers from "../client/boardResolvers";
 
 /**
  * If we are own the client we create an Http and WebSocket link.
@@ -87,7 +88,8 @@ function createApolloClient(
       link
     ]),
 
-    cache: new InMemoryCache().restore(initialState)
+    cache: new InMemoryCache().restore(initialState),
+    resolvers: BoardResolvers
   });
 }
 

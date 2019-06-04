@@ -7,6 +7,7 @@ import CardResolvers from "./resolvers/cardResolver";
 import UserResolvers from "./resolvers/userResolver";
 import BoardResolvers from "./resolvers/boardResolvers";
 import ColumnResolvers from "./resolvers/columnResolvers";
+import VoteResolvers from "./resolvers/voteResolver";
 
 const config = {
   appSecret: process.env.APP_SECRET || "mysecret"
@@ -21,7 +22,8 @@ export default class graphService implements GraphService {
         CardResolvers,
         UserResolvers,
         BoardResolvers,
-        ColumnResolvers
+        ColumnResolvers,
+        VoteResolvers
       ],
       emitSchemaFile: true,
       validate: true
