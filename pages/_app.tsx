@@ -99,14 +99,16 @@ class MyApp extends App<MyAppProps> {
 
   render() {
     const { Component, pageProps } = this.props;
-    return [
-      <Header />,
-      <ApolloProvider client={this.apolloClient}>
-        <Container>
-          <Component {...pageProps} />
-        </Container>
-      </ApolloProvider>
-    ];
+    return (
+      <React.Fragment>
+        <Header />
+        <ApolloProvider client={this.apolloClient}>
+          <Container>
+            <Component {...pageProps} />
+          </Container>
+        </ApolloProvider>
+      </React.Fragment>
+    );
   }
 }
 
