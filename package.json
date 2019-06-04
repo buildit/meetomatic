@@ -1,7 +1,7 @@
 {
   "scripts": {
     "dev": "nodemon",
-    "build": "next build && tsc --project tsconfig.server.json",
+    "build": "next build && tsc --project tsconfig.json",
     "start": "cross-env NODE_ENV=production node dist/index.js",
     "test": "jest",
     "test:watch": "jest --watch",
@@ -41,7 +41,7 @@
     "type-graphql": "^0.17.2"
   },
   "devDependencies": {
-    "@buildit/gravity-ui-web": "^3.0.0-alpha.0",
+    "@buildit/gravity-ui-web": "^3.0.0-alpha.2",
     "@types/cookie": "^0.3.2",
     "@types/enzyme": "^3.9.0",
     "@types/enzyme-adapter-react-16": "^1.0.5",

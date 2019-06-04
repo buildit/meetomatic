@@ -5,9 +5,8 @@ import { injectable, inject } from "tsyringe";
 
 @injectable()
 export class MeetoMaticServer {
-  public static readonly PORT: number = 3000;
   private server: express.Application;
-  private port: string | number;
+  private port: string | number = 3000;
   private graphServer: GraphService;
 
   constructor(@inject("GraphService") graphService: GraphService) {
@@ -23,7 +22,7 @@ export class MeetoMaticServer {
   }
 
   private config(): void {
-    this.port = process.env.PORT || MeetoMaticServer.PORT;
+    this.port = process.env.PORT || this.port;
   }
 
   private listen(): void {

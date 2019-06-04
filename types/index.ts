@@ -1,6 +1,11 @@
+export interface VoteState {
+  id: string;
+}
+
 export interface CardState {
   id: string;
   description: string;
+  votes: VoteState[];
 }
 
 export interface ColumnState {

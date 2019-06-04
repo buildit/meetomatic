@@ -81,7 +81,7 @@ const BoardUpdateUnion = createUnionType<
 @ObjectType()
 export class BoardNotification {
   @Field()
-  boardId: string;
+  boardId!: string;
   @Field(() => [BoardUpdateUnion])
-  updates: typeof BoardUpdateUnion[];
+  updates!: typeof BoardUpdateUnion[];
 }

@@ -4,7 +4,7 @@ import { Mutation, withApollo } from "react-apollo";
 import redirect from "../lib/redirect";
 import CreateBoardWidget from "../components/CreateBoard/CreateBoard";
 import { CreateBoard } from "./types/CreateBoard";
-import { CreateBoardInput } from "server/graph-server/schemas/board";
+import { CreateBoardInput } from "../server/graph-server/schemas/board";
 
 export interface Props {
   client: any;

@@ -5,7 +5,7 @@ import Card from "./card";
 @ObjectType()
 export default class Vote {
   @Field()
-  id: string;
+  id!: string;
 
   @Field()
   owner?: User;

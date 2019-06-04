@@ -5,7 +5,7 @@ import { MockedProvider } from "react-apollo/test-utils";
 import { Board, BoardVariables } from "../../client/types/Board";
 import wait from "../../lib/wait";
 import Card from "../../components/Card/Card";
-import { CreateCardVariables, CreateCard } from "pages/types/CreateCard";
+import { CreateCardVariables, CreateCard } from "../../pages/types/CreateCard";
 import { GET_BOARD, GET_USER } from "../../client/queries";
 import boardResolvers from "../../client/boardResolvers";
 import { CurrentUser } from "../../client/types/CurrentUser";

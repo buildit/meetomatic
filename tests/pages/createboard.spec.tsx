@@ -45,10 +45,10 @@ describe("<CreateBoardPage />", () => {
   it("does redirect to board after create", async () => {
     const board = createBoardPage({});
     const boardName = board.find("#boardname");
-    boardName.instance().value = "My Board";
+    (boardName.instance() as any).value = "My Board";
     boardName.simulate("change");
     const boardPassword = board.find("#boardpassword");
-    boardPassword.instance().value = "mypassword";
+    (boardPassword.instance() as any).value = "mypassword";
     boardPassword.simulate("change");
     board.find("button").simulate("submit");
     expect(board.find("CreateBoard").prop("isProcessing")).toBeTruthy();
