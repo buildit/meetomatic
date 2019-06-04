@@ -2,13 +2,13 @@ import "../styles/styles.scss";
 import App, { Container, DefaultAppIProps } from "next/app";
 import React from "react";
 import { ApolloProvider, getDataFromTree } from "react-apollo";
-import gql from "graphql-tag";
 import redirect from "../lib/redirect";
 import cookie from "cookie";
 import initApolloClient from "../lib/initApollo";
 import Head from "next/head";
-import { CurrentUser } from "./types/CurrentUser";
 import Header from "../components/Header/Header";
+import { CurrentUser } from "../client/types/CurrentUser";
+import { GET_USER } from "../client/queries";
 
 function parseCookies(req, options = {}) {
   return cookie.parse(
@@ -16,16 +16,6 @@ function parseCookies(req, options = {}) {
     options
   );
 }
-
-const GET_USER = gql`
-  query CurrentUser {
-    currentUser {
-      id
-      email
-      name
-    }
-  }
-`;
 
 interface MyAppProps extends DefaultAppIProps {
   apollo: any;
@@ -55,6 +45,7 @@ class MyApp extends App<MyAppProps> {
     });
     const user = getCurrentUser.data.currentUser;
 
+    ctx.user = user;
     if (!user) {
       if (!unauthpages.includes(ctx.pathname)) {
         redirect(ctx, "/login");

@@ -1,14 +1,7 @@
+
 import * as React from "react";
 
-interface Props {
-  boardName: string
-}
-
-export default class Header extends React.Component<Props> {
-  constructor(props: Props) {
-    super(props);
-  }
-
+export default class Header extends React.Component {
   render() {
     return (
       <div>

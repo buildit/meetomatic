@@ -19,12 +19,24 @@ export interface CreateCard_createCard_card_owner {
   email: string;
 }
 
+export interface CreateCard_createCard_card_votes_owner {
+  __typename: "User";
+  id: string;
+}
+
+export interface CreateCard_createCard_card_votes {
+  __typename: "Vote";
+  id: string;
+  owner: CreateCard_createCard_card_votes_owner;
+}
+
 export interface CreateCard_createCard_card {
   __typename: "Card";
   id: string;
   description: string;
   column: CreateCard_createCard_card_column;
   owner: CreateCard_createCard_card_owner;
+  votes: CreateCard_createCard_card_votes[] | null;
 }
 
 export interface CreateCard_createCard {

@@ -1,13 +1,12 @@
 import * as React from "react";
 import { Draggable } from "react-beautiful-dnd";
-import { CardState } from "types";
+import { CardState } from "../../types";
 import VoteButton from "../../components/VoteButton/VoteButton";
+
 
 interface CardProps extends CardState {
   index: number;
-  votes?: number;
   onClick(id: string);
-  handleVoteClick()
 }
 
 interface State {
@@ -46,7 +45,8 @@ export default class Card extends React.Component<CardProps, State> {
             <div className="grav-c-card">
               <p className="grav-c-card__body" onClick={this._handleClick}>{this.props.description} <span className="grav-c-card__reveal-icon">✏️</span></p>
               <p className="mom-c-votes">
-                {this.props.votes} {this.props.votes > 1 ? "votes" : "vote"}
+                {this.props.votes.length}{" "}
+                {this.props.votes.length > 1 ? "votes" : "vote"}
               </p>
               <VoteButton handleVoteClick={this._handleVoteClick} hasVoted={this.state.hasVoted}/>
             </div>
