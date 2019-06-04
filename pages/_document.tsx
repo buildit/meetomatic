@@ -1,12 +1,9 @@
-import Document, { Head, Main, NextScript } from "next/document";
-import { resetServerContext } from "react-beautiful-dnd";
+import Document, { Head, Main, NextScript } from 'next/document'
 
 export default class MyDocument extends Document {
   static async getInitialProps(ctx) {
-    resetServerContext();
-    const initialProps = await Document.getInitialProps(ctx);
-
-    return { ...initialProps };
+    const initialProps = await Document.getInitialProps(ctx)
+    return { ...initialProps }
   }
 
   render() {
@@ -15,11 +12,11 @@ export default class MyDocument extends Document {
         <Head>
           <style>{`body { margin: 0 } /* custom! */`}</style>
         </Head>
-        <body>
+        <body className="custom_class">
           <Main />
           <NextScript />
         </body>
       </html>
-    );
+    )
   }
 }

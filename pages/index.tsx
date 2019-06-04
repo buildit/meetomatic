@@ -1,58 +1,43 @@
-import * as React from "react";
-import Link from "next/link";
-import gql from "graphql-tag";
-import { Query } from "react-apollo";
-import { UserBoardList } from "./types/UserBoardList";
-import { BoardState } from "../types";
+import * as React from "react"; 
+import Card from '../components/Card/Card';
+import * as io from 'socket.io-client';
+import * as SocketIO from 'socket.io';
 
-export interface Props {}
-
-interface State {}
-
-const GET_USER_BOARD_LIST = gql`
-  query UserBoardList {
-    boards {
-      id
-      name
-      owner {
-        id
-        name
-        email
-      }
-    }
+export interface Props {
+    name: string;
+    enthusiasmLevel?: number;
   }
-`;
+  
+  interface State {
+    hello: string;
+  }
 
-class UserBoardListQuery extends Query<UserBoardList> {}
 export default class extends React.Component<Props, State> {
-  static getInitialProps(ctx) {
-    return ctx.query;
+  protected getSocket = () => this.socket;
+  private socket: SocketIO.Socket;
+
+  constructor(props) {
+    super(props);
+
+    this.socket = io();  
+    this.state = {
+        hello: ''
+    }   
   }
 
-  _renderBoardLink(board: BoardState) {
+  componentDidMount() {
+    this.socket.on('connected', data => {
+        this.setState({
+            hello: data.message
+        })
+    })
+  }
+    
+  render() {    
     return (
       <div>
-        <Link as={`/board/${board.id}`} href={`/board?id=${board.id}`}>
-          <a>{board.name}</a>
-        </Link>
+         Hello World!
       </div>
-    );
-  }
-  render() {
-    return (
-      <div className="grav-o-container">
-        <h2>Board List</h2>
-        <UserBoardListQuery query={GET_USER_BOARD_LIST}>
-          {({ data }) => {
-            return data.boards.map(b => this._renderBoardLink(b));
-          }}
-        </UserBoardListQuery>
-        <div>
-          <Link href="/board/create">
-            <button>Create new board</button>
-          </Link>
-        </div>
-      </div>
-    );
+    )
   }
 }
