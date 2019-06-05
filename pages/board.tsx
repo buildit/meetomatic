@@ -1,7 +1,8 @@
 import * as React from "react";
 import BoardWidget from "../components/Board/Board";
 import { Query, withApollo } from "react-apollo";
-import gql from "graphql-tag";
+import Modal from "react-modal";
+
 import {
   Board,
   BoardVariables,
@@ -9,23 +10,29 @@ import {
   Board_board_columns,
   Board_board
 } from "../client/types/Board";
+
 import { CreateCard, CreateCardVariables } from "./types/CreateCard";
+import { DeleteCard, DeleteCardVariables } from "./types/DeleteCard";
+
 import {
   MoveCard,
   MoveCardVariables,
   MoveCard_updateCard
 } from "./types/MoveCard";
 import { DataProxy } from "apollo-cache";
-import ApolloClient from "apollo-client";
+
 import { BoardUpdated, BoardUpdatedVariables } from "./types/BoardUpdated";
+
 import {
   RenameCard,
   RenameCardVariables,
   RenameCard_updateCard
 } from "./types/RenameCard";
+
+
 import { Card } from "./types/Card";
-import Modal from "react-modal";
 import EditCardForm from "../components/EditCardForm/EditCardForm";
+import ApolloClient from "apollo-client";
 import BoardStatusBar from "../components/BoardStatusBar/BoardStatusBar";
 import { GET_BOARD, UPVOTE_CARD, DOWNVOTE_CARD } from "../client/queries";
 import { UpvoteCard, UpvoteCardVariables } from "../client/types/UpvoteCard";
@@ -36,137 +43,18 @@ import {
 } from "../client/types/DownvoteCard";
 
 
+import { CREATE_CARD, DELETE_CARD } from "../client/queries/card";
+
+import { BOARD_UPDATED_SUBSCRIPTION, GET_BOARD } from "../client/queries/board";
+
+import {  
+  MOVE_CARD,
+  RENAME_CARD
+} from "../client/fragments/cardFragments";
+
+import BoardApi from "../client/api/boardApi";
+
 class BoardQuery extends Query<Board, BoardVariables> {}
-
-const CARD_FRAGMENT = gql`
-  fragment Card on Card {
-    id
-    description
-    column {
-      id
-      name
-    }
-    owner {
-      name
-      id
-      email
-    }
-    votes {
-      id
-      owner {
-        id
-      }
-    }
-  }
-`;
-const CARD_UPDATE_FRAGMENT = gql`
-  fragment CardUpdate on Card {
-    id
-    column {
-      id
-      name
-    }
-    owner {
-      id
-    }
-  }
-`;
-
-export const CREATE_CARD = gql`
-  mutation CreateCard($description: String!, $columnId: String!) {
-    createCard(input: { description: $description, columnId: $columnId }) {
-      card {
-        ...Card
-      }
-    }
-  }
-  ${CARD_FRAGMENT}
-`;
-
-const MOVE_CARD = gql`
-  mutation MoveCard($id: String!, $columnId: String!) {
-    updateCard(id: $id, input: { setColumn: { columnId: $columnId } }) {
-      card {
-        ...CardUpdate
-      }
-    }
-  }
-  ${CARD_UPDATE_FRAGMENT}
-`;
-
-const RENAME_CARD = gql`
-  mutation RenameCard($id: String!, $description: String!) {
-    updateCard(
-      id: $id
-      input: { setDescription: { description: $description } }
-    ) {
-      card {
-        description
-        ...CardUpdate
-      }
-    }
-  }
-  ${CARD_UPDATE_FRAGMENT}
-`;
-
-export const BOARD_UPDATED_SUBSCRIPTION = gql`
-  subscription BoardUpdated($boardId: String!) {
-    boardUpdated(boardId: $boardId) {
-      boardId
-      updates {
-        __typename
-        ... on CardCreatedUpdate {
-          card {
-            ...Card
-          }
-        }
-        __typename
-        ... on CardMovedUpdate {
-          card {
-            ...Card
-          }
-        }
-        __typename
-        ... on CardRenamedUpdate {
-          card {
-            ...Card
-          }
-        }
-        __typename
-        ... on CardDownvotedUpdate {
-          card {
-            id
-          }
-          voteId
-        }
-
-        __typename
-        ... on CardUpvotedUpdate {
-          card {
-            id
-          }
-          vote {
-            id
-            owner {
-              id
-              name
-              email
-            }
-          }
-        }
-
-        __typename
-        ... on CardDownvotedUpdate {
-          card {
-            id
-          }
-          voteId
-        }
-      }
-    }
-  }
-  ${CARD_FRAGMENT}
-`;
 
 export interface Props {
   id: string;
@@ -181,14 +69,14 @@ interface State {
   cardId: string;
 }
 
-// Modal && Modal.setAppElement("#board");
-
 class BoardPage extends React.Component<Props, State> {
   private subscription;
+  private _boardApi;
 
   static defaultProps = {
     subscribeToUpdates: true
   };
+
   static getInitialProps(ctx) {
     return { ...ctx.query, user: ctx.user };
   }
@@ -199,6 +87,8 @@ class BoardPage extends React.Component<Props, State> {
   };
 
   componentDidMount() {
+    this._boardApi  = new BoardApi(this.props.client, this.props.id);
+
     if (this.props.subscribeToUpdates) {
       this.subscription = this.props.client
         .subscribe<{ data: BoardUpdated }, BoardUpdatedVariables>({
@@ -211,6 +101,7 @@ class BoardPage extends React.Component<Props, State> {
           // If we a get a board notificaiton, turn it in to a Payload
           // and use the existing logic for updating the store
           data.boardUpdated.updates.forEach(update => {
+            console.log(update);
             if (update.__typename === "CardCreatedUpdate") {
               this._handleCreatedCard(this.props.client, {
                 data: {
@@ -283,6 +174,7 @@ class BoardPage extends React.Component<Props, State> {
     };
   }
 
+
   private _findCard(cardId: string, board: Board_board) {
     for (const column of board.columns) {
       const card = column.cards.find(c => c.id === cardId);
@@ -325,7 +217,8 @@ class BoardPage extends React.Component<Props, State> {
    * Note this can also be called as the result of a subscription notification
    */
   _handleCreatedCard = (cache: DataProxy, { data }: { data: CreateCard }) => {
-    const board = this._readBoard(cache);
+    const board =  this._boardApi._readBoard(cache);
+
     const column = board.columns.find(
       c => c.id === data.createCard.card.column.id
     );
@@ -334,7 +227,9 @@ class BoardPage extends React.Component<Props, State> {
       return;
     }
     column.cards.push(data.createCard.card);
-    this._writeBoard(cache, board);
+
+    this._boardApi._writeBoard(cache, board);
+
     this.setState({ newCardTitle: "" });
   };
 
@@ -346,10 +241,10 @@ class BoardPage extends React.Component<Props, State> {
   _handleMovedCard = (cache: DataProxy, { data }: { data: MoveCard }) => {
     const updateCard = data.updateCard;
     // Read the data from our cache for this query.
-    const board = this._readBoard(cache);
+    const board = this._boardApi._readBoard(cache);
 
     let cardSourceIndex = -1;
-    let sourceColumn: Board_board_columns;
+    let sourceColumn: Board_columns;
 
     // Find the column that the card currently belongs to.
     for (const column of board.columns) {
@@ -363,14 +258,15 @@ class BoardPage extends React.Component<Props, State> {
 
     // If we found the card and the source column != dest column, move the card
     if (sourceColumn && cardSourceIndex !== -1) {
-      let card: Board_board_columns_cards;
+      let card: Board_columns_cards;
       card = sourceColumn.cards[cardSourceIndex];
       sourceColumn.cards.splice(cardSourceIndex, 1);
       const destColumn = board.columns.find(
         c => c.id === updateCard.card.column.id
       );
       destColumn.cards.push(card);
-      this._writeBoard(cache, board);
+
+      this._boardApi._writeBoard(cache, board);
     }
   };
 
@@ -412,7 +308,7 @@ class BoardPage extends React.Component<Props, State> {
    * User wants to move a card
    */
   _handleMoveCard = (id: string, columnId: string) => {
-    const card = this._getCard(id);
+    const card = this._boardApi._getCard(id)
     const optimisticResponse = this._createCardUpdateRespone(card);
     optimisticResponse.card.column.id = columnId;
 
@@ -430,7 +326,7 @@ class BoardPage extends React.Component<Props, State> {
   };
 
   _handleRenameCard = (id: string, description: string) => {
-    const card = this._getCard(id);
+    const card = this._boardApi._getCard(id);
     const optimisticResponse = this._createCardUpdateRespone(card);
     this.props.client.mutate<RenameCard, RenameCardVariables>({
       mutation: RENAME_CARD,
@@ -511,9 +407,46 @@ class BoardPage extends React.Component<Props, State> {
     this.setState({ cardId });
   };
 
+  _handleClickDeleted = async cardId => {
+    this.props.client.mutate<DeleteCard, DeleteCardVariables>({
+      mutation: DELETE_CARD,
+      variables: {
+       id: cardId,
+       date: "2015-03-25T12:00:00Z"
+      },
+      update: this._handleDeletedCard
+    });
+  };
+
+  _handleDeletedCard = (cache: DataProxy, { data }: { data: DeleteCard }) => {
+
+    const board =  this._boardApi._readBoard(cache);
+
+    const index = board.columns.findIndex(
+      c => c.id === data['updateCard'].card.column.id
+    );
+    
+    console.log("BEFORE");
+    console.log(board.columns[index].cards)
+
+  
+    const cardToDelete =  board.columns[index].cards.findIndex(x => data['updateCard'].card.id === x.id);
+
+    console.log(cardToDelete);
+
+    if (cardToDelete > -1) {
+      board.columns[index].cards.splice(cardToDelete, 1);
+    }
+
+    console.log("AFTER");
+    console.log(board.columns[index].cards)
+
+    this._boardApi._writeBoard(cache, board);
+  };
+
   _renderCardModal() {
     if (this.state.cardId) {
-      const card = this._getCard(this.state.cardId);
+      const card = this._boardApi._getCard(this.state.cardId)
       return (
         <Modal
           className="card-modal"
@@ -552,6 +485,7 @@ class BoardPage extends React.Component<Props, State> {
                   onAddNewCard={this._handleCreateCard}
                   onMoveCard={this._handleMoveCard}
                   onClickCard={this._handleClickCard}
+                  onDeleteCard={this._handleClickDeleted}
                 />
               </div>
             );
@@ -559,7 +493,6 @@ class BoardPage extends React.Component<Props, State> {
         </BoardQuery>
         {this._renderCardModal()}
       </div>
-    );
   }
 }
 

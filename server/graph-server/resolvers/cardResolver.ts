@@ -54,7 +54,8 @@ export default class {
     const card = await ctx.prisma.createCard({
       description: input.description,
       column: { connect: { id: input.columnId } },
-      owner: { connect: { id: ctx.user.id } }
+      owner: { connect: { id: ctx.user.id } },
+      archivedOn: null
     });
     await publish({
       updates: [{ card, name: CardUpdates.Created }],
@@ -105,6 +106,11 @@ export default class {
       updates.push(CardUpdates.Renamed);
     }
 
+    if (input.setArchivedOn) {
+      data.archivedOn = input.setArchivedOn.archivedOn;
+      updates.push(CardUpdates.Renamed);
+    }
+
     const updatedCard = await ctx.prisma.updateCard({
       where: { id },
       data
@@ -127,6 +133,7 @@ export default class {
     @PubSub("boardNotification") publish: Publisher<BoardNotification>
   ): Promise<UpvoteCardPayload> {
     const card = await ctx.prisma.card({ id: input.cardId });
+    
     if (!card) {
       throw Error(`Card ${input.cardId} does not exist`);
     }
