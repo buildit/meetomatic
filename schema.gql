@@ -112,6 +112,10 @@ type Query {
   board(id: String!): Board
 }
 
+input SetCardArchivedInput {
+  archivedOn: String!
+}
+
 input SetCardColumnInput {
   columnId: String!
 }
@@ -133,6 +137,7 @@ type Subscription {
 input UpdateCardInput {
   setColumn: SetCardColumnInput
   setDescription: SetCardDescriptionInput
+  setArchivedOn: SetCardArchivedInput
 }
 
 type UpdateCardPayload {

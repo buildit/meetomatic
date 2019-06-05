@@ -18,6 +18,7 @@ type Card {
   votes: [Vote]
   owner: User!
   column: Column!
+  archivedOn: DateTime @default(value: null)
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
 }

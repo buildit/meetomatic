@@ -16,6 +16,7 @@ export const GET_USER = gql`
   }
 `;
 
+
 export const GET_BOARD = gql`
   query Board($id: String!) {
     board(id: $id) {
