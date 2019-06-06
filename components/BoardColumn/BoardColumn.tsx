@@ -29,6 +29,7 @@ export default class BoardColumn extends React.Component<BoardColumnProps, {}> {
         {this.props.cards &&
           this.props.cards.length > 0 &&
           this.props.cards.map((card, index) => {
+            {console.log("card", card);}
             return (
               <Card
                 id={card.id}

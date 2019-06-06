@@ -34,7 +34,6 @@ import { Card } from "./types/Card";
 import EditCardForm from "../components/EditCardForm/EditCardForm";
 import ApolloClient from "apollo-client";
 import BoardStatusBar from "../components/BoardStatusBar/BoardStatusBar";
-import { GET_BOARD, UPVOTE_CARD, DOWNVOTE_CARD } from "../client/queries";
 import { UpvoteCard, UpvoteCardVariables } from "../client/types/UpvoteCard";
 import { UserState } from "../types";
 import {
@@ -43,7 +42,7 @@ import {
 } from "../client/types/DownvoteCard";
 
 
-import { CREATE_CARD, DELETE_CARD } from "../client/queries/card";
+import { CREATE_CARD, DELETE_CARD, UPVOTE_CARD, DOWNVOTE_CARD } from "../client/queries/card";
 
 import { BOARD_UPDATED_SUBSCRIPTION, GET_BOARD } from "../client/queries/board";
 
@@ -185,13 +184,6 @@ class BoardPage extends React.Component<Props, State> {
     return null;
   }
 
-  private _getCard(cardId: string): Card {
-    return this.props.client.readFragment<Card>({
-      id: `Card:${cardId}`,
-      fragment: CARD_FRAGMENT
-    });
-  }
-
   private _readBoard(cache: DataProxy): Board_board {
     return cache.readQuery<Board, BoardVariables>({
       query: GET_BOARD,
@@ -238,14 +230,35 @@ class BoardPage extends React.Component<Props, State> {
    *
    * Update our board cache by moving the card between columns
    */
+  _handleMoveCard = (id: string, columnId: string) => {
+    const card = this._boardApi._getCard(id)
+    const optimisticResponse = this._createCardUpdateRespone(card);
+    optimisticResponse.card.column.id = columnId;
+ 
+    this.props.client.mutate<MoveCard, MoveCardVariables>({
+      mutation: MOVE_CARD,
+      variables: {
+        columnId,
+        id
+      },
+      optimisticResponse: {
+        updateCard: optimisticResponse
+      },
+      update: this._handleMovedCard
+    });
+  };
+
   _handleMovedCard = (cache: DataProxy, { data }: { data: MoveCard }) => {
     const updateCard = data.updateCard;
     // Read the data from our cache for this query.
-    const board = this._boardApi._readBoard(cache);
-
+    const { board } = cache.readQuery<Board, BoardVariables>({
+      query: GET_BOARD,
+      variables: { id: this.props.id }
+    });
+ 
     let cardSourceIndex = -1;
-    let sourceColumn: Board_columns;
-
+    let sourceColumn: Board_board_columns;
+ 
     // Find the column that the card currently belongs to.
     for (const column of board.columns) {
       const index = column.cards.findIndex(c => c.id === updateCard.card.id);
@@ -255,18 +268,21 @@ class BoardPage extends React.Component<Props, State> {
         break;
       }
     }
-
+ 
     // If we found the card and the source column != dest column, move the card
     if (sourceColumn && cardSourceIndex !== -1) {
-      let card: Board_columns_cards;
+      let card: Board_board_columns_cards;
       card = sourceColumn.cards[cardSourceIndex];
       sourceColumn.cards.splice(cardSourceIndex, 1);
       const destColumn = board.columns.find(
         c => c.id === updateCard.card.column.id
       );
       destColumn.cards.push(card);
-
-      this._boardApi._writeBoard(cache, board);
+      cache.writeQuery<Board, BoardVariables>({
+        query: GET_BOARD,
+        variables: { id: this.props.id },
+        data: { board }
+      });
     }
   };
 
@@ -301,27 +317,6 @@ class BoardPage extends React.Component<Props, State> {
         description: this.state.newCardTitle
       },
       update: this._handleCreatedCard
-    });
-  };
-
-  /**
-   * User wants to move a card
-   */
-  _handleMoveCard = (id: string, columnId: string) => {
-    const card = this._boardApi._getCard(id)
-    const optimisticResponse = this._createCardUpdateRespone(card);
-    optimisticResponse.card.column.id = columnId;
-
-    this.props.client.mutate<MoveCard, MoveCardVariables>({
-      mutation: MOVE_CARD,
-      variables: {
-        columnId,
-        id
-      },
-      optimisticResponse: {
-        updateCard: optimisticResponse
-      },
-      update: this._handleMovedCard
     });
   };
 
@@ -374,7 +369,7 @@ class BoardPage extends React.Component<Props, State> {
   };
 
   _handleDownvotedCard = cardId => {
-    const card = this._getCard(cardId);
+    const card = this._boardApi._getCard(cardId);
     const vote = card.votes.find(v => v.owner.id == this.props.user.id);
     if (!vote) {
       // TODO: show an error
@@ -493,7 +488,7 @@ class BoardPage extends React.Component<Props, State> {
         </BoardQuery>
         {this._renderCardModal()}
       </div>
-  }
+    )}
 }
 
 export default withApollo(BoardPage);

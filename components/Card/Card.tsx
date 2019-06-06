@@ -6,7 +6,6 @@ import VoteButton from "../../components/VoteButton/VoteButton";
 
 interface CardProps extends CardState {
   index: number;
-  votes?: number;
   ArchivedOn?: string;
   onClick(id: string);
   onDelete(id: string);
@@ -48,9 +47,7 @@ export default class Card extends React.Component<CardProps, State> {
             {...provided.draggableProps}
             {...provided.dragHandleProps}
           >
-            <button onClick={this._handleDelete}>Delete</button>
             <div className="grav-c-card">
-              <p className="grav-c-card__body">{this.props.description}</p>
               <p className="grav-c-card__body">{this.props.ArchivedOn}</p>
               <p className="grav-c-card__body" onClick={this._handleClick}>{this.props.description} <span className="grav-c-card__reveal-icon">✏️</span></p>
               <p className="mom-c-votes">
@@ -58,6 +55,7 @@ export default class Card extends React.Component<CardProps, State> {
                 {this.props.votes.length > 1 ? "votes" : "vote"}
               </p>
               <VoteButton handleVoteClick={this._handleVoteClick} hasVoted={this.state.hasVoted}/>
+              <button onClick={this._handleDelete}>Delete</button>
             </div>
             {provided.placeholder}
           </div>
