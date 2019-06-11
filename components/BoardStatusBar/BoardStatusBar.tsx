@@ -1,7 +1,8 @@
 import * as React from "react";
 
 interface Props {
-  boardName: string
+  boardName: string,
+  remainingVotes: number
 }
 
 export default class StatusBar extends React.Component<Props> {
@@ -21,7 +22,7 @@ export default class StatusBar extends React.Component<Props> {
             </ul>
           </div>
           <div className="grav-c-status-bar__item">
-            <span>👍 X votes remaining</span>
+            <span>👍 {this.props.remainingVotes} votes remaining</span>
           </div>
         </div>
     );

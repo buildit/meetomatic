@@ -469,7 +469,7 @@ class BoardPage extends React.Component<Props, State> {
 
             return (
               <div>
-                <BoardStatusBar boardName={data.board.name} />
+                <BoardStatusBar boardName={data.board.name} remainingVotes={data.board.remainingVotes} />
                 <BoardWidget
                   id={data.board.id}
                   name={data.board.name}
