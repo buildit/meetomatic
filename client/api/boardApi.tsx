@@ -3,12 +3,13 @@ import { Card } from "../../pages/types/Card";
 import {
   Board,
   BoardVariables,
-} from "../types/Board";
+} from "../types/Board"; 
 import { DataProxy } from "apollo-cache";
 import { 
   CARD_FRAGMENT
 } from "../fragments/cardFragments";
 import { GET_BOARD } from "../queries/board";
+import { UserState } from "../../types";
 
 export default class  BoardApi {
     private client: ApolloClient<any>;

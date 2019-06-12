@@ -40,7 +40,7 @@ export default class NewCard extends React.Component<Props, State> {
 
   render() {
     return (
-      <div className="grav-c-card">
+      <div className="grav-c-board-card">
         <button
           className="grav-c-button-link add-card-link"
           type="button"
@@ -51,7 +51,7 @@ export default class NewCard extends React.Component<Props, State> {
         </button>
         {this.state.showForm ? (
           <form className="add-card-form" onSubmit={this.handleSubmit}>
-            <h3 className="grav-c-card__title">New card</h3>
+            <h3 className="grav-c-board-card__title">New card</h3>
             <div className="grav-c-form-group">
               <label htmlFor="boardName">Title</label>
               <input

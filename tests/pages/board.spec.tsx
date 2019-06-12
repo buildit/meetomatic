@@ -181,7 +181,7 @@ describe("<BoardPage />", () => {
       await wait(0);
       wrapper.update();
       expect(wrapper.find(Card)).toHaveLength(1);
-      wrapper.find(".add-card-link").simulate("click");
+      wrapper.find(".grav-c-button-link").simulate("click");
       expect(wrapper.find(".add-card-form")).toHaveLength(1);
       const input = wrapper.find(".add-card-form").find("input") as any;
       input.instance().value = "New Card";

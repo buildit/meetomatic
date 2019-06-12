@@ -47,15 +47,19 @@ export default class Card extends React.Component<CardProps, State> {
             {...provided.draggableProps}
             {...provided.dragHandleProps}
           >
-            <div className="grav-c-card">
-              <p className="grav-c-card__body">{this.props.ArchivedOn}</p>
-              <p className="grav-c-card__body" onClick={this._handleClick}>{this.props.description} <span className="grav-c-card__reveal-icon">✏️</span></p>
+            <div className="grav-c-board-card">
+              <div className="grav-c-board-card__body">
+                <h2 onClick={this._handleClick}>{this.props.description} <span className="grav-c-board-card__reveal-icon">✏️</span></h2>
+                <p>{this.props.ArchivedOn}</p>
+              </div>
               <p className="mom-c-votes">
                 {this.props.votes.length}{" "}
-                {this.props.votes.length > 1 ? "votes" : "vote"}
+                {this.props.votes.length === 1 ? "vote" : "votes"}
               </p>
-              <VoteButton handleVoteClick={this._handleVoteClick} hasVoted={this.state.hasVoted}/>
-              <button onClick={this._handleDelete}>Delete</button>
+              <div className="grav-c-board-card__buttons">
+                <VoteButton handleVoteClick={this._handleVoteClick} hasVoted={this.state.hasVoted}/>
+                <button onClick={this._handleDelete}>Delete</button>
+              </div>
             </div>
             {provided.placeholder}
           </div>

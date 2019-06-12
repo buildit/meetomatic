@@ -368,33 +368,33 @@ class BoardPage extends React.Component<Props, State> {
       .catch(err => alert(err.message));
   };
 
-  _handleDownvotedCard = cardId => {
-    const card = this._boardApi._getCard(cardId);
-    const vote = card.votes.find(v => v.owner.id == this.props.user.id);
-    if (!vote) {
-      // TODO: show an error
-      return;
-    }
-    this.props.client
-      .mutate<DownvoteCard, DownvoteCardVariables>({
-        mutation: DOWNVOTE_CARD,
-        variables: {
-          cardId
-        },
-        optimisticResponse: {
-          downvoteCard: {
-            card: {
-              id: cardId,
-              __typename: "Card"
-            },
-            voteId: vote.id,
-            __typename: "DownvoteCardPayload"
-          }
-        },
-        update: this._handleCardDownvoted
-      })
-      .catch(err => alert(err.message));
-  };
+  // _handleDownvotedCard = cardId => {
+  //   const card = this._boardApi._getCard(cardId);
+  //   const vote = card.votes.find(v => v.owner.id == this.props.user.id);
+  //   if (!vote) {
+  //     // TODO: show an error
+  //     return;
+  //   }
+  //   this.props.client
+  //     .mutate<DownvoteCard, DownvoteCardVariables>({
+  //       mutation: DOWNVOTE_CARD,
+  //       variables: {
+  //         cardId
+  //       },
+  //       optimisticResponse: {
+  //         downvoteCard: {
+  //           card: {
+  //             id: cardId,
+  //             __typename: "Card"
+  //           },
+  //           voteId: vote.id,
+  //           __typename: "DownvoteCardPayload"
+  //         }
+  //       },
+  //       update: this._handleCardDownvoted
+  //     })
+  //     .catch(err => alert(err.message));
+  // };
 
   _handleClickCard = async cardId => {
     // this._handleDownvotedCard(cardId);
