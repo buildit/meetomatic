@@ -42,7 +42,7 @@ export default class NewCard extends React.Component<Props, State> {
     return (
       <div className="grav-c-board-card">
         <button
-          className="grav-c-button-link add-card-link"
+          className="grav-c-button-link"
           type="button"
           onClick={this.toggleCardForm}
           aria-pressed={this.state.showForm}
