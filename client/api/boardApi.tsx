@@ -2,6 +2,7 @@ import ApolloClient from "apollo-client";
 import { Card } from "../../pages/types/Card";
 import {
   Board,
+  Board_board,
   BoardVariables,
 } from "../types/Board"; 
 import { DataProxy } from "apollo-cache";
@@ -10,6 +11,13 @@ import {
 } from "../fragments/cardFragments";
 import { GET_BOARD } from "../queries/board";
 import { UserState } from "../../types";
+import {
+  DownvoteCard,
+  DownvoteCardVariables
+} from "../types/DownvoteCard";
+
+import { DOWNVOTE_CARD } from "../queries/card";
+
 
 export default class  BoardApi {
     private client: ApolloClient<any>;
@@ -28,7 +36,7 @@ export default class  BoardApi {
       });
     }
   
-    private _readBoard(cache: DataProxy): Board {
+    private _readBoard(cache: DataProxy): Board_board {
       const value =  cache.readQuery<Board>({
         query: GET_BOARD,
         variables: { id: this.boardId }
@@ -37,7 +45,7 @@ export default class  BoardApi {
       return value;
     }
   
-    private _writeBoard(cache: DataProxy, board: Board) {
+    private _writeBoard(cache: DataProxy, board: Board_board) {
       console.log(board);
       cache.writeQuery<Board, BoardVariables>({
         query: GET_BOARD,
@@ -46,7 +54,7 @@ export default class  BoardApi {
       });
     }
   
-    private _findCard(cardId: string, board: Board) {
+    private _findCard(cardId: string, board: Board_board) {
       for (const column of board.columns) {
         const card = column.cards.find(c => c.id === cardId);
         if (card) {
